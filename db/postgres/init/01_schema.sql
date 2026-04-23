@@ -11,7 +11,7 @@ CREATE EXTENSION IF NOT EXISTS "pg_trgm";   -- Full-text search tiếng Việt
 -- ── ENUM TYPES ────────────────────────────────────────────────
 CREATE TYPE user_role     AS ENUM ('candidate', 'recruiter', 'admin');
 CREATE TYPE job_status    AS ENUM ('draft', 'active', 'expired', 'closed');
-CREATE TYPE app_status    AS ENUM ('submitted', 'reviewing', 'interview', 'offered', 'rejected', 'accepted');
+CREATE TYPE app_status    AS ENUM ('submitted', 'reviewing', 'interview', 'offered', 'rejected', 'accepted', 'withdrawn');
 CREATE TYPE interview_type   AS ENUM ('online', 'offline', 'phone');
 CREATE TYPE interview_status AS ENUM ('scheduled', 'completed', 'cancelled', 'rescheduled');
 
@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS job_postings (
     status      job_status NOT NULL DEFAULT 'draft',
     deadline    DATE,
     view_count  INTEGER NOT NULL DEFAULT 0,
+    application_count INTEGER NOT NULL DEFAULT 0,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -104,6 +105,7 @@ CREATE TABLE IF NOT EXISTS applications (
     id           UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     candidate_id UUID NOT NULL REFERENCES candidates(id) ON DELETE CASCADE,
     job_id       UUID NOT NULL REFERENCES job_postings(id) ON DELETE CASCADE,
+    company_id   UUID NOT NULL REFERENCES companies(id),
     status       app_status NOT NULL DEFAULT 'submitted',
     cover_letter TEXT,
     resume_url   TEXT,
@@ -123,11 +125,18 @@ CREATE INDEX idx_app_applied   ON applications (applied_at DESC);
 CREATE TABLE IF NOT EXISTS interviews (
     id               UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     application_id   UUID NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
+    candidate_id     UUID NOT NULL REFERENCES candidates(id),
+    job_id           UUID NOT NULL REFERENCES job_postings(id),
+    company_id       UUID NOT NULL REFERENCES companies(id),
     round            INTEGER NOT NULL DEFAULT 1,
     scheduled_at     TIMESTAMP NOT NULL,
     duration_minutes INTEGER NOT NULL DEFAULT 60,
     type             interview_type NOT NULL DEFAULT 'online',
+    location         TEXT,
+    meeting_link     TEXT,
     location_or_link TEXT,
+    interviewer      TEXT,
+    notes            TEXT,
     status           interview_status NOT NULL DEFAULT 'scheduled',
     feedback         TEXT,
     score            SMALLINT CHECK (score BETWEEN 1 AND 10),
@@ -137,6 +146,19 @@ CREATE TABLE IF NOT EXISTS interviews (
 
 CREATE INDEX idx_interview_app       ON interviews (application_id);
 CREATE INDEX idx_interview_scheduled ON interviews (scheduled_at);
+
+-- ── BẢNG candidate_profiles (for denormalized data) ────────────
+CREATE TABLE IF NOT EXISTS candidate_profiles (
+    candidate_id UUID PRIMARY KEY REFERENCES candidates(id) ON DELETE CASCADE,
+    summary      TEXT,
+    skills       JSONB,
+    created_at   TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at   TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TRIGGER trg_candidate_profiles_updated_at  
+    BEFORE UPDATE ON candidate_profiles 
+    FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- ── MATERIALIZED VIEW: pipeline statistics ────────────────────
 -- Dùng cho báo cáo dashboard HR (NV10) – cải thiện query 18x

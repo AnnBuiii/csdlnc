@@ -28,3 +28,139 @@
     at Protocol.ondata (node:internal/streams/readable:1009:22)
     at Protocol.emit (node:events:524:28)
     at addChunk (node:internal/streams/readable:561:12)
+2026-04-23 03:31:28 [[32minfo[39m]: ✅ PostgreSQL connected
+2026-04-23 03:31:28 [[32minfo[39m]: ✅ MongoDB connected
+2026-04-23 03:31:28 [[32minfo[39m]: ✅ Redis connected
+2026-04-23 03:31:28 [[32minfo[39m]: ✅ Neo4j connected
+2026-04-23 03:31:28 [[32minfo[39m]: ✅ Cassandra connected (temporary)
+2026-04-23 03:31:28 [[32minfo[39m]: Creating keyspace: srs_events
+2026-04-23 03:31:29 [[32minfo[39m]: ✅ Keyspace srs_events created
+2026-04-23 03:31:29 [[32minfo[39m]: ✅ Cassandra connected to keyspace srs_events
+2026-04-23 03:31:29 [[31merror[39m]: ReferenceError: createTables is not defined
+    at connectCassandra (/app/src/config/cassandra.js:62:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async bootstrap (/app/src/index.js:21:5)
+2026-04-23 03:31:57 [[32minfo[39m]: ✅ PostgreSQL connected
+2026-04-23 03:31:57 [[32minfo[39m]: ✅ MongoDB connected
+2026-04-23 03:31:57 [[32minfo[39m]: ✅ Redis connected
+2026-04-23 03:31:58 [[32minfo[39m]: ✅ Neo4j connected
+2026-04-23 03:31:58 [[32minfo[39m]: ✅ Cassandra connected (temporary)
+2026-04-23 03:31:58 [[32minfo[39m]: ✅ Keyspace srs_events already exists
+2026-04-23 03:31:58 [[32minfo[39m]: ✅ Cassandra connected to keyspace srs_events
+2026-04-23 03:31:59 [[32minfo[39m]: ✅ Cassandra tables checked/created
+2026-04-23 03:31:59 [[32minfo[39m]: ✅ Socket.IO initialized
+2026-04-23 03:31:59 [[32minfo[39m]: 🚀 SRS Backend running on port 3000 [development]
+2026-04-23 03:32:49 [[32minfo[39m]: SIGTERM received – shutting down gracefully
+2026-04-23 03:32:51 [[32minfo[39m]: ✅ PostgreSQL connected
+2026-04-23 03:32:51 [[32minfo[39m]: ✅ MongoDB connected
+2026-04-23 03:32:51 [[32minfo[39m]: ✅ Redis connected
+2026-04-23 03:32:51 [[32minfo[39m]: ✅ Neo4j connected
+2026-04-23 03:32:51 [[32minfo[39m]: ✅ Cassandra connected (temporary)
+2026-04-23 03:32:51 [[32minfo[39m]: ✅ Keyspace srs_events already exists
+2026-04-23 03:32:51 [[32minfo[39m]: ✅ Cassandra connected to keyspace srs_events
+2026-04-23 03:32:51 [[32minfo[39m]: ✅ Cassandra tables checked/created
+2026-04-23 03:32:51 [[32minfo[39m]: ✅ Socket.IO initialized
+2026-04-23 03:32:51 [[32minfo[39m]: 🚀 SRS Backend running on port 3000 [development]
+2026-04-23 03:43:03 [[31merror[39m]: ValidationError: JobPosting validation failed: workMode: `remote` is not a valid enum value for path `workMode`.
+    at Document.invalidate (/app/node_modules/mongoose/lib/document.js:3381:32)
+    at /app/node_modules/mongoose/lib/document.js:3142:17
+    at /app/node_modules/mongoose/lib/schemaType.js:1446:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+2026-04-23 03:45:23 [[31merror[39m]: error: invalid input value for enum app_status: "withdrawn"
+    at /app/node_modules/pg/lib/client.js:631:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /app/src/services/application.service.js:22:22
+    at async withTransaction (/app/src/config/postgres.js:38:20)
+    at async /app/src/routes/application.routes.js:20:22
+2026-04-23 03:46:30 [[31merror[39m]: error: column "company_id" of relation "applications" does not exist
+    at /app/node_modules/pg/lib/client.js:631:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /app/src/services/application.service.js:33:19
+    at async withTransaction (/app/src/config/postgres.js:38:20)
+    at async /app/src/routes/application.routes.js:20:22
+2026-04-23 03:47:15 [[31merror[39m]: error: column "application_count" does not exist
+    at /app/node_modules/pg/lib/client.js:631:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /app/src/services/application.service.js:42:7
+    at async withTransaction (/app/src/config/postgres.js:38:20)
+    at async /app/src/routes/application.routes.js:20:22
+2026-04-23 03:48:54 [[31merror[39m]: error: relation "candidate_profiles" does not exist
+    at /app/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async query (/app/src/config/postgres.js:28:15)
+    at async ApplicationService.getApplicationsByJob (/app/src/services/application.service.js:89:17)
+    at async /app/src/routes/application.routes.js:48:22
+2026-04-23 03:51:05 [[31merror[39m]: error: column "candidate_id" of relation "interviews" does not exist
+    at /app/node_modules/pg/lib/client.js:631:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /app/src/services/interview.service.js:25:19
+    at async withTransaction (/app/src/config/postgres.js:38:20)
+    at async /app/src/routes/interview.routes.js:20:22
+2026-04-23 03:51:49 [[31merror[39m]: error: column "job_id" of relation "interviews" does not exist
+    at /app/node_modules/pg/lib/client.js:631:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /app/src/services/interview.service.js:25:19
+    at async withTransaction (/app/src/config/postgres.js:38:20)
+    at async /app/src/routes/interview.routes.js:20:22
+2026-04-23 03:52:27 [[31merror[39m]: error: column "location" of relation "interviews" does not exist
+    at /app/node_modules/pg/lib/client.js:631:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /app/src/services/interview.service.js:25:19
+    at async withTransaction (/app/src/config/postgres.js:38:20)
+    at async /app/src/routes/interview.routes.js:20:22
+2026-04-23 03:54:29 [[31merror[39m]: error: column ca.email does not exist
+    at /app/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async query (/app/src/config/postgres.js:28:15)
+    at async InterviewService.getInterviewsByCompany (/app/src/services/interview.service.js:58:17)
+    at async /app/src/routes/interview.routes.js:31:22
+2026-04-23 04:02:15 [[32minfo[39m]: ✅ PostgreSQL connected
+2026-04-23 04:02:15 [[32minfo[39m]: ✅ MongoDB connected
+2026-04-23 04:02:15 [[32minfo[39m]: ✅ Redis connected
+2026-04-23 04:02:15 [[32minfo[39m]: ✅ Neo4j connected
+2026-04-23 04:02:15 [[32minfo[39m]: ✅ Cassandra connected (temporary)
+2026-04-23 04:02:15 [[32minfo[39m]: ✅ Keyspace srs_events already exists
+2026-04-23 04:02:15 [[32minfo[39m]: ✅ Cassandra connected to keyspace srs_events
+2026-04-23 04:02:15 [[32minfo[39m]: ✅ Cassandra tables checked/created
+2026-04-23 04:02:15 [[32minfo[39m]: ✅ Socket.IO initialized
+2026-04-23 04:02:15 [[32minfo[39m]: 🚀 SRS Backend running on port 3000 [development]
+2026-04-23 04:02:39 [[32minfo[39m]: ✅ PostgreSQL connected
+2026-04-23 04:02:39 [[32minfo[39m]: ✅ MongoDB connected
+2026-04-23 04:02:39 [[32minfo[39m]: ✅ Redis connected
+2026-04-23 04:02:39 [[32minfo[39m]: ✅ Neo4j connected
+2026-04-23 04:02:39 [[32minfo[39m]: ✅ Cassandra connected (temporary)
+2026-04-23 04:02:39 [[32minfo[39m]: ✅ Keyspace srs_events already exists
+2026-04-23 04:02:39 [[32minfo[39m]: ✅ Cassandra connected to keyspace srs_events
+2026-04-23 04:02:39 [[32minfo[39m]: ✅ Cassandra tables checked/created
+2026-04-23 04:02:39 [[32minfo[39m]: ✅ Socket.IO initialized
+2026-04-23 04:02:39 [[32minfo[39m]: 🚀 SRS Backend running on port 3000 [development]
+2026-04-23 04:05:01 [[32minfo[39m]: ✅ PostgreSQL connected
+2026-04-23 04:05:01 [[32minfo[39m]: ✅ MongoDB connected
+2026-04-23 04:05:01 [[32minfo[39m]: ✅ Redis connected
+2026-04-23 04:05:01 [[32minfo[39m]: ✅ Neo4j connected
+2026-04-23 04:05:01 [[32minfo[39m]: ✅ Cassandra connected (temporary)
+2026-04-23 04:05:01 [[32minfo[39m]: ✅ Keyspace srs_events already exists
+2026-04-23 04:05:01 [[32minfo[39m]: ✅ Cassandra connected to keyspace srs_events
+2026-04-23 04:05:01 [[32minfo[39m]: ✅ Cassandra tables checked/created
+2026-04-23 04:05:01 [[32minfo[39m]: ✅ Socket.IO initialized
+2026-04-23 04:05:01 [[32minfo[39m]: 🚀 SRS Backend running on port 3000 [development]
+2026-04-23 04:05:40 [[32minfo[39m]: ✅ PostgreSQL connected
+2026-04-23 04:05:40 [[32minfo[39m]: ✅ MongoDB connected
+2026-04-23 04:05:41 [[32minfo[39m]: ✅ Redis connected
+2026-04-23 04:05:41 [[32minfo[39m]: ✅ Neo4j connected
+2026-04-23 04:05:41 [[32minfo[39m]: ✅ Cassandra connected (temporary)
+2026-04-23 04:05:41 [[32minfo[39m]: ✅ Keyspace srs_events already exists
+2026-04-23 04:05:41 [[32minfo[39m]: ✅ Cassandra connected to keyspace srs_events
+2026-04-23 04:05:41 [[32minfo[39m]: ✅ Cassandra tables checked/created
+2026-04-23 04:05:41 [[32minfo[39m]: ✅ Socket.IO initialized
+2026-04-23 04:05:41 [[32minfo[39m]: 🚀 SRS Backend running on port 3000 [development]
+2026-04-23 04:06:01 [[32minfo[39m]: ✅ PostgreSQL connected
+2026-04-23 04:06:01 [[32minfo[39m]: ✅ MongoDB connected
+2026-04-23 04:06:01 [[32minfo[39m]: ✅ Redis connected
+2026-04-23 04:06:01 [[32minfo[39m]: ✅ Neo4j connected
+2026-04-23 04:06:01 [[32minfo[39m]: ✅ Cassandra connected (temporary)
+2026-04-23 04:06:01 [[32minfo[39m]: ✅ Keyspace srs_events already exists
+2026-04-23 04:06:01 [[32minfo[39m]: ✅ Cassandra connected to keyspace srs_events
+2026-04-23 04:06:01 [[32minfo[39m]: ✅ Cassandra tables checked/created
+2026-04-23 04:06:01 [[32minfo[39m]: ✅ Socket.IO initialized
+2026-04-23 04:06:01 [[32minfo[39m]: 🚀 SRS Backend running on port 3000 [development]

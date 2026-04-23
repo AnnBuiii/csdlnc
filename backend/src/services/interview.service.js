@@ -9,7 +9,7 @@ class InterviewService {
 
       // Verify application belongs to company
       const appRes = await client.query(
-        `SELECT a.id, a.candidate_id, a.job_id, c.full_name, j.title
+        `SELECT a.id, a.candidate_id, a.job_id, a.company_id, c.full_name, j.title
          FROM applications a
          JOIN candidates c ON c.id = a.candidate_id
          JOIN job_postings j ON j.id = a.job_id
@@ -24,10 +24,10 @@ class InterviewService {
 
       const res = await client.query(
         `INSERT INTO interviews
-           (application_id, candidate_id, job_id, scheduled_at, type, location, meeting_link, interviewer, notes)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+           (application_id, candidate_id, job_id, company_id, scheduled_at, type, location, meeting_link, interviewer, notes)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
          RETURNING id, status, scheduled_at, type`,
-        [applicationId, app.candidate_id, app.job_id, scheduledAt, type, location || null, meetingLink || null, interviewer || null, notes || null]
+        [applicationId, app.candidate_id, app.job_id, app.company_id, scheduledAt, type, location || null, meetingLink || null, interviewer || null, notes || null]
       );
 
       // Cập nhật application → interview
@@ -58,11 +58,12 @@ class InterviewService {
     const res = await query(
       `SELECT i.id, i.scheduled_at, i.type, i.status, i.location, i.meeting_link,
               i.interviewer, i.notes,
-              ca.full_name  AS candidate_name, ca.phone, ca.email AS candidate_email,
+              ca.full_name  AS candidate_name, ca.phone, u.email AS candidate_email,
               j.title       AS job_title
        FROM interviews i
        JOIN applications a ON a.id = i.application_id
        JOIN candidates   ca ON ca.id = a.candidate_id
+       JOIN users        u  ON u.id = ca.user_id
        JOIN job_postings j  ON j.id = i.job_id
        WHERE ${where}
        ORDER BY i.scheduled_at ASC
