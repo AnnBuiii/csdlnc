@@ -1,0 +1,30 @@
+2026-04-23 02:54:31 [[32minfo[39m]: ✅ PostgreSQL connected
+2026-04-23 02:54:31 [[32minfo[39m]: ✅ MongoDB connected
+2026-04-23 02:54:31 [[32minfo[39m]: ✅ Redis connected
+2026-04-23 02:54:31 [[32minfo[39m]: ✅ Neo4j connected
+2026-04-23 02:54:31 [[31merror[39m]: ResponseError: Keyspace 'srs_events' does not exist
+    at FrameReader.readError (/app/node_modules/cassandra-driver/lib/readers.js:389:17)
+    at Parser.parseBody (/app/node_modules/cassandra-driver/lib/streams.js:209:66)
+    at Parser._transform (/app/node_modules/cassandra-driver/lib/streams.js:152:10)
+    at Transform._write (node:internal/streams/transform:171:8)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at Protocol.ondata (node:internal/streams/readable:1009:22)
+    at Protocol.emit (node:events:524:28)
+    at addChunk (node:internal/streams/readable:561:12)
+2026-04-23 03:23:54 [[32minfo[39m]: ✅ PostgreSQL connected
+2026-04-23 03:23:54 [[32minfo[39m]: ✅ MongoDB connected
+2026-04-23 03:23:54 [[32minfo[39m]: ✅ Redis connected
+2026-04-23 03:23:54 [[32minfo[39m]: ✅ Neo4j connected
+2026-04-23 03:23:54 [[31merror[39m]: ResponseError: Keyspace 'srs_events' does not exist
+    at FrameReader.readError (/app/node_modules/cassandra-driver/lib/readers.js:389:17)
+    at Parser.parseBody (/app/node_modules/cassandra-driver/lib/streams.js:209:66)
+    at Parser._transform (/app/node_modules/cassandra-driver/lib/streams.js:152:10)
+    at Transform._write (node:internal/streams/transform:171:8)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at Protocol.ondata (node:internal/streams/readable:1009:22)
+    at Protocol.emit (node:events:524:28)
+    at addChunk (node:internal/streams/readable:561:12)
