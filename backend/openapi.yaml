@@ -1,935 +1,944 @@
 openapi: 3.0.3
 info:
-  title: Smart Recruitment System API
-  description: |
-    Đây là tài liệu API của Hệ Thống Tuyển Dụng Thông Minh (Smart Recruitment System).
-    Hệ thống hỗ trợ cả ứng viên (candidate) và nhà tuyển dụng (recruiter).
-    
-    ## Authentication
-    - Tất cả request cần authentication (trừ các endpoint public) phải gửi token trong header:
-      `Authorization: Bearer <jwt-token>`
-    - Token có thể được refresh thông qua endpoint `/api/auth/refresh`
-    
-    ## User Roles
-    - `candidate`: Ứng viên tìm việc
-    - `recruiter`: Nhà tuyển dụng
-    - `admin`: Quản trị viên hệ thống
-  version: 1.0.0
-  contact:
-    name: SRS Team
-    email: support@srs.com
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
+    title: Smart Recruitment System API
+    description: |
+        Đây là tài liệu API của Hệ Thống Tuyển Dụng Thông Minh (Smart Recruitment System).
+        Hệ thống hỗ trợ cả ứng viên (candidate) và nhà tuyển dụng (recruiter).
 
+        ## Authentication
+        - Tất cả request cần authentication (trừ các endpoint public) phải gửi token trong header:
+          `Authorization: Bearer <jwt-token>`
+        - Token có thể được refresh thông qua endpoint `/api/auth/refresh`
+
+        ## User Roles
+        - `candidate`: Ứng viên tìm việc
+        - `recruiter`: Nhà tuyển dụng
+        - `admin`: Quản trị viên hệ thống
+    version: 1.0.0
 servers:
-  - url: http://localhost:8000/api
-    description: Local development server
-  - url: https://api.srs.com/api
-    description: Production server
+    - url: http://localhost:3000/api
+      description: Local development server
+    - url: https://api.srs.com/api
+      description: Production server
 
 tags:
-  - name: Authentication
-    description: Đăng ký, đăng nhập, quản lý phiên làm việc
-  - name: Candidates
-    description: Quản lý hồ sơ ứng viên
-  - name: Companies
-    description: Quản lý thông tin công ty
-  - name: Jobs
-    description: Tuyển dụng và quản lý công việc
-  - name: Applications
-    description: Nộp đơn và quản lý ứng tuyển
-  - name: Interviews
-    description: Lịch phỏng vấn và kết quả
-  - name: Recommendations
-    description: Đề xuất công việc và ứng viên
-  - name: Reviews
-    description: Đánh giá công ty
-  - name: Analytics
-    description: Thống kê và báo cáo
-  - name: Notifications
-    description: Thông báo hệ thống
+    - name: Authentication
+      description: Đăng ký, đăng nhập, quản lý phiên làm việc
+    - name: Candidates
+      description: Quản lý hồ sơ ứng viên
+    - name: Companies
+      description: Quản lý thông tin công ty
+    - name: Jobs
+      description: Tuyển dụng và quản lý công việc
+    - name: Applications
+      description: Nộp đơn và quản lý ứng tuyển
+    - name: Interviews
+      description: Lịch phỏng vấn và kết quả
+    - name: Recommendations
+      description: Đề xuất công việc và ứng viên
+    - name: Reviews
+      description: Đánh giá công ty
+    - name: Analytics
+      description: Thống kê và báo cáo
+    - name: Notifications
+      description: Thông báo hệ thống
 
 paths:
-  # ==================== Authentication Routes ====================
-  /auth/register/candidate:
-    post:
-      tags: [Authentication]
-      summary: Đăng ký ứng viên
-      description: Tạo tài khoản mới cho ứng viên
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [email, password, fullName]
-              properties:
-                email:
-                  type: string
-                  format: email
-                  example: candidate@example.com
-                password:
-                  type: string
-                  minLength: 8
-                  example: password123
-                fullName:
-                  type: string
-                  example: Nguyễn Văn A
-      responses:
-        '201':
-          description: Đăng ký thành công
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: Đăng ký ứng viên thành công.
-                  data:
-                    type: object
-                    properties:
-                      userId:
-                        type: string
-                        format: uuid
-                      token:
-                        type: string
-                      refreshToken:
-                        type: string
-        '400':
-          description: Dữ liệu không hợp lệ
-        '409':
-          description: Email đã tồn tại
+    # ==================== Authentication Routes ====================
+    /auth/register/candidate:
+        post:
+            tags: [Authentication]
+            summary: Đăng ký ứng viên
+            description: Tạo tài khoản mới cho ứng viên
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [email, password, fullName]
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+                                    example: candidate@example.com
+                                password:
+                                    type: string
+                                    minLength: 8
+                                    example: password123
+                                fullName:
+                                    type: string
+                                    example: Nguyễn Văn A
+            responses:
+                "201":
+                    description: Đăng ký thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    success:
+                                        type: boolean
+                                        example: true
+                                    message:
+                                        type: string
+                                        example: Đăng ký ứng viên thành công.
+                                    data:
+                                        type: object
+                                        properties:
+                                            userId:
+                                                type: string
+                                                format: uuid
+                                            token:
+                                                type: string
+                                            refreshToken:
+                                                type: string
+                "400":
+                    description: Dữ liệu không hợp lệ
+                "409":
+                    description: Email đã tồn tại
 
-  /auth/register/recruiter:
-    post:
-      tags: [Authentication]
-      summary: Đăng ký nhà tuyển dụng
-      description: Tạo tài khoản mới cho nhà tuyển dụng
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [email, password, companyName]
-              properties:
-                email:
-                  type: string
-                  format: email
-                  example: recruiter@company.com
-                password:
-                  type: string
-                  minLength: 8
-                  example: password123
-                companyName:
-                  type: string
-                  example: Công ty ABC
-      responses:
-        '201':
-          description: Đăng ký thành công
-        '400':
-          description: Dữ liệu không hợp lệ
-        '409':
-          description: Email đã tồn tại
+    /auth/register/recruiter:
+        post:
+            tags: [Authentication]
+            summary: Đăng ký nhà tuyển dụng
+            description: Tạo tài khoản mới cho nhà tuyển dụng
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [email, password, companyName]
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+                                    example: recruiter@company.com
+                                password:
+                                    type: string
+                                    minLength: 8
+                                    example: password123
+                                companyName:
+                                    type: string
+                                    example: Công ty ABC
+            responses:
+                "201":
+                    description: Đăng ký thành công
+                "400":
+                    description: Dữ liệu không hợp lệ
+                "409":
+                    description: Email đã tồn tại
 
-  /auth/login:
-    post:
-      tags: [Authentication]
-      summary: Đăng nhập
-      description: Đăng nhập vào hệ thống
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [email, password]
-              properties:
-                email:
-                  type: string
-                  format: email
-                  example: user@example.com
-                password:
-                  type: string
-                  example: password123
-      responses:
-        '200':
-          description: Đăng nhập thành công
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      token:
-                        type: string
-                      refreshToken:
-                        type: string
-                      user:
-                        $ref: '#/components/schemas/User'
-        '401':
-          description: Thông tin đăng nhập không chính xác
+    /auth/login:
+        post:
+            tags: [Authentication]
+            summary: Đăng nhập
+            description: Đăng nhập vào hệ thống
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [email, password]
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+                                    example: user@example.com
+                                password:
+                                    type: string
+                                    example: password123
+            responses:
+                "200":
+                    description: Đăng nhập thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    success:
+                                        type: boolean
+                                        example: true
+                                    data:
+                                        type: object
+                                        properties:
+                                            token:
+                                                type: string
+                                            refreshToken:
+                                                type: string
+                                            user:
+                                                $ref: "#/components/schemas/User"
+                "401":
+                    description: Thông tin đăng nhập không chính xác
 
-  /auth/logout:
-    post:
-      tags: [Authentication]
-      summary: Đăng xuất
-      description: Đăng xuất khỏi hệ thống
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [refreshToken]
-              properties:
-                refreshToken:
-                  type: string
-                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-      responses:
-        '200':
-          description: Đăng xuất thành công
-        '401':
-          description: Không có quyền truy cập
+    /auth/logout:
+        post:
+            tags: [Authentication]
+            summary: Đăng xuất
+            description: Đăng xuất khỏi hệ thống
+            security:
+                - bearerAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [refreshToken]
+                            properties:
+                                refreshToken:
+                                    type: string
+                                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+            responses:
+                "200":
+                    description: Đăng xuất thành công
+                "401":
+                    description: Không có quyền truy cập
 
-  /auth/refresh:
-    post:
-      tags: [Authentication]
-      summary: Refresh token
-      description: Làm mới token truy cập
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [refreshToken]
-              properties:
-                refreshToken:
-                  type: string
-                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-      responses:
-        '200':
-          description: Token được làm mới thành công
-        '401':
-          description: Refresh token không hợp lệ
+    /auth/refresh:
+        post:
+            tags: [Authentication]
+            summary: Refresh token
+            description: Làm mới token truy cập
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [refreshToken]
+                            properties:
+                                refreshToken:
+                                    type: string
+                                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+            responses:
+                "200":
+                    description: Token được làm mới thành công
+                "401":
+                    description: Refresh token không hợp lệ
 
-  /auth/me:
-    get:
-      tags: [Authentication]
-      summary: Thông tin người dùng hiện tại
-      description: Lấy thông tin của người dùng đang đăng nhập
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Thành công
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '401':
-          description: Không có quyền truy cập
+    /auth/me:
+        get:
+            tags: [Authentication]
+            summary: Thông tin người dùng hiện tại
+            description: Lấy thông tin của người dùng đang đăng nhập
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/User"
+                "401":
+                    description: Không có quyền truy cập
 
-  # ==================== Candidate Routes ====================
-  /candidates/profile:
-    get:
-      tags: [Candidates]
-      summary: Lấy hồ sơ của chính mình
-      description: Ứng viên lấy thông tin hồ sơ của mình
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Thành công
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CandidateProfile'
-    put:
-      tags: [Candidates]
-      summary: Cập nhật hồ sơ
-      description: Ứng viên cập nhật thông tin hồ sơ
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CandidateProfile'
-      responses:
-        '200':
-          description: Cập nhật thành công
-        '400':
-          description: Dữ liệu không hợp lệ
+    # ==================== Candidate Routes ====================
+    /candidates/profile:
+        get:
+            tags: [Candidates]
+            summary: Lấy hồ sơ của chính mình
+            description: Ứng viên lấy thông tin hồ sơ của mình
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/CandidateProfile"
+        put:
+            tags: [Candidates]
+            summary: Cập nhật hồ sơ
+            description: Ứng viên cập nhật thông tin hồ sơ
+            security:
+                - bearerAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/CandidateProfile"
+            responses:
+                "200":
+                    description: Cập nhật thành công
+                "400":
+                    description: Dữ liệu không hợp lệ
 
-  /candidates/{id}/profile:
-    get:
-      tags: [Candidates]
-      summary: Xem hồ sơ ứng viên (public)
-      description: Xem thông tin hồ sơ ứng viên (không cần đăng nhập)
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-          example: 123e4567-e89b-12d3-a456-426614174000
-      responses:
-        '200':
-          description: Thành công
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CandidateProfile'
-        '404':
-          description: Ứng viên không tồn tại
-
-  # ==================== Job Routes ====================
-  /jobs:
-    get:
-      tags: [Jobs]
-      summary: Tìm kiếm công việc
-      description: Tìm kiếm và lọc công việc (công khai)
-      parameters:
-        - name: keyword
-          in: query
-          schema:
-            type: string
-          description: Từ khóa tìm kiếm
-        - name: location
-          in: query
-          schema:
-            type: string
-          description: Địa điểm làm việc
-        - name: jobType
-          in: query
-          schema:
-            type: string
-            enum: [fulltime, parttime, remote, hybrid]
-          description: Loại công việc
-        - name: experience
-          in: query
-          schema:
-            type: string
-            enum: [intern, fresher, junior, senior, manager]
-          description: Yêu cầu kinh nghiệm
-        - name: page
-          in: query
-          schema:
-            type: integer
-            minimum: 1
-          description: Số trang
-        - name: limit
-          in: query
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-          description: Số lượng mỗi trang
-      responses:
-        '200':
-          description: Thành công
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Job'
-                  meta:
-                    $ref: '#/components/schemas/PaginationMeta'
-    post:
-      tags: [Jobs]
-      summary: Tạo tin tuyển dụng
-      description: Nhà tuyển dụng tạo tin tuyển dụng mới
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [title]
-              properties:
-                title:
-                  type: string
-                  example: Senior Backend Developer
-                description:
-                  type: string
-                  example: Tuyển dụng lập trình viên backend
-                requirements:
-                  type: array
-                  items:
-                    type: string
-                  example: ["Node.js", "PostgreSQL", "Redis"]
-                salaryMin:
-                  type: integer
-                  minimum: 0
-                  example: 20000000
-                salaryMax:
-                  type: integer
-                  minimum: 0
-                  example: 40000000
-                jobType:
-                  type: string
-                  enum: [fulltime, parttime, remote, hybrid]
-                  example: fulltime
-                location:
-                  type: string
-                  example: Hà Nội
-                deadline:
-                  type: string
-                  format: date
-                  example: 2024-12-31
-      responses:
-        '201':
-          description: Tạo tin thành công
-        '400':
-          description: Dữ liệu không hợp lệ
-        '401':
-          description: Không có quyền truy cập
-
-  /jobs/{id}:
-    get:
-      tags: [Jobs]
-      summary: Chi tiết tin tuyển dụng
-      description: Lấy thông tin chi tiết của một tin tuyển dụng
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-          example: 123e4567-e89b-12d3-a456-426614174000
-      responses:
-        '200':
-          description: Thành công
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/JobDetail'
-        '404':
-          description: Tin tuyển dụng không tồn tại
-
-  /jobs/{id}/related:
-    get:
-      tags: [Jobs]
-      summary: Công việc liên quan
-      description: Lấy danh sách công việc liên quan
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          description: Thành công
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Job'
-
-  # ==================== Application Routes ====================
-  /applications:
-    post:
-      tags: [Applications]
-      summary: Nộp đơn ứng tuyển
-      description: Ứng viên nộp đơn ứng tuyển công việc
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [jobId]
-              properties:
-                jobId:
-                  type: string
-                  format: uuid
+    /candidates/{id}/profile:
+        get:
+            tags: [Candidates]
+            summary: Xem hồ sơ ứng viên (public)
+            description: Xem thông tin hồ sơ ứng viên (không cần đăng nhập)
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      format: uuid
                   example: 123e4567-e89b-12d3-a456-426614174000
-                resumeUrl:
-                  type: string
-                  format: uri
-                  example: https://storage.example.com/resume.pdf
-                coverLetter:
-                  type: string
-                  example: Tôi rất mong muốn được làm việc tại công ty...
-      responses:
-        '201':
-          description: Nộp đơn thành công
-        '400':
-          description: Dữ liệu không hợp lệ
-        '404':
-          description: Công việc không tồn tại
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/CandidateProfile"
+                "404":
+                    description: Ứng viên không tồn tại
 
-  /applications/mine:
-    get:
-      tags: [Applications]
-      summary: Đơn ứng tuyển của tôi
-      description: Ứng viên xem danh sách đơn ứng tuyển của mình
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: page
-          in: query
-          schema:
-            type: integer
-            minimum: 1
-        - name: limit
-          in: query
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 50
-        - name: status
-          in: query
-          schema:
-            type: string
-            enum: [pending, reviewed, shortlisted, interviewed, rejected, hired]
-      responses:
-        '200':
-          description: Thành công
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Application'
-                  meta:
-                    $ref: '#/components/schemas/PaginationMeta'
+    # ==================== Job Routes ====================
+    /jobs:
+        get:
+            tags: [Jobs]
+            summary: Tìm kiếm công việc
+            description: Tìm kiếm và lọc công việc (công khai)
+            parameters:
+                - name: keyword
+                  in: query
+                  schema:
+                      type: string
+                  description: Từ khóa tìm kiếm
+                - name: location
+                  in: query
+                  schema:
+                      type: string
+                  description: Địa điểm làm việc
+                - name: jobType
+                  in: query
+                  schema:
+                      type: string
+                      enum: [fulltime, parttime, remote, hybrid]
+                  description: Loại công việc
+                - name: experience
+                  in: query
+                  schema:
+                      type: string
+                      enum: [intern, fresher, junior, senior, manager]
+                  description: Yêu cầu kinh nghiệm
+                - name: page
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                  description: Số trang
+                - name: limit
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      maximum: 100
+                  description: Số lượng mỗi trang
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    success:
+                                        type: boolean
+                                        example: true
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Job"
+                                    meta:
+                                        $ref: "#/components/schemas/PaginationMeta"
+        post:
+            tags: [Jobs]
+            summary: Tạo tin tuyển dụng
+            description: Nhà tuyển dụng tạo tin tuyển dụng mới
+            security:
+                - bearerAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [title]
+                            properties:
+                                title:
+                                    type: string
+                                    example: Senior Backend Developer
+                                description:
+                                    type: string
+                                    example: Tuyển dụng lập trình viên backend
+                                requirements:
+                                    type: array
+                                    items:
+                                        type: string
+                                    example: ["Node.js", "PostgreSQL", "Redis"]
+                                salaryMin:
+                                    type: integer
+                                    minimum: 0
+                                    example: 20000000
+                                salaryMax:
+                                    type: integer
+                                    minimum: 0
+                                    example: 40000000
+                                jobType:
+                                    type: string
+                                    enum: [fulltime, parttime, remote, hybrid]
+                                    example: fulltime
+                                location:
+                                    type: string
+                                    example: Hà Nội
+                                deadline:
+                                    type: string
+                                    format: date
+                                    example: 2024-12-31
+            responses:
+                "201":
+                    description: Tạo tin thành công
+                "400":
+                    description: Dữ liệu không hợp lệ
+                "401":
+                    description: Không có quyền truy cập
 
-  # ==================== Interview Routes ====================
-  /interviews:
-    post:
-      tags: [Interviews]
-      summary: Lên lịch phỏng vấn
-      description: Nhà tuyển dụng lên lịch phỏng vấn ứng viên
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [applicationId, scheduledAt, type]
-              properties:
-                applicationId:
-                  type: string
-                  format: uuid
-                scheduledAt:
-                  type: string
-                  format: date-time
-                type:
-                  type: string
-                  enum: [phone, video, onsite]
-                notes:
-                  type: string
-      responses:
-        '201':
-          description: Tạo lịch phỏng vấn thành công
-        '400':
-          description: Dữ liệu không hợp lệ
-        '404':
-          description: Đơn ứng tuyển không tồn tại
+    /jobs/{id}:
+        get:
+            tags: [Jobs]
+            summary: Chi tiết tin tuyển dụng
+            description: Lấy thông tin chi tiết của một tin tuyển dụng
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      format: uuid
+                  example: 123e4567-e89b-12d3-a456-426614174000
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/JobDetail"
+                "404":
+                    description: Tin tuyển dụng không tồn tại
 
-  /interviews/mine:
-    get:
-      tags: [Interviews]
-      summary: Lịch phỏng vấn của tôi
-      description: Ứng viên xem danh sách lịch phỏng vấn
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Thành công
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Interview'
+    /jobs/{id}/related:
+        get:
+            tags: [Jobs]
+            summary: Công việc liên quan
+            description: Lấy danh sách công việc liên quan
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      format: uuid
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Job"
 
-  # ==================== Recommendation Routes ====================
-  /recommendations/jobs:
-    get:
-      tags: [Recommendations]
-      summary: Đề xuất công việc
-      description: Ứng viên nhận đề xuất công việc dựa trên hồ sơ
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: limit
-          in: query
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 20
-            default: 10
-      responses:
-        '200':
-          description: Thành công
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Job'
+    # ==================== Application Routes ====================
+    /applications:
+        post:
+            tags: [Applications]
+            summary: Nộp đơn ứng tuyển
+            description: Ứng viên nộp đơn ứng tuyển công việc
+            security:
+                - bearerAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [jobId]
+                            properties:
+                                jobId:
+                                    type: string
+                                    format: uuid
+                                    example: 123e4567-e89b-12d3-a456-426614174000
+                                resumeUrl:
+                                    type: string
+                                    format: uri
+                                    example: https://storage.example.com/resume.pdf
+                                coverLetter:
+                                    type: string
+                                    example: Tôi rất mong muốn được làm việc tại công ty...
+            responses:
+                "201":
+                    description: Nộp đơn thành công
+                "400":
+                    description: Dữ liệu không hợp lệ
+                "404":
+                    description: Công việc không tồn tại
 
-  # ==================== Health Check ====================
-  /health:
-    get:
-      summary: Kiểm tra trạng thái hệ thống
-      description: Endpoint kiểm tra hệ thống có hoạt động không
-      responses:
-        '200':
-          description: Hệ thống hoạt động bình thường
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
+    /applications/mine:
+        get:
+            tags: [Applications]
+            summary: Đơn ứng tuyển của tôi
+            description: Ứng viên xem danh sách đơn ứng tuyển của mình
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                - name: limit
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      maximum: 50
+                - name: status
+                  in: query
+                  schema:
+                      type: string
+                      enum:
+                          [
+                              pending,
+                              reviewed,
+                              shortlisted,
+                              interviewed,
+                              rejected,
+                              hired,
+                          ]
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    success:
+                                        type: boolean
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Application"
+                                    meta:
+                                        $ref: "#/components/schemas/PaginationMeta"
+
+    # ==================== Interview Routes ====================
+    /interviews:
+        post:
+            tags: [Interviews]
+            summary: Lên lịch phỏng vấn
+            description: Nhà tuyển dụng lên lịch phỏng vấn ứng viên
+            security:
+                - bearerAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [applicationId, scheduledAt, type]
+                            properties:
+                                applicationId:
+                                    type: string
+                                    format: uuid
+                                scheduledAt:
+                                    type: string
+                                    format: date-time
+                                type:
+                                    type: string
+                                    enum: [phone, video, onsite]
+                                notes:
+                                    type: string
+            responses:
+                "201":
+                    description: Tạo lịch phỏng vấn thành công
+                "400":
+                    description: Dữ liệu không hợp lệ
+                "404":
+                    description: Đơn ứng tuyển không tồn tại
+
+    /interviews/mine:
+        get:
+            tags: [Interviews]
+            summary: Lịch phỏng vấn của tôi
+            description: Ứng viên xem danh sách lịch phỏng vấn
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Interview"
+
+    # ==================== Recommendation Routes ====================
+    /recommendations/jobs:
+        get:
+            tags: [Recommendations]
+            summary: Đề xuất công việc
+            description: Ứng viên nhận đề xuất công việc dựa trên hồ sơ
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: limit
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      maximum: 20
+                      default: 10
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Job"
+
+    # ==================== Health Check ====================
+    /health:
+        get:
+            summary: Kiểm tra trạng thái hệ thống
+            description: Endpoint kiểm tra hệ thống có hoạt động không
+            responses:
+                "200":
+                    description: Hệ thống hoạt động bình thường
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                        example: ok
+                                    timestamp:
+                                        type: string
+                                        format: date-time
+
+components:
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+
+    schemas:
+        User:
+            type: object
+            properties:
+                userId:
                     type: string
-                    example: ok
-                  timestamp:
+                    format: uuid
+                email:
+                    type: string
+                    format: email
+                role:
+                    type: string
+                    enum: [candidate, recruiter, admin]
+                fullName:
+                    type: string
+                avatarUrl:
+                    type: string
+                    format: uri
+                createdAt:
                     type: string
                     format: date-time
 
-components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+        CandidateProfile:
+            type: object
+            properties:
+                candidateId:
+                    type: string
+                    format: uuid
+                fullName:
+                    type: string
+                email:
+                    type: string
+                    format: email
+                phone:
+                    type: string
+                location:
+                    type: string
+                title:
+                    type: string
+                summary:
+                    type: string
+                experienceYears:
+                    type: integer
+                    minimum: 0
+                skills:
+                    type: array
+                    items:
+                        type: string
+                    example: ["JavaScript", "React", "Node.js"]
+                education:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Education"
+                workExperience:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/WorkExperience"
+                resumeUrl:
+                    type: string
+                    format: uri
+                avatarUrl:
+                    type: string
+                    format: uri
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
 
-  schemas:
-    User:
-      type: object
-      properties:
-        userId:
-          type: string
-          format: uuid
-        email:
-          type: string
-          format: email
-        role:
-          type: string
-          enum: [candidate, recruiter, admin]
-        fullName:
-          type: string
-        avatarUrl:
-          type: string
-          format: uri
-        createdAt:
-          type: string
-          format: date-time
+        Job:
+            type: object
+            properties:
+                jobId:
+                    type: string
+                    format: uuid
+                title:
+                    type: string
+                companyName:
+                    type: string
+                location:
+                    type: string
+                jobType:
+                    type: string
+                    enum: [fulltime, parttime, remote, hybrid]
+                salaryMin:
+                    type: integer
+                salaryMax:
+                    type: integer
+                currency:
+                    type: string
+                    default: VND
+                experience:
+                    type: string
+                    enum: [intern, fresher, junior, senior, manager]
+                status:
+                    type: string
+                    enum: [draft, active, closed]
+                deadline:
+                    type: string
+                    format: date
+                createdAt:
+                    type: string
+                    format: date-time
 
-    CandidateProfile:
-      type: object
-      properties:
-        candidateId:
-          type: string
-          format: uuid
-        fullName:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
-        location:
-          type: string
-        title:
-          type: string
-        summary:
-          type: string
-        experienceYears:
-          type: integer
-          minimum: 0
-        skills:
-          type: array
-          items:
-            type: string
-          example: ["JavaScript", "React", "Node.js"]
-        education:
-          type: array
-          items:
-            $ref: '#/components/schemas/Education'
-        workExperience:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkExperience'
-        resumeUrl:
-          type: string
-          format: uri
-        avatarUrl:
-          type: string
-          format: uri
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+        JobDetail:
+            allOf:
+                - $ref: "#/components/schemas/Job"
+                - type: object
+                  properties:
+                      description:
+                          type: string
+                      requirements:
+                          type: array
+                          items:
+                              type: string
+                      benefits:
+                          type: array
+                          items:
+                              type: string
+                      company:
+                          $ref: "#/components/schemas/Company"
+                      applicationCount:
+                          type: integer
+                      viewCount:
+                          type: integer
 
-    Job:
-      type: object
-      properties:
-        jobId:
-          type: string
-          format: uuid
-        title:
-          type: string
-        companyName:
-          type: string
-        location:
-          type: string
-        jobType:
-          type: string
-          enum: [fulltime, parttime, remote, hybrid]
-        salaryMin:
-          type: integer
-        salaryMax:
-          type: integer
-        currency:
-          type: string
-          default: VND
-        experience:
-          type: string
-          enum: [intern, fresher, junior, senior, manager]
-        status:
-          type: string
-          enum: [draft, active, closed]
-        deadline:
-          type: string
-          format: date
-        createdAt:
-          type: string
-          format: date-time
+        Application:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                    format: uuid
+                jobId:
+                    type: string
+                    format: uuid
+                candidateId:
+                    type: string
+                    format: uuid
+                status:
+                    type: string
+                    enum:
+                        [
+                            pending,
+                            reviewed,
+                            shortlisted,
+                            interviewed,
+                            rejected,
+                            hired,
+                        ]
+                resumeUrl:
+                    type: string
+                    format: uri
+                coverLetter:
+                    type: string
+                appliedAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+                job:
+                    $ref: "#/components/schemas/Job"
+                candidate:
+                    $ref: "#/components/schemas/CandidateProfile"
 
-    JobDetail:
-      allOf:
-        - $ref: '#/components/schemas/Job'
-        - type: object
-          properties:
-            description:
-              type: string
-            requirements:
-              type: array
-              items:
-                type: string
-            benefits:
-              type: array
-              items:
-                type: string
-            company:
-              $ref: '#/components/schemas/Company'
-            applicationCount:
-              type: integer
-            viewCount:
-              type: integer
+        Interview:
+            type: object
+            properties:
+                interviewId:
+                    type: string
+                    format: uuid
+                applicationId:
+                    type: string
+                    format: uuid
+                candidateId:
+                    type: string
+                    format: uuid
+                jobId:
+                    type: string
+                    format: uuid
+                scheduledAt:
+                    type: string
+                    format: date-time
+                type:
+                    type: string
+                    enum: [phone, video, onsite]
+                status:
+                    type: string
+                    enum: [scheduled, completed, cancelled, no_show]
+                result:
+                    type: string
+                    enum: [pending, passed, failed]
+                notes:
+                    type: string
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
 
-    Application:
-      type: object
-      properties:
-        applicationId:
-          type: string
-          format: uuid
-        jobId:
-          type: string
-          format: uuid
-        candidateId:
-          type: string
-          format: uuid
-        status:
-          type: string
-          enum: [pending, reviewed, shortlisted, interviewed, rejected, hired]
-        resumeUrl:
-          type: string
-          format: uri
-        coverLetter:
-          type: string
-        appliedAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        job:
-          $ref: '#/components/schemas/Job'
-        candidate:
-          $ref: '#/components/schemas/CandidateProfile'
+        Company:
+            type: object
+            properties:
+                companyId:
+                    type: string
+                    format: uuid
+                name:
+                    type: string
+                description:
+                    type: string
+                industry:
+                    type: string
+                website:
+                    type: string
+                    format: uri
+                logoUrl:
+                    type: string
+                    format: uri
+                location:
+                    type: string
+                employeeCount:
+                    type: string
+                    enum: [1-10, 11-50, 51-200, 201-500, 501-1000, 1000+]
+                foundedYear:
+                    type: integer
+                avgRating:
+                    type: number
+                    minimum: 0
+                    maximum: 5
+                reviewCount:
+                    type: integer
+                createdAt:
+                    type: string
+                    format: date-time
 
-    Interview:
-      type: object
-      properties:
-        interviewId:
-          type: string
-          format: uuid
-        applicationId:
-          type: string
-          format: uuid
-        candidateId:
-          type: string
-          format: uuid
-        jobId:
-          type: string
-          format: uuid
-        scheduledAt:
-          type: string
-          format: date-time
-        type:
-          type: string
-          enum: [phone, video, onsite]
-        status:
-          type: string
-          enum: [scheduled, completed, cancelled, no_show]
-        result:
-          type: string
-          enum: [pending, passed, failed]
-        notes:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+        Education:
+            type: object
+            properties:
+                school:
+                    type: string
+                degree:
+                    type: string
+                field:
+                    type: string
+                startYear:
+                    type: integer
+                endYear:
+                    type: integer
+                description:
+                    type: string
 
-    Company:
-      type: object
-      properties:
-        companyId:
-          type: string
-          format: uuid
-        name:
-          type: string
-        description:
-          type: string
-        industry:
-          type: string
-        website:
-          type: string
-          format: uri
-        logoUrl:
-          type: string
-          format: uri
-        location:
-          type: string
-        employeeCount:
-          type: string
-          enum: [1-10, 11-50, 51-200, 201-500, 501-1000, 1000+]
-        foundedYear:
-          type: integer
-        avgRating:
-          type: number
-          minimum: 0
-          maximum: 5
-        reviewCount:
-          type: integer
-        createdAt:
-          type: string
-          format: date-time
+        WorkExperience:
+            type: object
+            properties:
+                company:
+                    type: string
+                position:
+                    type: string
+                startDate:
+                    type: string
+                    format: date
+                endDate:
+                    type: string
+                    format: date
+                current:
+                    type: boolean
+                description:
+                    type: string
 
-    Education:
-      type: object
-      properties:
-        school:
-          type: string
-        degree:
-          type: string
-        field:
-          type: string
-        startYear:
-          type: integer
-        endYear:
-          type: integer
-        description:
-          type: string
+        PaginationMeta:
+            type: object
+            properties:
+                total:
+                    type: integer
+                page:
+                    type: integer
+                limit:
+                    type: integer
+                totalPages:
+                    type: integer
+                hasNext:
+                    type: boolean
+                hasPrev:
+                    type: boolean
 
-    WorkExperience:
-      type: object
-      properties:
-        company:
-          type: string
-        position:
-          type: string
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-        current:
-          type: boolean
-        description:
-          type: string
-
-    PaginationMeta:
-      type: object
-      properties:
-        total:
-          type: integer
-        page:
-          type: integer
-        limit:
-          type: integer
-        totalPages:
-          type: integer
-        hasNext:
-          type: boolean
-        hasPrev:
-          type: boolean
-
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        message:
-          type: string
-          example: Đã xảy ra lỗi
-        error:
-          type: string
-          example: ValidationError
-        statusCode:
-          type: integer
-          example: 400
-        timestamp:
-          type: string
-          format: date-time
+        Error:
+            type: object
+            properties:
+                success:
+                    type: boolean
+                    example: false
+                message:
+                    type: string
+                    example: Đã xảy ra lỗi
+                error:
+                    type: string
+                    example: ValidationError
+                statusCode:
+                    type: integer
+                    example: 400
+                timestamp:
+                    type: string
+                    format: date-time

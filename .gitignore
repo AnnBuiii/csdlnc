@@ -1,0 +1,119 @@
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+~$*
+
+# Environment variables
+.env
+!.env.example
+
+# Backend - Node.js
+backend/node_modules/
+backend/package-lock.json
+backend/yarn.lock
+backend/pnpm-lock.yaml
+backend/.npm
+backend/.env.local
+backend/.env.*.local
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+backend/yarn-error.log
+backend/logs/
+backend/logs/*
+backend/uploads/
+backend/uploads/*
+backend/.DS_Store
+
+# Database data directories
+db/postgres/data/
+db/mongo/data/
+db/neo4j/data/
+db/cassandra/data/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+backend/coverage/
+
+# nyc test coverage
+.nyc_output
+backend/.nyc_output
+
+# Jest test results
+backend/junit.xml
+backend/test-results/
+backend/__tests__/__snapshots__/
+
+# Build output
+dist/
+build/
+out/
+.next/
+.nuxt/
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variable files
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Next.js build output
+.next
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+public
+
+# Vue/Nuxt
+.serverless/
+.fusebox/
+.dynamodb/
+
+# Temporary folders
+tmp/
+temp/
