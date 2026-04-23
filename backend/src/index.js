@@ -8,8 +8,29 @@ const { connectCassandra } = require('./config/cassandra');
 const logger = require('./config/logger');
 const { initSocketIO } = require('./config/socket');
 const http = require('http');
+const { execSync } = require('child_process');
+const path = require('path');
 
 const PORT = process.env.PORT || 3000;
+
+async function checkAndSeedDatabase() {
+  try {
+    const { query } = require('./config/postgres');
+    const result = await query('SELECT COUNT(*) FROM users');
+    const userCount = parseInt(result.rows[0].count);
+    
+    if (userCount === 0) {
+      logger.info('📊 Database empty, running seed script...');
+      const seedScript = path.join(__dirname, '../scripts/seed.js');
+      execSync(`node ${seedScript}`, { stdio: 'inherit' });
+      logger.info('✅ Database seeded successfully');
+    } else {
+      logger.info(`📊 Database already has ${userCount} users, skipping seed`);
+    }
+  } catch (error) {
+    logger.warn(`⚠️  Could not check database emptiness: ${error.message}`);
+  }
+}
 
 async function bootstrap() {
   try {
@@ -19,6 +40,9 @@ async function bootstrap() {
     await connectRedis();
     await connectNeo4j();
     await connectCassandra();
+
+    // Check if database is empty and seed if needed
+    await checkAndSeedDatabase();
 
     const server = http.createServer(app);
     initSocketIO(server);
