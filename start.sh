@@ -5,18 +5,15 @@
 set -e
 echo "🚀 Smart Recruitment System – Khởi động..."
 
-# 1. Tạo file .env nếu chưa có
 if [ ! -f .env ]; then
     echo "📋 Tạo file .env từ .env.example..."
     cp .env.example .env
     echo "⚠️  Hãy chỉnh sửa .env trước khi chạy production!"
 fi
 
-# 3. Khởi động databases trước
 echo "🗄️  Khởi động databases..."
 docker compose up -d postgres mongo redis neo4j cassandra
 
-# 4. Chờ databases healthy (dùng Docker health status thay vì echo)
 wait_healthy() {
     local service=$1
     local timeout=${2:-120}
@@ -41,15 +38,12 @@ wait_healthy redis 60
 wait_healthy neo4j 120
 wait_healthy cassandra 180
 
-# 5. Khởi động backend
 echo "⚙️  Khởi động backend..."
 docker compose up -d backend
 
-# 6. Khởi động UI tools
 echo "🖥️  Khởi động UI tools..."
 docker compose up -d pgadmin mongo-express redisinsight cassandra-web
 
-# 7. Chờ UI tools sẵn sàng (chúng không có healthcheck nên chờ port)
 wait_port() {
     local service=$1
     local port=$2
