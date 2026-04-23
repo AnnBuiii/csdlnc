@@ -164,3 +164,24 @@
 2026-04-23 04:06:01 [[32minfo[39m]: ✅ Cassandra tables checked/created
 2026-04-23 04:06:01 [[32minfo[39m]: ✅ Socket.IO initialized
 2026-04-23 04:06:01 [[32minfo[39m]: 🚀 SRS Backend running on port 3000 [development]
+2026-04-23 04:10:52 [[32minfo[39m]: SIGTERM received – shutting down gracefully
+2026-04-23 04:11:40 [[32minfo[39m]: ✅ PostgreSQL connected
+2026-04-23 04:11:40 [[32minfo[39m]: ✅ MongoDB connected
+2026-04-23 04:11:40 [[32minfo[39m]: ✅ Redis connected
+2026-04-23 04:11:41 [[32minfo[39m]: ✅ Neo4j connected
+2026-04-23 04:11:41 [[32minfo[39m]: ✅ Cassandra connected (temporary)
+2026-04-23 04:11:41 [[32minfo[39m]: ✅ Keyspace srs_events already exists
+2026-04-23 04:11:41 [[32minfo[39m]: ✅ Cassandra connected to keyspace srs_events
+2026-04-23 04:11:41 [[32minfo[39m]: ✅ Cassandra tables checked/created
+2026-04-23 04:11:41 [[32minfo[39m]: ✅ Socket.IO initialized
+2026-04-23 04:11:41 [[32minfo[39m]: 🚀 SRS Backend running on port 3000 [development]
+2026-04-23 04:21:48 [[32minfo[39m]: ✅ PostgreSQL connected
+2026-04-23 04:21:48 [[32minfo[39m]: ✅ MongoDB connected
+2026-04-23 04:21:48 [[32minfo[39m]: ✅ Redis connected
+2026-04-23 04:21:48 [[32minfo[39m]: ✅ Neo4j connected
+2026-04-23 04:21:48 [[32minfo[39m]: ✅ Cassandra connected (temporary)
+2026-04-23 04:21:49 [[32minfo[39m]: ✅ Keyspace srs_events already exists
+2026-04-23 04:21:49 [[32minfo[39m]: ✅ Cassandra connected to keyspace srs_events
+2026-04-23 04:21:49 [[32minfo[39m]: ✅ Cassandra tables checked/created
+2026-04-23 04:21:49 [[32minfo[39m]: ✅ Socket.IO initialized
+2026-04-23 04:21:49 [[32minfo[39m]: 🚀 SRS Backend running on port 3000 [development]
