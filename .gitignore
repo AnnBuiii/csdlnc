@@ -28,6 +28,23 @@ backend/uploads/
 backend/uploads/*
 backend/.DS_Store
 
+# Frontend - Node.js
+frontend/node_modules/
+frontend/package-lock.json
+frontend/yarn.lock
+frontend/pnpm-lock.yaml
+frontend/.npm
+frontend/.env.local
+frontend/.env.*.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/yarn-error.log
+frontend/dist/
+frontend/build/
+frontend/.vite/
+frontend/.DS_Store
+
 # Database data directories
 db/postgres/data/
 db/mongo/data/

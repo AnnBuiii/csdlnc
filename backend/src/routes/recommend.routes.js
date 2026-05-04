@@ -8,8 +8,10 @@ const { success } = require('../utils/response');
 // GET /api/recommendations/jobs – Gợi ý việc làm cho ứng viên
 router.get('/jobs', authenticate, authorize('candidate'), async (req, res, next) => {
   try {
+    const limit = parseInt(req.query.limit, 10);
+    const safeLimit = Number.isInteger(limit) && limit >= 0 ? limit : 10;
     const result = await recommendService.recommendJobsForCandidate(
-      req.user.candidateId, req.query.limit || 10
+      req.user.candidateId, safeLimit
     );
     success(res, result.data, result.fromCache ? 'Từ cache.' : 'Gợi ý mới.');
   } catch (err) { next(err); }
@@ -22,8 +24,10 @@ router.get('/candidates/:jobId',
   validate,
   async (req, res, next) => {
     try {
+      const limit = parseInt(req.query.limit, 10);
+      const safeLimit = Number.isInteger(limit) && limit >= 0 ? limit : 10;
       const result = await recommendService.recommendCandidatesForJob(
-        req.params.jobId, req.query.limit || 10
+        req.params.jobId, safeLimit
       );
       success(res, result.data);
     } catch (err) { next(err); }
