@@ -47,47 +47,44 @@ Hệ thống được xây dựng dựa trên khảo sát các nền tảng tuy�
 
 ## 1.3. Các nghiệp vụ chính của hệ thống
 
-### NV01 – Quản lý Tài khoản người dùng
-
+- NV01 – Quản lý Tài khoản người dùng: 
 Hệ thống hỗ trợ đăng ký, đăng nhập, xác thực tài khoản cho cả ứng viên lẫn nhà tuyển dụng. Người dùng có thể đăng nhập bằng email/mật khẩu hoặc OAuth (Google, LinkedIn). Hệ thống lưu phiên đăng nhập, lịch sử truy cập và thiết bị đăng nhập.
 
-### NV02 – Quản lý Hồ sơ Ứng viên (CV/Profile)
+- NV02 – Quản lý Hồ sơ Ứng viên (CV/Profile)
 
 Ứng viên tạo và duy trì hồ sơ cá nhân bao gồm thông tin cơ bản, kinh nghiệm làm việc, học vấn, kỹ năng, chứng chỉ, portfolio và mức lương kỳ vọng. Hồ sơ có thể được tải lên dưới dạng PDF hoặc điền trực tiếp trên hệ thống.
 
-### NV03 – Đăng và Quản lý Tin tuyển dụng (Job Posting)
+-  NV03 – Đăng và Quản lý Tin tuyển dụng (Job Posting)
 
 Nhà tuyển dụng tạo tin tuyển dụng với các thuộc tính: tiêu đề, mô tả công việc, yêu cầu kỹ năng, mức lương, địa điểm, loại hình công việc (full-time, part-time, remote), hạn nộp hồ sơ. Tin có thể được đặt ở trạng thái bản nháp, đang tuyển, đã hết hạn, hoặc đã đóng.
 
-### NV04 – Tìm kiếm và Lọc Công việc / Ứng viên
+-  NV04 – Tìm kiếm và Lọc Công việc / Ứng viên
 
 Ứng viên tìm kiếm công việc theo từ khóa, ngành nghề, địa điểm, mức lương, kinh nghiệm. Nhà tuyển dụng tìm kiếm ứng viên theo kỹ năng, kinh nghiệm, học vấn. Hệ thống hỗ trợ tìm kiếm full-text và lọc đa tiêu chí.
 
-### NV05 – Ứng tuyển và Quản lý Hồ sơ ứng tuyển (Application Management)
+- NV05 – Ứng tuyển và Quản lý Hồ sơ ứng tuyển (Application Management)
 
 Ứng viên nộp hồ sơ ứng tuyển vào một vị trí cụ thể. Hệ thống ghi nhận trạng thái từng đơn ứng tuyển theo pipeline: Đã nộp → Đang xem xét → Phỏng vấn → Đề nghị → Từ chối / Trúng tuyển. Nhà tuyển dụng quản lý, lọc và di chuyển hồ sơ qua các bước trong pipeline.
 
-### NV06 – Gợi ý thông minh (AI Matching & Recommendation)
+- NV06 – Gợi ý thông minh (AI Matching & Recommendation)
 
 Hệ thống phân tích hồ sơ ứng viên và tin tuyển dụng để gợi ý:
-- Công việc phù hợp cho ứng viên (Job Recommendation).
-- Ứng viên tiềm năng cho nhà tuyển dụng (Candidate Recommendation).
-
+	- Công việc phù hợp cho ứng viên (Job Recommendation).
+	- Ứng viên tiềm năng cho nhà tuyển dụng (Candidate Recommendation).
 Gợi ý dựa trên lịch sử tìm kiếm, kỹ năng, kinh nghiệm, mức lương và hành vi người dùng.
 
-### NV07 – Lên lịch Phỏng vấn (Interview Scheduling)
-
+- NV07 – Lên lịch Phỏng vấn (Interview Scheduling)
 Nhà tuyển dụng gửi lời mời phỏng vấn (trực tiếp, online, qua điện thoại). Ứng viên xác nhận, đề xuất thay đổi lịch. Hệ thống tích hợp calendar, gửi thông báo nhắc nhở qua email/SMS.
 
-### NV08 – Thông báo và Tin nhắn (Notification & Messaging)
+- NV08 – Thông báo và Tin nhắn (Notification & Messaging)
 
 Hệ thống gửi thông báo realtime và qua email cho các sự kiện: có công việc phù hợp mới, hồ sơ được xem, thay đổi trạng thái ứng tuyển, lịch phỏng vấn sắp tới. Hệ thống chat nội bộ giữa ứng viên và nhà tuyển dụng.
 
-### NV09 – Đánh giá và Nhận xét (Rating & Review)
+-  NV09 – Đánh giá và Nhận xét (Rating & Review)
 
 Ứng viên đánh giá công ty sau quá trình tuyển dụng. Nhà tuyển dụng đánh giá ứng viên sau phỏng vấn (private note). Hệ thống tổng hợp điểm đánh giá công ty để hiển thị công khai.
 
-### NV10 – Báo cáo và Thống kê (Analytics & Reporting)
+- NV10 – Báo cáo và Thống kê (Analytics & Reporting)
 
 Cung cấp dashboard thống kê cho nhà tuyển dụng: số lượng đơn ứng tuyển theo tin, tỷ lệ chuyển đổi qua các bước pipeline, thời gian tuyển dụng trung bình, nguồn ứng viên. Thống kê cho admin: người dùng mới, tin đăng, hoạt động hệ thống.
 
@@ -247,430 +244,318 @@ PUBLISH notifications:user_001 "{type: 'new_job', jobId: 'job_123'}"
 
 ---
 
-# YÊU CẦU 3: THIẾT KẾ MÔ HÌNH DỮ LIỆU
+# Yêu cầu 3: Thiết kế mô hình dữ liệu
 
-## 3.1. Relational DB – PostgreSQL
+Hệ thống sử dụng kiến trúc đa cơ sở dữ liệu (polyglot persistence), trong đó mỗi loại dữ liệu được lưu trữ bằng công nghệ phù hợp nhất với đặc điểm truy cập và cấu trúc của nó. Cụ thể, hệ thống kết hợp năm loại cơ sở dữ liệu: quan hệ (PostgreSQL), tài liệu (MongoDB), đồ thị (Neo4j), khóa-giá trị (Redis) và cột gia đình (Cassandra).
 
-### 3.1.1. Sơ đồ thực thể quan hệ (ERD) – Mô tả
+## 3.1. PostgreSQL
 
-Các bảng chính trong PostgreSQL:
+### Tổng quan
 
-```
-users (id, email, password_hash, role, is_active, created_at)
-  |
-  +-- candidates (id, user_id, full_name, phone, location, avatar_url, bio)
-  |
-  +-- companies (id, user_id, name, industry, logo_url, website, description)
-        |
-        +-- job_postings (id, company_id, title, level, job_type, location,
-        |                  salary_min, salary_max, status, deadline, created_at)
-        |
-        +-- applications (id, candidate_id, job_id, status, applied_at,
-                          cover_letter, resume_url, updated_at)
-                |
-                +-- interviews (id, application_id, scheduled_at, type,
-                               location_or_link, status, notes)
-```
+PostgreSQL đảm nhận vai trò lưu trữ dữ liệu cốt lõi của hệ thống — các thực thể có quan hệ ràng buộc chặt chẽ như tài khoản người dùng, hồ sơ ứng viên, thông tin công ty, tin tuyển dụng, đơn ứng tuyển và lịch phỏng vấn. Đây là nguồn dữ liệu tin cậy duy nhất (single source of truth) cho các nghiệp vụ cốt lõi.
 
-### 3.1.2. Chi tiết các bảng
+Dữ liệu được tổ chức xoay quanh thực thể trung tâm là `users`, từ đó phân nhánh thành `candidates` (ứng viên) và `companies` (nhà tuyển dụng). Mỗi công ty có thể đăng nhiều tin tuyển dụng (`job_postings`), và ứng viên có thể nộp đơn (`applications`) cho các tin đó. Mỗi đơn ứng tuyển có thể dẫn đến một hoặc nhiều buổi phỏng vấn (`interviews`).
 
-#### Bảng `users`
+### Sơ đồ thực thể quan hệ (ERD)
 
-| Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
-|---|---|---|---|
-| id | UUID | PK | Khóa chính |
-| email | VARCHAR(255) | UNIQUE, NOT NULL | Email đăng nhập |
-| password_hash | VARCHAR(255) | NOT NULL | Mật khẩu đã hash (bcrypt) |
-| role | ENUM('candidate','recruiter','admin') | NOT NULL | Vai trò |
-| is_active | BOOLEAN | DEFAULT TRUE | Trạng thái kích hoạt |
-| created_at | TIMESTAMP | DEFAULT NOW() | Thời điểm tạo |
-| updated_at | TIMESTAMP | DEFAULT NOW() | Thời điểm cập nhật |
-
-#### Bảng `candidates`
-
-| Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
-|---|---|---|---|
-| id | UUID | PK | Khóa chính |
-| user_id | UUID | FK → users.id | Liên kết tài khoản |
-| full_name | VARCHAR(200) | NOT NULL | Họ tên đầy đủ |
-| phone | VARCHAR(20) | | Số điện thoại |
-| date_of_birth | DATE | | Ngày sinh |
-| location | VARCHAR(200) | | Địa chỉ |
-| avatar_url | TEXT | | Ảnh đại diện |
-| bio | TEXT | | Giới thiệu bản thân |
-| expected_salary | INTEGER | | Mức lương kỳ vọng (VND) |
-| years_experience | INTEGER | DEFAULT 0 | Số năm kinh nghiệm |
-
-#### Bảng `companies`
-
-| Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
-|---|---|---|---|
-| id | UUID | PK | Khóa chính |
-| user_id | UUID | FK → users.id | Người quản lý |
-| name | VARCHAR(255) | NOT NULL | Tên công ty |
-| industry | VARCHAR(100) | | Ngành nghề |
-| size | VARCHAR(50) | | Quy mô (50-100, 100-500,...) |
-| logo_url | TEXT | | Logo công ty |
-| website | VARCHAR(255) | | Website |
-| description | TEXT | | Mô tả công ty |
-| address | TEXT | | Địa chỉ công ty |
-| rating | DECIMAL(3,2) | DEFAULT 0 | Điểm đánh giá tổng |
-
-#### Bảng `job_postings`
-
-| Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
-|---|---|---|---|
-| id | UUID | PK | Khóa chính |
-| company_id | UUID | FK → companies.id | Công ty đăng tin |
-| title | VARCHAR(255) | NOT NULL | Tiêu đề vị trí |
-| level | VARCHAR(50) | | Cấp độ (Junior/Senior/...) |
-| job_type | VARCHAR(50) | | Loại (Full-time/Part-time/...) |
-| location | VARCHAR(200) | | Địa điểm làm việc |
-| salary_min | INTEGER | | Lương tối thiểu |
-| salary_max | INTEGER | | Lương tối đa |
-| currency | VARCHAR(10) | DEFAULT 'VND' | Đơn vị tiền tệ |
-| status | ENUM | DEFAULT 'draft' | Trạng thái tin |
-| deadline | DATE | | Hạn nộp hồ sơ |
-| created_at | TIMESTAMP | DEFAULT NOW() | Thời gian đăng |
-
-#### Bảng `applications`
-
-| Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
-|---|---|---|---|
-| id | UUID | PK | Khóa chính |
-| candidate_id | UUID | FK → candidates.id | Ứng viên nộp |
-| job_id | UUID | FK → job_postings.id | Vị trí ứng tuyển |
-| status | ENUM | DEFAULT 'submitted' | Trạng thái đơn |
-| cover_letter | TEXT | | Thư xin việc |
-| resume_url | TEXT | | Link CV |
-| applied_at | TIMESTAMP | DEFAULT NOW() | Thời gian nộp |
-| updated_at | TIMESTAMP | | Cập nhật lần cuối |
-
-**Ràng buộc đặc biệt:** `UNIQUE (candidate_id, job_id)` – ngăn ứng viên nộp nhiều lần.
-
-#### Bảng `interviews`
-
-| Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
-|---|---|---|---|
-| id | UUID | PK | Khóa chính |
-| application_id | UUID | FK → applications.id | Liên kết đơn ứng tuyển |
-| round | INTEGER | DEFAULT 1 | Vòng phỏng vấn |
-| scheduled_at | TIMESTAMP | NOT NULL | Thời gian phỏng vấn |
-| duration_minutes | INTEGER | DEFAULT 60 | Thời lượng (phút) |
-| type | ENUM | | online / offline / phone |
-| location_or_link | TEXT | | Địa điểm hoặc link |
-| status | ENUM | DEFAULT 'scheduled' | Trạng thái |
-| feedback | TEXT | | Nhận xét sau phỏng vấn |
-
-## 3.2. Document Store – MongoDB
-
-### 3.2.1. Collection `candidate_profiles`
-
-```json
-{
-  "_id": "ObjectId('...')",
-  "candidateId": "uuid-candidate-001",
-  "userId": "uuid-user-001",
-  "personalInfo": {
-    "fullName": "Nguyễn Văn An",
-    "email": "an.nguyen@email.com",
-    "phone": "0901234567",
-    "location": "Hồ Chí Minh",
-    "avatarUrl": "https://cdn.example.com/avatars/001.jpg"
-  },
-  "summary": "Backend Developer với 4 năm kinh nghiệm trong Java và Microservices...",
-  "skills": [
-    { "name": "Java", "level": "Advanced", "yearsOfExp": 4 },
-    { "name": "Spring Boot", "level": "Advanced", "yearsOfExp": 3 },
-    { "name": "PostgreSQL", "level": "Intermediate", "yearsOfExp": 2 },
-    { "name": "Docker", "level": "Intermediate", "yearsOfExp": 2 }
-  ],
-  "experience": [
-    {
-      "company": "Công ty Công nghệ XYZ",
-      "role": "Senior Backend Developer",
-      "startDate": "2022-01",
-      "endDate": null,
-      "isCurrent": true,
-      "description": "Phát triển microservices cho hệ thống e-commerce...",
-      "achievements": ["Giảm 40% latency", "Deploy CI/CD pipeline"]
-    },
-    {
-      "company": "Startup ABC Tech",
-      "role": "Backend Developer",
-      "startDate": "2020-06",
-      "endDate": "2021-12",
-      "isCurrent": false,
-      "description": "Xây dựng REST API cho mobile app..."
+```mermaid
+erDiagram
+    users {
+        UUID id PK
+        string email
+        string password_hash
+        enum role
+        boolean is_active
+        timestamp created_at
     }
-  ],
-  "education": [
-    {
-      "school": "Đại học Công nghệ Thông tin (UIT)",
-      "degree": "Kỹ sư Công nghệ Thông tin",
-      "gpa": 3.2,
-      "startYear": 2016,
-      "endYear": 2020
+    candidates {
+        UUID id PK
+        UUID user_id FK
+        string full_name
+        string phone
+        date date_of_birth
+        string location
+        text bio
+        int expected_salary
+        int years_experience
     }
-  ],
-  "certifications": [
-    {
-      "name": "AWS Certified Developer",
-      "issuer": "Amazon Web Services",
-      "issueDate": "2023-03",
-      "expiryDate": "2026-03",
-      "credentialUrl": "https://aws.amazon.com/verify/..."
+    companies {
+        UUID id PK
+        UUID user_id FK
+        string name
+        string industry
+        string size
+        string website
+        decimal rating
     }
-  ],
-  "languages": [
-    { "language": "Tiếng Việt", "level": "Native" },
-    { "language": "Tiếng Anh", "level": "B2 – Upper Intermediate" }
-  ],
-  "portfolio": [
-    {
-      "title": "E-commerce Microservices",
-      "url": "https://github.com/an-nguyen/ecommerce",
-      "description": "Hệ thống microservices với Spring Boot, Kafka, Docker"
+    job_postings {
+        UUID id PK
+        UUID company_id FK
+        string title
+        string level
+        string job_type
+        string location
+        int salary_min
+        int salary_max
+        enum status
+        date deadline
+        timestamp created_at
     }
-  ],
-  "preferences": {
-    "expectedSalary": { "min": 30000000, "max": 50000000, "currency": "VND" },
-    "jobTypes": ["Full-time", "Remote"],
-    "preferredLocations": ["Hồ Chí Minh", "Remote"],
-    "industries": ["Công nghệ thông tin", "Fintech"]
-  },
-  "resumeUrl": "https://cdn.example.com/resumes/an_nguyen_cv.pdf",
-  "isPublic": true,
-  "createdAt": "2024-01-15T08:00:00Z",
-  "updatedAt": "2024-06-20T14:30:00Z"
-}
+    applications {
+        UUID id PK
+        UUID candidate_id FK
+        UUID job_id FK
+        enum status
+        text cover_letter
+        text resume_url
+        timestamp applied_at
+    }
+    interviews {
+        UUID id PK
+        UUID application_id FK
+        int round
+        timestamp scheduled_at
+        int duration_minutes
+        enum type
+        text location_or_link
+        enum status
+        text feedback
+    }
+
+    users ||--o| candidates : "có hồ sơ"
+    users ||--o| companies : "quản lý"
+    companies ||--o{ job_postings : "đăng tuyển"
+    candidates ||--o{ applications : "nộp đơn"
+    job_postings ||--o{ applications : "nhận đơn"
+    applications ||--o{ interviews : "dẫn đến"
 ```
 
-### 3.2.2. Collection `job_postings`
+### Các ràng buộc quan trọng
 
-```json
-{
-  "_id": "ObjectId('...')",
-  "jobId": "uuid-job-001",
-  "companyId": "uuid-company-001",
-  "companyInfo": {
-    "name": "Công ty Công nghệ XYZ",
-    "logoUrl": "https://cdn.example.com/logos/xyz.png",
-    "industry": "Công nghệ thông tin",
-    "size": "100-500"
-  },
-  "title": "Senior Backend Developer (Java/Spring Boot)",
-  "level": "Senior",
-  "jobType": ["Full-time"],
-  "workMode": "Hybrid",
-  "location": {
-    "city": "Hồ Chí Minh",
-    "district": "Quận 1",
-    "address": "123 Nguyễn Huệ, Q.1, TP.HCM",
-    "isRemoteAllowed": true
-  },
-  "salary": {
-    "min": 35000000,
-    "max": 55000000,
-    "currency": "VND",
-    "isNegotiable": true,
-    "isPublic": true
-  },
-  "description": "Chúng tôi đang tìm kiếm Senior Backend Developer...",
-  "requirements": {
-    "skills": [
-      { "name": "Java", "level": "Advanced", "isRequired": true },
-      { "name": "Spring Boot", "level": "Advanced", "isRequired": true },
-      { "name": "Microservices", "level": "Intermediate", "isRequired": false }
-    ],
-    "yearsOfExperience": { "min": 3, "max": 7 },
-    "education": "Đại học chuyên ngành CNTT hoặc tương đương",
-    "languageRequirements": ["Tiếng Anh giao tiếp tốt"]
-  },
-  "benefits": [
-    "Thưởng hiệu suất hàng quý",
-    "Bảo hiểm sức khỏe cao cấp",
-    "Laptop MacBook Pro",
-    "13 ngày phép/năm"
-  ],
-  "applicationProcess": [
-    "Vòng 1: Phỏng vấn HR (30 phút)",
-    "Vòng 2: Technical interview (60 phút)",
-    "Vòng 3: Culture fit với Team Lead"
-  ],
-  "status": "active",
-  "deadline": "2024-12-31",
-  "viewCount": 1250,
-  "applicationCount": 87,
-  "tags": ["java", "spring-boot", "backend", "microservices", "senior"],
-  "createdAt": "2024-10-01T09:00:00Z",
-  "updatedAt": "2024-10-15T10:00:00Z"
-}
+Bảng `applications` có ràng buộc duy nhất trên cặp `(candidate_id, job_id)` để ngăn ứng viên nộp đơn trùng lặp cho cùng một vị trí. Trường `role` trong `users` là kiểu liệt kê giới hạn ở ba giá trị: `candidate`, `recruiter` và `admin`. Các trường trạng thái trong `job_postings`, `applications` và `interviews` cũng sử dụng kiểu liệt kê để đảm bảo tính nhất quán.
+
+## 3.2. MongoDB
+
+### Tổng quan
+
+MongoDB lưu trữ các dữ liệu có cấu trúc linh hoạt, thường xuyên thay đổi cấu trúc hoặc cần nhúng nhiều thông tin con vào một tài liệu duy nhất. Hệ thống sử dụng ba collection chính.
+
+**Collection `candidate_profiles`** lưu toàn bộ hồ sơ nghề nghiệp của ứng viên dưới dạng một tài liệu duy nhất, bao gồm thông tin cá nhân, danh sách kỹ năng (với cấp độ và số năm kinh nghiệm), lịch sử làm việc, học vấn, chứng chỉ, ngoại ngữ, portfolio và sở thích việc làm. Cấu trúc nhúng (embedded) cho phép đọc toàn bộ hồ sơ chỉ với một truy vấn.
+
+**Collection `job_postings`** lưu bản mô tả chi tiết tin tuyển dụng, bao gồm thông tin công ty được nhúng trực tiếp (để hiển thị nhanh mà không cần join), yêu cầu kỹ năng cùng mức độ bắt buộc, chế độ đãi ngộ, quy trình tuyển dụng và các thống kê như lượt xem, số đơn nhận được.
+
+**Collection `company_reviews`** lưu đánh giá của ứng viên về công ty sau khi trải qua quy trình phỏng vấn, bao gồm điểm số nhiều chiều (cân bằng công việc-cuộc sống, lương, quản lý, văn hóa...), nhận xét văn bản và mô tả trải nghiệm phỏng vấn.
+
+### Sơ đồ cấu trúc collection
+
+```mermaid
+erDiagram
+    candidate_profiles {
+        ObjectId _id PK
+        string candidateId
+        object personalInfo
+        string summary
+        array skills
+        array experience
+        array education
+        array certifications
+        array languages
+        array portfolio
+        object preferences
+        string resumeUrl
+        boolean isPublic
+    }
+    job_postings {
+        ObjectId _id PK
+        string jobId
+        string companyId
+        object companyInfo
+        string title
+        string level
+        array jobType
+        object location
+        object salary
+        string description
+        object requirements
+        array benefits
+        array applicationProcess
+        string status
+        int viewCount
+        int applicationCount
+        array tags
+    }
+    company_reviews {
+        ObjectId _id PK
+        string companyId
+        string candidateId
+        string applicationId
+        boolean isAnonymous
+        object ratings
+        string title
+        string pros
+        string cons
+        string advice
+        object interviewExperience
+        boolean isVerified
+    }
+
+    candidate_profiles }o--o{ job_postings : "ứng tuyển vào"
+    company_reviews }o--|| job_postings : "đánh giá từ"
 ```
 
-### 3.2.3. Collection `company_reviews`
+## 3.3. Cơ sở dữ liệu đồ thị – Neo4j
 
-```json
-{
-  "_id": "ObjectId('...')",
-  "companyId": "uuid-company-001",
-  "candidateId": "uuid-candidate-001",
-  "applicationId": "uuid-application-001",
-  "isAnonymous": true,
-  "ratings": {
-    "overall": 4,
-    "workLifeBalance": 4,
-    "salary": 3,
-    "management": 4,
-    "careerGrowth": 5,
-    "culture": 4
-  },
-  "title": "Môi trường làm việc tốt, cơ hội học hỏi nhiều",
-  "pros": "Team tech lead có kinh nghiệm, được làm việc với công nghệ mới...",
-  "cons": "Quy trình phê duyệt hơi chậm, overtime đôi khi nhiều vào cuối sprint",
-  "advice": "Nên cải thiện quy trình review code và sprint planning",
-  "interviewExperience": {
-    "difficulty": "Medium",
-    "duration": "3 tuần",
-    "processDescription": "HR screening → Technical → Culture fit"
-  },
-  "isVerified": true,
-  "createdAt": "2024-07-10T15:00:00Z"
-}
+### Tổng quan
+
+Neo4j lưu trữ các mối quan hệ phức tạp giữa ứng viên, việc làm, kỹ năng, công ty và ngành nghề. Đây là nền tảng cho các tính năng gợi ý thông minh và phân tích mạng lưới nghề nghiệp. Thay vì biểu diễn quan hệ bằng khóa ngoại, Neo4j mô hình hóa chúng trực tiếp thành các cạnh có thuộc tính.
+
+Hệ thống định nghĩa sáu loại nút (node): `Candidate`, `Recruiter`, `Job`, `Company`, `Skill` và `Industry`. 
+Các mối quan hệ chính bao gồm: ứng viên sở hữu kỹ năng (`HAS_SKILL`), vị trí yêu cầu kỹ năng (`REQUIRES`), ứng viên ứng tuyển vào vị trí (`APPLIED_TO`), ứng viên đã từng làm tại công ty (`WORKS_AT`), tin tuyển dụng thuộc về công ty (`POSTED_BY`), và ứng viên có độ tương đồng với nhau (`SIMILAR_TO`).
+
+### Sơ đồ đồ thị
+
+```mermaid
+graph LR
+    C1(Candidate)
+    C2(Candidate)
+    R(Recruiter)
+    J(Job)
+    CO(Company)
+    SK1(Skill)
+    SK2(Skill)
+    IND(Industry)
+
+    C1 -->|HAS_SKILL\nlevel, yearsOfExp| SK1
+    C1 -->|HAS_SKILL\nlevel, yearsOfExp| SK2
+    C2 -->|HAS_SKILL| SK1
+    C1 -->|APPLIED_TO\nstatus, appliedAt| J
+    C1 -->|WORKS_AT\nrole, startDate| CO
+    C1 -->|SAVED\nsavedAt| J
+    C1 -->|VIEWED\nviewedAt| J
+    C1 -->|SIMILAR_TO\nsimilarityScore| C2
+    J -->|REQUIRES\nlevel, isRequired| SK1
+    J -->|REQUIRES| SK2
+    J -->|POSTED_BY| CO
+    CO -->|BELONGS_TO| IND
+    C1 -->|IN_INDUSTRY| IND
+    R -->|MANAGES| CO
 ```
 
-## 3.3. Graph Store – Neo4j
+### Ứng dụng của mô hình đồ thị
 
-### 3.3.1. Các Node và Relationship trong đồ thị
+Cấu trúc đồ thị cho phép thực hiện các truy vấn gợi ý phức tạp như: "Tìm các vị trí mà ứng viên có kỹ năng phù hợp và ứng viên tương đồng đã ứng tuyển thành công", hay "Đề xuất kỹ năng còn thiếu dựa trên những vị trí ứng viên quan tâm". Quan hệ `SIMILAR_TO` giữa các ứng viên được tính toán dựa trên độ tương đồng kỹ năng và lịch sử làm việc.
 
-**Node Types:**
+## 3.4. Cơ sở dữ liệu khóa-giá trị – Redis
 
-| Node | Properties |
-|---|---|
-| `Candidate` | id, name, location, yearsExp |
-| `Recruiter` | id, name, companyId |
-| `Job` | id, title, level, location, salary |
-| `Company` | id, name, industry |
-| `Skill` | name, category |
-| `Industry` | name |
+### Tổng quan
 
-**Relationship Types:**
+Redis phục vụ các nhu cầu cần tốc độ truy cập cực cao và dữ liệu có thời gian sống ngắn. Hệ thống tổ chức dữ liệu Redis theo các nhóm chức năng sau đây.
 
-| Relationship | Từ → Đến | Properties |
-|---|---|---|
-| `HAS_SKILL` | Candidate → Skill | level, yearsOfExp |
-| `REQUIRES` | Job → Skill | level, isRequired |
-| `APPLIED_TO` | Candidate → Job | appliedAt, status |
-| `WORKS_AT` | Candidate → Company | role, startDate |
-| `POSTED_BY` | Job → Company | |
-| `BELONGS_TO` | Company → Industry | |
-| `IN_INDUSTRY` | Candidate → Industry | |
-| `SIMILAR_TO` | Candidate ↔ Candidate | similarityScore |
-| `VIEWED` | Candidate → Job | viewedAt, duration |
-| `SAVED` | Candidate → Job | savedAt |
+**Quản lý phiên và xác thực:** Lưu trữ session đăng nhập dưới dạng hash với TTL một giờ, refresh token với TTL bảy ngày, và mã OTP xác thực email với TTL năm phút.
 
-### 3.3.2. Sơ đồ đồ thị (mô tả)
+**Bộ nhớ đệm (Cache):** Kết quả tìm kiếm việc làm và danh sách gợi ý được cache để giảm tải cho cơ sở dữ liệu chính, với TTL từ 1–5 phút tùy mức độ thay đổi của dữ liệu.
 
-```
-(Candidate:An) -[:HAS_SKILL {level:"Advanced"}]-> (Skill:Java)
-(Candidate:An) -[:HAS_SKILL {level:"Advanced"}]-> (Skill:SpringBoot)
-(Candidate:An) -[:APPLIED_TO {status:"interview"}]-> (Job:SeniorBackend_XYZ)
-(Candidate:An) -[:WORKS_AT {role:"Dev"}]-> (Company:XYZ)
+**Kiểm soát truy cập:** Bộ đếm giới hạn request theo địa chỉ IP (rate limiting) với cửa sổ thời gian một phút.
 
-(Job:SeniorBackend_XYZ) -[:REQUIRES {isRequired:true}]-> (Skill:Java)
-(Job:SeniorBackend_XYZ) -[:REQUIRES {isRequired:true}]-> (Skill:SpringBoot)
-(Job:SeniorBackend_XYZ) -[:POSTED_BY]-> (Company:XYZ)
-(Company:XYZ) -[:BELONGS_TO]-> (Industry:IT)
+**Dữ liệu thời gian thực:** Tập hợp người dùng đang online, hàng đợi thông báo chưa đọc và bộ đếm lượt xem tin tuyển dụng.
 
-(Candidate:Binh) -[:HAS_SKILL]-> (Skill:Java)
-(Candidate:An) -[:SIMILAR_TO {score:0.85}]-> (Candidate:Binh)
-```
+### Sơ đồ cấu trúc key-value
 
-## 3.4. Key-Value Store – Redis
+```mermaid
+graph LR
+    subgraph Auth ["Xác thực & Phiên"]
+        direction LR
+        S1["session:{userId}\nHash · TTL 1h"]
+        S2["refresh_token:{token}\nString · TTL 7d"]
+        S3["otp:{email}\nString · TTL 5m"]
+    end
 
-### 3.4.1. Cấu trúc lưu trữ Redis
+    subgraph Cache ["Bộ nhớ đệm"]
+        direction LR
+        C1["cache:jobs:search:{hash}\nString JSON · TTL 60s"]
+        C2["cache:recommend:{userId}\nList · TTL 5m"]
+    end
 
-| Key Pattern | Value Type | TTL | Mô tả |
-|---|---|---|---|
-| `session:{userId}` | Hash | 3600s | Session đăng nhập |
-| `refresh_token:{token}` | String | 604800s | Refresh token (7 ngày) |
-| `otp:{email}` | String | 300s | OTP xác thực email (5 phút) |
-| `cache:jobs:search:{hash}` | String (JSON) | 60s | Cache kết quả tìm kiếm |
-| `cache:recommend:{userId}` | List | 300s | Cache gợi ý việc làm |
-| `rate_limit:{ip}` | Integer | 60s | Giới hạn request/phút |
-| `online_users` | Set | - | Danh sách user đang online |
-| `notifications:{userId}` | List | 86400s | Hàng đợi thông báo |
-| `job_view_count:{jobId}` | Integer | - | Đếm lượt xem tin (counter) |
+    subgraph RealTime ["Thời gian thực"]
+        direction LR
+        R1["online_users\nSet · không TTL"]
+        R2["notifications:{userId}\nList · TTL 24h"]
+        R3["job_view_count:{jobId}\nCounter · không TTL"]
+    end
 
-### 3.4.2. Cấu trúc Session Hash
-
-```
-HSET session:user_001
-  userId "user_001"
-  email "an.nguyen@email.com"
-  role "candidate"
-  candidateId "candidate_001"
-  loginAt "2024-10-20T08:00:00Z"
-  deviceInfo "Chrome/Windows"
-EXPIRE session:user_001 3600
+    subgraph Control ["Kiểm soát"]
+        direction LR
+        CT1["rate_limit:{ip}\nInteger · TTL 60s"]
+    end
 ```
 
-## 3.5. Column Family Store – Cassandra
 
-### 3.5.1. Keyspace và Table
+## 3.5. Cassandra
 
-```sql
-CREATE KEYSPACE smart_recruitment
-  WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3};
+### Tổng quan
 
-USE smart_recruitment;
+Cassandra lưu trữ dữ liệu nhật ký và thống kê với khối lượng ghi rất lớn và yêu cầu khả năng mở rộng theo chiều ngang. Dữ liệu được tổ chức theo kiểu cột gia đình với khóa phân vùng được chọn để phù hợp với các pattern truy vấn phổ biến nhất.
+
+Hệ thống sử dụng ba bảng chính trong keyspace `smart_recruitment` với hệ số nhân bản là 3.
+
+**Bảng `user_activity_log`** ghi lại toàn bộ hoạt động của người dùng (xem tin, nộp đơn, tìm kiếm, nhấn vào gợi ý). Dữ liệu được phân vùng theo `(user_id, event_date)` và sắp xếp giảm dần theo thời gian, giúp truy vấn lịch sử hoạt động trong ngày rất hiệu quả.
+
+**Bảng `job_daily_stats`** lưu thống kê hàng ngày của mỗi tin tuyển dụng (lượt xem, lượt ứng tuyển, lượt lưu, lượt nhấp). Sử dụng kiểu `COUNTER` của Cassandra để ghi tăng nguyên tử mà không cần khóa.
+
+**Bảng `search_history`** lưu lịch sử tìm kiếm của người dùng cùng bộ lọc và số kết quả, phục vụ phân tích hành vi và cải thiện thuật toán gợi ý.
+
+### Sơ đồ cấu trúc bảng Cassandra
+
+```mermaid
+erDiagram
+    user_activity_log {
+        UUID user_id PK
+        date event_date PK
+        timestamp event_time CK
+        UUID event_id CK
+        string event_type
+        string entity_type
+        UUID entity_id
+        map metadata
+    }
+
+    job_daily_stats {
+        UUID job_id PK
+        date stat_date PK
+        counter view_count
+        counter apply_count
+        counter save_count
+        counter click_count
+    }
+
+    search_history {
+        UUID user_id PK
+        date search_date PK
+        timestamp searched_at CK
+        UUID search_id CK
+        string query
+        map filters
+        int result_count
+    }
+    
+    user_activity_log }o--o{ job_daily_stats : "tương tác với job"
+    user_activity_log }o--o{ search_history : "cùng user"
+
 ```
 
-### 3.5.2. Bảng `user_activity_log`
 
-```sql
-CREATE TABLE user_activity_log (
-  user_id    UUID,
-  event_date DATE,
-  event_time TIMESTAMP,
-  event_id   UUID,
-  event_type TEXT,  -- 'view_job', 'apply', 'search', 'click_recommend'
-  entity_type TEXT, -- 'job', 'candidate', 'company'
-  entity_id  UUID,
-  metadata   MAP<TEXT, TEXT>,
-  PRIMARY KEY ((user_id, event_date), event_time, event_id)
-) WITH CLUSTERING ORDER BY (event_time DESC);
+## Tổng kết kiến trúc đa cơ sở dữ liệu
+
+```mermaid
+graph TD
+    APP[Ứng dụng]
+
+    APP -->|Nghiệp vụ cốt lõi\nRàng buộc toàn vẹn| PG[(PostgreSQL\nQuan hệ)]
+    APP -->|Hồ sơ linh hoạt\nTin tuyển dụng chi tiết| MG[(MongoDB\nTài liệu)]
+    APP -->|Gợi ý & Phân tích\nMạng lưới quan hệ| N4[(Neo4j\nĐồ thị)]
+    APP -->|Cache & Session\nThời gian thực| RD[(Redis\nKhóa-Giá trị)]
+    APP -->|Nhật ký & Thống kê\nKhối lượng lớn| CS[(Cassandra\nCột gia đình)]
 ```
-
-### 3.5.3. Bảng `job_daily_stats`
-
-```sql
-CREATE TABLE job_daily_stats (
-  job_id         UUID,
-  stat_date      DATE,
-  view_count     COUNTER,
-  apply_count    COUNTER,
-  save_count     COUNTER,
-  click_count    COUNTER,
-  PRIMARY KEY (job_id, stat_date)
-) WITH CLUSTERING ORDER BY (stat_date DESC);
-```
-
-### 3.5.4. Bảng `search_history`
-
-```sql
-CREATE TABLE search_history (
-  user_id     UUID,
-  search_date DATE,
-  searched_at TIMESTAMP,
-  search_id   UUID,
-  query       TEXT,
-  filters     MAP<TEXT, TEXT>,
-  result_count INT,
-  PRIMARY KEY ((user_id, search_date), searched_at, search_id)
-) WITH CLUSTERING ORDER BY (searched_at DESC);
-```
-
 ---
 
 # YÊU CẦU 4: CÀI ĐẶT VÀ TRIỂN KHAI HỆ THỐNG
@@ -1295,148 +1180,6 @@ WHERE job_id = 550e8400-e29b-41d4-a716-446655440000
   AND stat_date <= '2024-10-20';
 ```
 
-## 4.7. Thiết kế giao diện các chức năng
-
-### 4.7.1. Màn hình Tìm kiếm việc làm
-
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│  🔍 [Tìm kiếm theo tên công việc, kỹ năng...    ] [Địa điểm ▾] [Tìm]│
-├──────────────────────────────────────────────────────────────────────┤
-│  BỘ LỌC:  Ngành ▾  Loại CV ▾  Mức lương ▾  Kinh nghiệm ▾  Remote □  │
-├────────────────────┬─────────────────────────────────────────────────┤
-│   GỢI Ý CHO BẠN   │  KẾT QUẢ (1,240 tin)               Sắp xếp ▾   │
-│  ─────────────────│  ┌─────────────────────────────────────────────┐│
-│  ★ Senior Java Dev │  │ Senior Backend Developer        Mới nhất ★  ││
-│  ★ Spring Boot Eng │  │ Công ty Công nghệ XYZ • Q.1, TP.HCM • Remote││
-│  ★ Backend Lead    │  │ 35-55 triệu/tháng • 3-5 năm kinh nghiệm    ││
-│                    │  │ Java ✓  Spring Boot ✓  Microservices        ││
-│   TÌM KIẾM GẦN ĐÂY│  │                          [Ứng tuyển ngay]   ││
-│  • java spring boot│  └─────────────────────────────────────────────┘│
-│  • backend HCM     │  ┌─────────────────────────────────────────────┐│
-│  • remote fulltime │  │ Java Developer – Fintech                    ││
-│                    │  │ ...                                          ││
-│                    │  └─────────────────────────────────────────────┘│
-└────────────────────┴─────────────────────────────────────────────────┘
-```
-
-### 4.7.2. Màn hình Pipeline Tuyển dụng (Kanban)
-
-```
-┌──────────────────────────────────────────────────────────────────────────────┐
-│  📋 Pipeline: Senior Backend Developer  (87 đơn)          [Lọc] [Export]    │
-├────────────────┬──────────────────┬──────────────────┬────────────┬──────────┤
-│  ĐÃ NỘP (34)   │  ĐANG XEM (28)   │  PHỎNG VẤN (15) │ ĐỀ NGHỊ(5)│TỪ CHỐI  │
-├────────────────┼──────────────────┼──────────────────┼────────────┼──────────┤
-│ ┌────────────┐ │ ┌──────────────┐ │ ┌──────────────┐ │ ┌────────┐ │          │
-│ │Nguyễn V. An│ │ │Trần Thị Bình │ │ │Lê Văn Cường  │ │ │Mai T.D.│ │          │
-│ │4yr • Java  │ │ │3yr • Python  │ │ │5yr • Java    │ │ │6yr•Java│ │          │
-│ │35-45tr/th  │ │ │30-40tr/th    │ │ │📅 15/11 10am │ │ │Offer đã│ │          │
-│ │[Xem hồ sơ] │ │ │[Xem hồ sơ]   │ │ │[Xem chi tiết]│ │ │gửi     │ │          │
-│ └────────────┘ │ └──────────────┘ │ └──────────────┘ │ └────────┘ │          │
-└────────────────┴──────────────────┴──────────────────┴────────────┴──────────┘
-```
-
-## 4.8. Kết nối Backend đến các DBMS
-
-### 4.8.1. Cấu trúc dự án Node.js
-
-```
-src/
-├── config/
-│   ├── postgres.js       # Pool connection PostgreSQL
-│   ├── mongodb.js        # MongoDB client
-│   ├── redis.js          # Redis client
-│   └── neo4j.js          # Neo4j driver
-├── routes/
-│   ├── auth.routes.js
-│   ├── candidate.routes.js
-│   ├── job.routes.js
-│   └── application.routes.js
-├── services/
-│   ├── auth.service.js
-│   ├── candidate.service.js
-│   ├── job.service.js
-│   ├── recommendation.service.js  # Neo4j
-│   └── analytics.service.js       # Cassandra
-└── middleware/
-    ├── auth.middleware.js
-    └── rateLimit.middleware.js
-```
-
-### 4.8.2. Kết nối PostgreSQL
-
-```javascript
-// config/postgres.js
-const { Pool } = require('pg');
-const pool = new Pool({
-  host: process.env.PG_HOST || 'localhost',
-  port: 5432,
-  database: 'smart_recruitment',
-  user: process.env.PG_USER,
-  password: process.env.PG_PASSWORD,
-  max: 20,
-  idleTimeoutMillis: 30000
-});
-module.exports = pool;
-```
-
-### 4.8.3. API Endpoint – Ứng tuyển
-
-```javascript
-// POST /api/applications
-router.post('/applications', authenticate, async (req, res) => {
-  const { jobId, coverLetter, resumeUrl } = req.body;
-  const candidateId = req.user.candidateId;
-
-  const client = await pool.connect();
-  try {
-    await client.query('BEGIN');
-
-    // 1. Kiểm tra đã ứng tuyển chưa
-    const existing = await client.query(
-      'SELECT id FROM applications WHERE candidate_id=$1 AND job_id=$2',
-      [candidateId, jobId]
-    );
-    if (existing.rows.length > 0) {
-      return res.status(409).json({ error: 'Bạn đã ứng tuyển vào vị trí này rồi.' });
-    }
-
-    // 2. Tạo đơn ứng tuyển
-    const result = await client.query(
-      `INSERT INTO applications (candidate_id, job_id, cover_letter, resume_url)
-       VALUES ($1, $2, $3, $4) RETURNING id, applied_at`,
-      [candidateId, jobId, coverLetter, resumeUrl]
-    );
-
-    // 3. Ghi event vào Cassandra (async, không block)
-    logActivity(req.user.userId, 'apply_job', jobId);
-
-    // 4. Cập nhật đồ thị Neo4j (async)
-    neo4jDriver.session().run(
-      'MATCH (c:Candidate {id:$cId}),(j:Job {id:$jId}) MERGE (c)-[:APPLIED_TO {appliedAt:datetime()}]->(j)',
-      { cId: candidateId, jId: jobId }
-    );
-
-    // 5. Gửi thông báo realtime qua Redis
-    await sendNotification(req.user.userId, {
-      type: 'application_submitted',
-      message: 'Đơn ứng tuyển của bạn đã được gửi thành công!'
-    });
-
-    await client.query('COMMIT');
-    res.status(201).json({ applicationId: result.rows[0].id });
-  } catch (err) {
-    await client.query('ROLLBACK');
-    res.status(500).json({ error: err.message });
-  } finally {
-    client.release();
-  }
-});
-```
-
----
-
 # YÊU CẦU 5: KỸ THUẬT NÂNG CAO HIỆU SUẤT
 
 ## 5.1. Phân tích hiệu suất hệ thống
@@ -1736,7 +1479,3 @@ Việc áp dụng kiến trúc **Polyglot Persistence** – sử dụng nhiều 
 8. Sadalage, P. J., & Fowler, M. (2012). *NoSQL Distilled*. Pearson Education.
 9. TopCV (2024). *Khảo sát thị trường tuyển dụng Việt Nam 2024*. https://www.topcv.vn/
 10. LinkedIn Engineering Blog (2024). *How LinkedIn Scales its Graph Data Infrastructure*. https://engineering.linkedin.com/
-
----
-
-*Báo cáo được thực hiện bởi nhóm sinh viên – Học kỳ 1, Năm học 2024-2025*
