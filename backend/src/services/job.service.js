@@ -114,12 +114,27 @@ class JobService {
     const cached = await getCache(cacheKey);
     if (cached) return { ...cached, fromCache: true };
 
-    // Full-text search + filter trên MongoDB (NV04)
+    // Fuzzy search + filter trên MongoDB (NV04)
     const mongoFilter = { status: 'active' };
 
     if (filters.q) {
-      mongoFilter.$text = { $search: filters.q };
+      const words = filters.q.trim().split(/\s+/).filter(Boolean);
+      const escaped = words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+      // Each word must appear in at least one searchable field (AND of ORs)
+      mongoFilter.$and = escaped.map(w => {
+        const re = new RegExp(w, 'i');
+        return {
+          $or: [
+            { title: re },
+            { description: re },
+            { tags: re },
+            { 'companyInfo.name': re },
+            { 'requirements.skills.name': re },
+          ],
+        };
+      });
     }
+
     if (filters.city)       mongoFilter['location.city'] = new RegExp(filters.city, 'i');
     if (filters.level)      mongoFilter.level = filters.level;
     if (filters.workMode)   mongoFilter.workMode = filters.workMode;
@@ -132,8 +147,8 @@ class JobService {
       mongoFilter['requirements.skills.name'] = { $in: skills };
     }
 
-    const sortOpts = filters.q ? { score: { $meta: 'textScore' } } : { createdAt: -1 };
-    const projectOpts = filters.q ? { score: { $meta: 'textScore' } } : {};
+    const sortOpts = { createdAt: -1 };
+    const projectOpts = {};
 
     const [jobs, total] = await Promise.all([
       JobPosting.find(mongoFilter, projectOpts)

@@ -68,7 +68,6 @@ const candidateProfileSchema = new mongoose.Schema({
     preferredLocations: [String],
     industries:         [String],
   },
-  resumeUrl:    String,
   isPublic:     { type: Boolean, default: true },
   lastViewedAt: Date,
   viewedCount:  { type: Number, default: 0 },

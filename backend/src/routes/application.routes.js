@@ -11,14 +11,13 @@ router.post('/',
   authorize('candidate'),
   [
     body('jobId').isUUID(),
-    body('resumeUrl').optional().isURL(),
   ],
   validate,
   async (req, res, next) => {
     try {
-      const { jobId, coverLetter, resumeUrl } = req.body;
+      const { jobId, coverLetter } = req.body;
       const result = await appService.apply(
-        req.user.candidateId, jobId, { coverLetter, resumeUrl }
+        req.user.candidateId, jobId, { coverLetter }
       );
       created(res, result, 'Nộp đơn thành công.');
     } catch (err) { next(err); }
