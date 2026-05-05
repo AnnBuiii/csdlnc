@@ -119,7 +119,8 @@ Cung cấp dashboard thống kê cho nhà tuyển dụng: số lượng đơn �
 
 ## 2.2. Phân tích từng nghiệp vụ và lựa chọn CSDL
 
-### 2.2.1. NV01 – Quản lý Tài khoản người dùng → **Relational DB (PostgreSQL)**
+### 2.2.1. NV01 – Quản lý Tài khoản người dùng 
+**Relational DB (PostgreSQL)**
 
 **Phân tích:** Dữ liệu tài khoản có cấu trúc rõ ràng, cần đảm bảo tính toàn vẹn (unique email, ràng buộc khóa ngoại). Thông tin người dùng liên kết chặt chẽ với hồ sơ, công ty, đơn ứng tuyển. Cần transaction ACID (ví dụ: tạo tài khoản và hồ sơ công ty trong cùng một transaction).
 
@@ -130,7 +131,8 @@ Cung cấp dashboard thống kê cho nhà tuyển dụng: số lượng đơn �
 
 **Session/Token lưu trong:** Redis (Key-Value) – xem NV08.
 
-### 2.2.2. NV02 – Quản lý Hồ sơ Ứng viên → **Document Store (MongoDB)**
+### 2.2.2. NV02 – Quản lý Hồ sơ Ứng viên 
+**Document Store (MongoDB)**
 
 **Phân tích:** Hồ sơ ứng viên có cấu trúc linh hoạt: mỗi ứng viên có số lượng kinh nghiệm, kỹ năng, học vấn, dự án khác nhau. Không thể định nghĩa schema cứng. Cần lưu trữ dạng document JSON để dễ dàng thêm bớt trường dữ liệu.
 
@@ -140,20 +142,9 @@ Cung cấp dashboard thống kê cho nhà tuyển dụng: số lượng đơn �
 - Hỗ trợ full-text search, aggregate pipeline để phân tích kỹ năng.
 - Dễ mở rộng theo chiều ngang khi số lượng hồ sơ tăng.
 
-**Ví dụ document:**
-```json
-{
-  "_id": "candidate_001",
-  "fullName": "Nguyễn Văn A",
-  "skills": ["Java", "Spring Boot", "PostgreSQL"],
-  "experience": [
-    { "company": "Công ty ABC", "role": "Backend Dev", "years": 3 }
-  ],
-  "education": [{ "school": "UIT", "degree": "Kỹ sư CNTT", "year": 2020 }]
-}
-```
 
-### 2.2.3. NV03 – Đăng và Quản lý Tin tuyển dụng → **Document Store (MongoDB)**
+### 2.2.3. NV03 – Đăng và Quản lý Tin tuyển dụng
+**Document Store (MongoDB)**
 
 **Phân tích:** Tương tự hồ sơ ứng viên, mỗi tin tuyển dụng có cấu trúc phong phú và linh hoạt: danh sách yêu cầu kỹ năng, phúc lợi, mô tả công việc dài. Tin tuyển dụng thường được đọc nhiều hơn ghi.
 
@@ -162,13 +153,15 @@ Cung cấp dashboard thống kê cho nhà tuyển dụng: số lượng đơn �
 - Hỗ trợ full-text search theo tiêu đề, mô tả, kỹ năng.
 - Index compound cho tìm kiếm đa tiêu chí (địa điểm + ngành + mức lương).
 
-### 2.2.4. NV04 – Tìm kiếm và Lọc → **Document Store (MongoDB) + Elasticsearch (mở rộng)**
+### 2.2.4. NV04 – Tìm kiếm và Lọc
+**Document Store (MongoDB) + Elasticsearch (mở rộng)**
 
 **Phân tích:** Tìm kiếm là nghiệp vụ đọc nhiều, cần hỗ trợ full-text search, fuzzy search, lọc đa tiêu chí đồng thời. MongoDB Atlas Search (hoặc Elasticsearch) phù hợp cho bài toán này.
 
 **Lý do:** MongoDB natively hỗ trợ text index và $search aggregation với Atlas Search. Phù hợp cho tìm kiếm tiếng Việt và tiếng Anh theo tên công việc, kỹ năng, địa điểm.
 
-### 2.2.5. NV05 – Ứng tuyển và Quản lý Pipeline → **Relational DB (PostgreSQL)**
+### 2.2.5. NV05 – Ứng tuyển và Quản lý Pipeline
+**Relational DB (PostgreSQL)**
 
 **Phân tích:** Quá trình ứng tuyển là một quy trình có trạng thái, liên kết giữa ứng viên và tin tuyển dụng. Cần đảm bảo tính toàn vẹn (một ứng viên không nộp 2 lần vào cùng một tin), cần JOIN để lấy thông tin đầy đủ, cần transaction khi thay đổi trạng thái.
 
@@ -177,7 +170,8 @@ Cung cấp dashboard thống kê cho nhà tuyển dụng: số lượng đơn �
 - Ràng buộc UNIQUE (candidate_id, job_id) ngăn duplicate.
 - Hỗ trợ query phức tạp: đếm hồ sơ theo từng bước pipeline, thống kê.
 
-### 2.2.6. NV06 – Gợi ý thông minh → **Graph Store (Neo4j)**
+### 2.2.6. NV06 – Gợi ý thông minh
+**Graph Store (Neo4j)**
 
 **Phân tích:** Gợi ý thông minh cần phân tích quan hệ giữa: ứng viên – kỹ năng – công việc – công ty – ngành nghề. Đây là bài toán đồ thị điển hình. Collaborative filtering (ứng viên tương tự nhau về kỹ năng đã ứng tuyển gì) rất phù hợp với Graph DB.
 
@@ -187,18 +181,13 @@ Cung cấp dashboard thống kê cho nhà tuyển dụng: số lượng đơn �
 - Phát hiện ứng viên tương tự, công việc liên quan dễ dàng.
 - Hiệu suất cao với bài toán duyệt đồ thị nhiều bước.
 
-**Ví dụ Cypher gợi ý:**
-```cypher
-MATCH (c:Candidate {id: "001"})-[:HAS_SKILL]->(s:Skill)<-[:REQUIRES]-(j:Job)
-WHERE NOT (c)-[:APPLIED]->(j)
-RETURN j.title, count(s) AS matchScore ORDER BY matchScore DESC LIMIT 10
-```
-
-### 2.2.7. NV07 – Lên lịch Phỏng vấn → **Relational DB (PostgreSQL)**
+### 2.2.7. NV07 – Lên lịch Phỏng vấn 
+**Relational DB (PostgreSQL)**
 
 **Phân tích:** Lịch phỏng vấn có cấu trúc rõ ràng, cần liên kết với Application, Candidate, Recruiter. Cần ACID khi đặt lịch (tránh trùng lịch).
 
-### 2.2.8. NV08 – Thông báo và Session → **Key-Value Store (Redis)**
+### 2.2.8. NV08 – Thông báo và Session 
+**Key-Value Store (Redis)**
 
 **Phân tích:** Session đăng nhập cần đọc/ghi cực nhanh với TTL (thời gian hết hạn). Thông báo realtime cần pub/sub. Dữ liệu tạm thời không cần lưu lâu dài. Redis là lựa chọn tối ưu.
 
@@ -208,17 +197,13 @@ RETURN j.title, count(s) AS matchScore ORDER BY matchScore DESC LIMIT 10
 - Cache kết quả tìm kiếm, cache danh sách gợi ý.
 - Tốc độ in-memory cực nhanh (< 1ms).
 
-**Ví dụ sử dụng:**
-```
-SET session:user_001 "{userId: 1, role: 'candidate'}" EX 3600
-PUBLISH notifications:user_001 "{type: 'new_job', jobId: 'job_123'}"
-```
-
-### 2.2.9. NV09 – Đánh giá và Nhận xét → **Document Store (MongoDB)**
+### 2.2.9. NV09 – Đánh giá và Nhận xét
+**Document Store (MongoDB)**
 
 **Phân tích:** Đánh giá công ty là dạng document tự do (nội dung, điểm số nhiều tiêu chí, thông tin ứng viên ẩn danh). Schema linh hoạt phù hợp với MongoDB. 
 
-### 2.2.10. NV10 – Báo cáo và Thống kê / Event Log → **Column Family Store (Cassandra)**
+### 2.2.10. NV10 – Báo cáo và Thống kê / Event Log
+**Column Family Store (Cassandra)**
 
 **Phân tích:** Hệ thống sinh ra lượng lớn event log (lượt xem tin, lượt click ứng tuyển, hành vi người dùng). Đây là dữ liệu time-series, ghi liên tục, cần truy vấn theo khoảng thời gian. Cassandra được thiết kế tối ưu cho bài toán này.
 
