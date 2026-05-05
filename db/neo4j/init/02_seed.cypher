@@ -373,29 +373,29 @@ MERGE (job3)-[:POSTED_BY]->(fptsoftware);
 
 // Connect jobs to required skills
 // Job 1: Senior Full-stack Developer
-MERGE (job1)-[:REQUIRES_SKILL {required: true, priority: 'high'}]->(javascript);
-MERGE (job1)-[:REQUIRES_SKILL {required: true, priority: 'high'}]->(typescript);
-MERGE (job1)-[:REQUIRES_SKILL {required: true, priority: 'high'}]->(react);
-MERGE (job1)-[:REQUIRES_SKILL {required: true, priority: 'high'}]->(nodejs);
-MERGE (job1)-[:REQUIRES_SKILL {required: true, priority: 'medium'}]->(postgresql);
-MERGE (job1)-[:REQUIRES_SKILL {required: false, priority: 'medium'}]->(aws);
-MERGE (job1)-[:REQUIRES_SKILL {required: false, priority: 'low'}]->(docker);
+MERGE (job1)-[:REQUIRES {isRequired: true, priority: 'high'}]->(javascript);
+MERGE (job1)-[:REQUIRES {isRequired: true, priority: 'high'}]->(typescript);
+MERGE (job1)-[:REQUIRES {isRequired: true, priority: 'high'}]->(react);
+MERGE (job1)-[:REQUIRES {isRequired: true, priority: 'high'}]->(nodejs);
+MERGE (job1)-[:REQUIRES {isRequired: true, priority: 'medium'}]->(postgresql);
+MERGE (job1)-[:REQUIRES {isRequired: false, priority: 'medium'}]->(aws);
+MERGE (job1)-[:REQUIRES {isRequired: false, priority: 'low'}]->(docker);
 
 // Job 2: Data Scientist
-MERGE (job2)-[:REQUIRES_SKILL {required: true, priority: 'high'}]->(python);
-MERGE (job2)-[:REQUIRES_SKILL {required: true, priority: 'high'}]->(sql);
-MERGE (job2)-[:REQUIRES_SKILL {required: true, priority: 'high'}]->(machinelearning:Skill {name: 'Machine Learning', category: 'Data Science', popularity: 85});
-MERGE (job2)-[:REQUIRES_SKILL {required: true, priority: 'medium'}]->(pandas);
-MERGE (job2)-[:REQUIRES_SKILL {required: true, priority: 'medium'}]->(scikitlearn);
-MERGE (job2)-[:REQUIRES_SKILL {required: false, priority: 'low'}]->(tensorflow);
-MERGE (job2)-[:REQUIRES_SKILL {required: false, priority: 'low'}]->(pytorch);
+MERGE (job2)-[:REQUIRES {isRequired: true, priority: 'high'}]->(python);
+MERGE (job2)-[:REQUIRES {isRequired: true, priority: 'high'}]->(sql);
+MERGE (job2)-[:REQUIRES {isRequired: true, priority: 'high'}]->(machinelearning:Skill {name: 'Machine Learning', category: 'Data Science', popularity: 85});
+MERGE (job2)-[:REQUIRES {isRequired: true, priority: 'medium'}]->(pandas);
+MERGE (job2)-[:REQUIRES {isRequired: true, priority: 'medium'}]->(scikitlearn);
+MERGE (job2)-[:REQUIRES {isRequired: false, priority: 'low'}]->(tensorflow);
+MERGE (job2)-[:REQUIRES {isRequired: false, priority: 'low'}]->(pytorch);
 
 // Job 3: .NET Developer
-MERGE (job3)-[:REQUIRES_SKILL {required: true, priority: 'high'}]->(csharp);
-MERGE (job3)-[:REQUIRES_SKILL {required: true, priority: 'high'}]->(dotnet);
-MERGE (job3)-[:REQUIRES_SKILL {required: false, priority: 'medium'}]->(sql);
-MERGE (job3)-[:REQUIRES_SKILL {required: false, priority: 'low'}]->(html);
-MERGE (job3)-[:REQUIRES_SKILL {required: false, priority: 'low'}]->(css);
+MERGE (job3)-[:REQUIRES {isRequired: true, priority: 'high'}]->(csharp);
+MERGE (job3)-[:REQUIRES {isRequired: true, priority: 'high'}]->(dotnet);
+MERGE (job3)-[:REQUIRES {isRequired: false, priority: 'medium'}]->(sql);
+MERGE (job3)-[:REQUIRES {isRequired: false, priority: 'low'}]->(html);
+MERGE (job3)-[:REQUIRES {isRequired: false, priority: 'low'}]->(css);
 
 // ─── CREATE APPLICATIONS (for AI matching analysis) ───────────
 // Applications from PostgreSQL seed data

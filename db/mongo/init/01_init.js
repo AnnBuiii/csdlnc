@@ -51,6 +51,8 @@ db.candidate_profiles.createIndex({ userId: 1 });
 db.candidate_profiles.createIndex({ 'personalInfo.location': 1 });
 db.candidate_profiles.createIndex({ 'skills.name': 1 });
 db.candidate_profiles.createIndex({ 'preferences.expectedSalary.min': 1, 'preferences.expectedSalary.max': 1 });
+db.candidate_profiles.createIndex({ 'preferences.preferredLocations': 1 });
+db.candidate_profiles.createIndex({ 'preferences.industries': 1 });
 db.candidate_profiles.createIndex({ isPublic: 1, updatedAt: -1 });
 
 // Full-text search index (NV04)
@@ -115,35 +117,36 @@ db.createCollection('company_reviews', {
   validator: {
     $jsonSchema: {
       bsonType: 'object',
-      required: ['companyId', 'rating', 'createdAt'],
+      required: ['companyId', 'ratings'],
       properties: {
         companyId:    { bsonType: 'string' },
-        candidateId:  { bsonType: 'string' },   // Ẩn danh tùy chọn
+        candidateId:  { bsonType: 'string' },
         isAnonymous:  { bsonType: 'bool' },
-        rating: {
+        ratings: {
           bsonType: 'object',
           required: ['overall'],
           properties: {
-            overall:     { bsonType: 'int', minimum: 1, maximum: 5 },
-            culture:     { bsonType: 'int', minimum: 1, maximum: 5 },
-            management:  { bsonType: 'int', minimum: 1, maximum: 5 },
+            overall:         { bsonType: 'int', minimum: 1, maximum: 5 },
+            culture:         { bsonType: 'int', minimum: 1, maximum: 5 },
+            management:      { bsonType: 'int', minimum: 1, maximum: 5 },
             workLifeBalance: { bsonType: 'int', minimum: 1, maximum: 5 },
-            salary:      { bsonType: 'int', minimum: 1, maximum: 5 }
+            salary:          { bsonType: 'int', minimum: 1, maximum: 5 },
+            careerGrowth:    { bsonType: 'int', minimum: 1, maximum: 5 }
           }
         },
         title:     { bsonType: 'string' },
         content:   { bsonType: 'string' },
         pros:      { bsonType: 'string' },
         cons:      { bsonType: 'string' },
-        isApproved: { bsonType: 'bool' },
-        createdAt: { bsonType: 'date' }
+        advice:    { bsonType: 'string' },
+        isApproved: { bsonType: 'bool' }
       }
     }
   }
 });
 
 db.company_reviews.createIndex({ companyId: 1, isApproved: 1 });
-db.company_reviews.createIndex({ companyId: 1, 'rating.overall': -1 });
+db.company_reviews.createIndex({ companyId: 1, 'ratings.overall': -1 });
 db.company_reviews.createIndex({ candidateId: 1 });
 db.company_reviews.createIndex({ createdAt: -1 });
 

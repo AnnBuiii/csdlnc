@@ -99,13 +99,13 @@ class InterviewService {
 
   // ── NV07: Ghi kết quả phỏng vấn ───────────────────────────────
   async updateResult(interviewId, companyId, data) {
-    const { status, rating, feedback, decision, notes } = data;
+    const { status, score, feedback, notes } = data;
     const res = await query(
       `UPDATE interviews
-       SET status = $1, rating = $2, feedback = $3, decision = $4, notes = $5, updated_at = NOW()
-       WHERE id = $6 AND company_id = $7
-       RETURNING id, status, decision`,
-      [status, rating || null, feedback || null, decision || null, notes || null, interviewId, companyId]
+       SET status = $1, score = $2, feedback = $3, notes = $4, updated_at = NOW()
+       WHERE id = $5 AND company_id = $6
+       RETURNING id, status, score, feedback`,
+      [status, score || null, feedback || null, notes || null, interviewId, companyId]
     );
     if (!res.rows.length) {
       const err = new Error('Lịch phỏng vấn không tồn tại hoặc bạn không có quyền.');

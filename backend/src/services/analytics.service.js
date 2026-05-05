@@ -83,6 +83,10 @@ class AnalyticsService {
 
   // ── NV10: Thống kê một tin tuyển dụng ────────────────────────
   async getJobStats(jobId, days = 30) {
+    const fromDate = new Date();
+    fromDate.setDate(fromDate.getDate() - parseInt(days));
+    const fromDateStr = fromDate.toISOString().split('T')[0]; // 'YYYY-MM-DD'
+
     const [stats, viewEvents] = await Promise.all([
       query(
         `SELECT id, title, status, view_count, application_count, created_at, deadline
@@ -93,10 +97,10 @@ class AnalyticsService {
         `SELECT event_date, count(*) AS views
          FROM user_activity_log
          WHERE entity_id = ? AND event_type = 'view_job'
-           AND event_date >= toDate(now()) - ?days
+           AND event_date >= ?
          GROUP BY event_date
          ORDER BY event_date`,
-        [jobId, parseInt(days)]
+        [jobId, fromDateStr]
       ),
     ]);
 

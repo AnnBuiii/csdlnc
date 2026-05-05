@@ -30,27 +30,29 @@ const candidateProfiles = [
     professionalSummary: 'Từng làm Technical Lead tại TechStartup (2 năm), Senior Developer tại VNCorp (3 năm). Chịu trách nhiệm cho kiến trúc hệ thống và mentoring junior developers.',
     education: [
       {
+        school: 'Đại học Bách Khoa Hà Nội',
         degree: 'Kỹ sư Công nghệ Thông tin',
-        institution: 'Đại học Bách Khoa Hà Nội',
-        year: 2017,
-        gpa: 3.5
+        major: 'Công nghệ Thông tin',
+        gpa: 3.5,
+        startYear: 2013,
+        endYear: 2017
       }
     ],
     experience: [
       {
-        title: 'Technical Lead',
+        role: 'Technical Lead',
         company: 'TechStartup Vietnam',
-        location: 'Hà Nội',
-        startDate: new Date('2021-03-01'),
-        endDate: new Date('2023-12-31'),
+        startDate: '2021-03',
+        endDate: '2023-12',
+        isCurrent: false,
         description: 'Dẫn dắt team 5 developers, thiết kế kiến trúc microservices, triển khai CI/CD pipeline.'
       },
       {
-        title: 'Senior Full-stack Developer',
+        role: 'Senior Full-stack Developer',
         company: 'VNCorp',
-        location: 'Hà Nội',
-        startDate: new Date('2018-01-15'),
-        endDate: new Date('2021-02-28'),
+        startDate: '2018-01',
+        endDate: '2021-02',
+        isCurrent: false,
         description: 'Phát triển các ứng dụng enterprise sử dụng React, Node.js, PostgreSQL.'
       }
     ],
@@ -67,22 +69,20 @@ const candidateProfiles = [
       { name: 'Git', level: 'Advanced', yearsOfExp: 5 }
     ],
     certifications: [
-      'AWS Certified Developer – Associate (2022)',
-      'Scrum Master Certified (2021)'
+      { name: 'AWS Certified Developer – Associate', issuer: 'Amazon Web Services', issueDate: '2022-06' },
+      { name: 'Scrum Master Certified', issuer: 'SCRUMstudy', issueDate: '2021-03' }
     ],
     preferences: {
       jobTypes: ['Full-time', 'Contract'],
-      locations: ['Hà Nội', 'Remote'],
-      workModes: ['Hybrid', 'Remote'],
-      expectedSalary: { min: 35000000, max: 60000000, currency: 'VND' },
-      noticePeriod: 30, // days
-      isOpenToRelocation: false
+      preferredLocations: ['Hà Nội', 'Remote'],
+      industries: ['Công nghệ Thông tin', 'Tài chính - Ngân hàng'],
+      expectedSalary: { min: 35000000, max: 60000000, currency: 'VND' }
     },
-    portfolio: {
-      github: 'https://github.com/nguyenvana',
-      linkedin: 'https://linkedin.com/in/nguyenvana',
-      website: 'https://nguyenvana.dev'
-    },
+    portfolio: [
+      { title: 'GitHub', url: 'https://github.com/nguyenvana', description: 'Open source projects' },
+      { title: 'LinkedIn', url: 'https://linkedin.com/in/nguyenvana', description: 'Professional profile' },
+      { title: 'Personal Website', url: 'https://nguyenvana.dev', description: 'Portfolio & blog' }
+    ],
     isPublic: true,
     lastViewedAt: new Date('2026-04-22T15:30:00Z'),
     viewedCount: 42,
@@ -104,33 +104,37 @@ const candidateProfiles = [
     professionalSummary: 'Chuyên về predictive modeling, customer segmentation, và fraud detection trong ngân hàng.',
     education: [
       {
+        school: 'Đại học Bách Khoa Hà Nội',
         degree: 'Thạc sĩ Khoa học Dữ liệu',
-        institution: 'Đại học Bách Khoa Hà Nội',
-        year: 2020,
-        gpa: 3.8
+        major: 'Khoa học Dữ liệu',
+        gpa: 3.8,
+        startYear: 2018,
+        endYear: 2020
       },
       {
+        school: 'Đại học Khoa học Tự nhiên',
         degree: 'Cử nhân Toán Tin',
-        institution: 'Đại học Khoa học Tự nhiên',
-        year: 2018,
-        gpa: 3.6
+        major: 'Toán Tin học',
+        gpa: 3.6,
+        startYear: 2014,
+        endYear: 2018
       }
     ],
     experience: [
       {
-        title: 'Data Scientist',
+        role: 'Data Scientist',
         company: 'FinTech Vietnam',
-        location: 'TP.HCM',
-        startDate: new Date('2021-06-01'),
-        endDate: null, // Current job
+        startDate: '2021-06',
+        endDate: null,
+        isCurrent: true,
         description: 'Xây dựng ML models cho credit scoring và churn prediction. Tối ưu hóa data pipeline với Apache Spark.'
       },
       {
-        title: 'Data Analyst',
+        role: 'Data Analyst',
         company: 'BankTech Solutions',
-        location: 'Hà Nội',
-        startDate: new Date('2020-01-15'),
-        endDate: new Date('2021-05-31'),
+        startDate: '2020-01',
+        endDate: '2021-05',
+        isCurrent: false,
         description: 'Phân tích dữ liệu khách hàng, xây dựng dashboard với Tableau.'
       }
     ],
@@ -147,22 +151,20 @@ const candidateProfiles = [
       { name: 'AWS SageMaker', level: 'Intermediate', yearsOfExp: 2 }
     ],
     certifications: [
-      'TensorFlow Developer Certificate (2022)',
-      'AWS Certified Machine Learning – Speciality (2023)'
+      { name: 'TensorFlow Developer Certificate', issuer: 'Google', issueDate: '2022-05' },
+      { name: 'AWS Certified Machine Learning – Specialty', issuer: 'Amazon Web Services', issueDate: '2023-02' }
     ],
     preferences: {
       jobTypes: ['Full-time'],
-      locations: ['TP.HCM', 'Remote'],
-      workModes: ['Remote', 'Hybrid'],
-      expectedSalary: { min: 25000000, max: 40000000, currency: 'VND' },
-      noticePeriod: 60,
-      isOpenToRelocation: true
+      preferredLocations: ['TP.HCM', 'Remote'],
+      industries: ['Tài chính - Ngân hàng', 'Công nghệ Thông tin'],
+      expectedSalary: { min: 25000000, max: 40000000, currency: 'VND' }
     },
-    portfolio: {
-      github: 'https://github.com/tranthib',
-      kaggle: 'https://kaggle.com/tranthib',
-      medium: 'https://medium.com/@tranthib'
-    },
+    portfolio: [
+      { title: 'GitHub', url: 'https://github.com/tranthib', description: 'Data science projects' },
+      { title: 'Kaggle', url: 'https://kaggle.com/tranthib', description: 'Competition notebooks' },
+      { title: 'Medium', url: 'https://medium.com/@tranthib', description: 'Technical articles' }
+    ],
     isPublic: true,
     lastViewedAt: new Date('2026-04-20T11:45:00Z'),
     viewedCount: 38,
@@ -184,35 +186,37 @@ const candidateProfiles = [
     professionalSummary: 'Expertise trong thiết kế và vận hành hệ thống high-availability trên AWS và Kubernetes.',
     education: [
       {
+        school: 'Đại học Công nghệ Thông tin',
         degree: 'Kỹ sư Mạng máy tính',
-        institution: 'Đại học Công nghệ Thông tin',
-        year: 2014,
-        gpa: 3.4
+        major: 'Mạng máy tính',
+        gpa: 3.4,
+        startYear: 2010,
+        endYear: 2014
       }
     ],
     experience: [
       {
-        title: 'Senior DevOps Engineer',
+        role: 'Senior DevOps Engineer',
         company: 'CloudTech Vietnam',
-        location: 'Đà Nẵng',
-        startDate: new Date('2019-08-01'),
+        startDate: '2019-08',
         endDate: null,
+        isCurrent: true,
         description: 'Thiết kế và vận hành multi-region Kubernetes clusters cho ứng dụng global. Triển khai GitOps với ArgoCD.'
       },
       {
-        title: 'DevOps Engineer',
+        role: 'DevOps Engineer',
         company: 'VN Hosting Solutions',
-        location: 'Hà Nội',
-        startDate: new Date('2016-03-15'),
-        endDate: new Date('2019-07-31'),
+        startDate: '2016-03',
+        endDate: '2019-07',
+        isCurrent: false,
         description: 'Xây dựng CI/CD pipeline với Jenkins, quản lý infrastructure với Terraform.'
       },
       {
-        title: 'System Administrator',
+        role: 'System Administrator',
         company: 'IT Services Company',
-        location: 'Hà Nội',
-        startDate: new Date('2014-07-01'),
-        endDate: new Date('2016-02-28'),
+        startDate: '2014-07',
+        endDate: '2016-02',
+        isCurrent: false,
         description: 'Quản trị hệ thống Linux, cấu hình network, backup solutions.'
       }
     ],
@@ -230,23 +234,21 @@ const candidateProfiles = [
       { name: 'Ansible', level: 'Intermediate', yearsOfExp: 3 }
     ],
     certifications: [
-      'AWS Certified Solutions Architect – Professional (2023)',
-      'Certified Kubernetes Administrator (2022)',
-      'Red Hat Certified Engineer (2020)'
+      { name: 'AWS Certified Solutions Architect – Professional', issuer: 'Amazon Web Services', issueDate: '2023-01' },
+      { name: 'Certified Kubernetes Administrator', issuer: 'CNCF', issueDate: '2022-08' },
+      { name: 'Red Hat Certified Engineer', issuer: 'Red Hat', issueDate: '2020-05' }
     ],
     preferences: {
       jobTypes: ['Full-time', 'Contract'],
-      locations: ['Đà Nẵng', 'Remote', 'Hà Nội'],
-      workModes: ['Remote', 'Hybrid'],
-      expectedSalary: { min: 45000000, max: 70000000, currency: 'VND' },
-      noticePeriod: 90,
-      isOpenToRelocation: true
+      preferredLocations: ['Đà Nẵng', 'Remote', 'Hà Nội'],
+      industries: ['Công nghệ Thông tin'],
+      expectedSalary: { min: 45000000, max: 70000000, currency: 'VND' }
     },
-    portfolio: {
-      github: 'https://github.com/lethic-devops',
-      linkedin: 'https://linkedin.com/in/lethic',
-      blog: 'https://devopsvietnam.com'
-    },
+    portfolio: [
+      { title: 'GitHub', url: 'https://github.com/lethic-devops', description: 'Infrastructure as code projects' },
+      { title: 'LinkedIn', url: 'https://linkedin.com/in/lethic', description: 'Professional profile' },
+      { title: 'DevOps Blog', url: 'https://devopsvietnam.com', description: 'Vietnamese DevOps community blog' }
+    ],
     isPublic: true,
     lastViewedAt: new Date('2026-04-18T14:20:00Z'),
     viewedCount: 56,
@@ -268,27 +270,29 @@ const candidateProfiles = [
     professionalSummary: 'Thành thạo native development với Swift/Kotlin và cross-platform với React Native.',
     education: [
       {
+        school: 'Đại học FPT',
         degree: 'Cử nhân Kỹ thuật Phần mềm',
-        institution: 'Đại học FPT',
-        year: 2018,
-        gpa: 3.7
+        major: 'Kỹ thuật Phần mềm',
+        gpa: 3.7,
+        startYear: 2014,
+        endYear: 2018
       }
     ],
     experience: [
       {
-        title: 'Senior Mobile Developer',
+        role: 'Senior Mobile Developer',
         company: 'AppStudio Vietnam',
-        location: 'Hà Nội',
-        startDate: new Date('2020-11-01'),
+        startDate: '2020-11',
         endDate: null,
+        isCurrent: true,
         description: 'Phát triển ứng dụng mobile cho khách hàng enterprise. Tech lead cho team 3 mobile developers.'
       },
       {
-        title: 'Mobile Developer',
+        role: 'Mobile Developer',
         company: 'Startup Mobile',
-        location: 'Hà Nội',
-        startDate: new Date('2018-07-15'),
-        endDate: new Date('2020-10-31'),
+        startDate: '2018-07',
+        endDate: '2020-10',
+        isCurrent: false,
         description: 'Phát triển ứng dụng e-commerce và social networking từ ý tưởng đến launch.'
       }
     ],
@@ -305,22 +309,20 @@ const candidateProfiles = [
       { name: 'CI/CD (Mobile)', level: 'Intermediate', yearsOfExp: 2 }
     ],
     certifications: [
-      'Apple Certified iOS Developer (2021)',
-      'Google Associate Android Developer (2020)'
+      { name: 'Apple Certified iOS Developer', issuer: 'Apple', issueDate: '2021-09' },
+      { name: 'Google Associate Android Developer', issuer: 'Google', issueDate: '2020-11' }
     ],
     preferences: {
       jobTypes: ['Full-time'],
-      locations: ['Hà Nội'],
-      workModes: ['Hybrid', 'Onsite'],
-      expectedSalary: { min: 30000000, max: 45000000, currency: 'VND' },
-      noticePeriod: 45,
-      isOpenToRelocation: false
+      preferredLocations: ['Hà Nội'],
+      industries: ['Công nghệ Thông tin'],
+      expectedSalary: { min: 30000000, max: 45000000, currency: 'VND' }
     },
-    portfolio: {
-      github: 'https://github.com/phamd-mobile',
-      appStore: 'https://apps.apple.com/developer/phamd',
-      playStore: 'https://play.google.com/store/apps/developer?id=PhamD'
-    },
+    portfolio: [
+      { title: 'GitHub', url: 'https://github.com/phamd-mobile', description: 'Mobile development projects' },
+      { title: 'App Store', url: 'https://apps.apple.com/developer/phamd', description: 'Published iOS apps' },
+      { title: 'Google Play', url: 'https://play.google.com/store/apps/developer?id=PhamD', description: 'Published Android apps' }
+    ],
     isPublic: true,
     lastViewedAt: new Date('2026-04-19T16:10:00Z'),
     viewedCount: 29,
@@ -342,27 +344,29 @@ const candidateProfiles = [
     professionalSummary: 'Đã hoàn thành 2 internship trong quá trình học, có kinh nghiệm thực tế với ASP.NET và Entity Framework.',
     education: [
       {
+        school: 'Đại học Công nghệ TP.HCM',
         degree: 'Cử nhân Công nghệ Thông tin',
-        institution: 'Đại học Công nghệ TP.HCM',
-        year: 2025,
-        gpa: 3.2
+        major: 'Công nghệ Thông tin',
+        gpa: 3.2,
+        startYear: 2021,
+        endYear: 2025
       }
     ],
     experience: [
       {
-        title: 'Intern .NET Developer',
+        role: 'Intern .NET Developer',
         company: 'Software House Vietnam',
-        location: 'TP.HCM',
-        startDate: new Date('2024-06-01'),
-        endDate: new Date('2024-08-31'),
+        startDate: '2024-06',
+        endDate: '2024-08',
+        isCurrent: false,
         description: 'Phát triển tính năng CRUD cho hệ thống quản lý nội bộ sử dụng ASP.NET Core và SQL Server.'
       },
       {
-        title: 'Intern Web Developer',
+        role: 'Intern Web Developer',
         company: 'Local Tech Company',
-        location: 'Cần Thơ',
-        startDate: new Date('2023-12-01'),
-        endDate: new Date('2024-02-28'),
+        startDate: '2023-12',
+        endDate: '2024-02',
+        isCurrent: false,
         description: 'Xây dựng website cho khách hàng sử dụng HTML/CSS/JavaScript và PHP.'
       }
     ],
@@ -378,20 +382,18 @@ const candidateProfiles = [
       { name: 'Visual Studio', level: 'Intermediate', yearsOfExp: 2 }
     ],
     certifications: [
-      'Microsoft Certified: .NET Fundamentals (2024)'
+      { name: 'Microsoft Certified: .NET Fundamentals', issuer: 'Microsoft', issueDate: '2024-03' }
     ],
     preferences: {
       jobTypes: ['Full-time', 'Internship'],
-      locations: ['Cần Thơ', 'TP.HCM', 'Remote'],
-      workModes: ['Onsite', 'Hybrid'],
-      expectedSalary: { min: 10000000, max: 18000000, currency: 'VND' },
-      noticePeriod: 15,
-      isOpenToRelocation: true
+      preferredLocations: ['Cần Thơ', 'TP.HCM', 'Remote'],
+      industries: ['Công nghệ Thông tin'],
+      expectedSalary: { min: 10000000, max: 18000000, currency: 'VND' }
     },
-    portfolio: {
-      github: 'https://github.com/vane-dotnet',
-      linkedin: 'https://linkedin.com/in/vane-fresher'
-    },
+    portfolio: [
+      { title: 'GitHub', url: 'https://github.com/vane-dotnet', description: '.NET learning projects' },
+      { title: 'LinkedIn', url: 'https://linkedin.com/in/vane-fresher', description: 'Professional profile' }
+    ],
     isPublic: true,
     lastViewedAt: new Date('2026-04-21T09:30:00Z'),
     viewedCount: 15,
@@ -572,7 +574,7 @@ const companyReviews = [
     companyId: '22222222-2222-2222-2222-222222222221',
     candidateId: 'cccccccc-cccc-cccc-cccc-cccccccccccc',
     isAnonymous: false,
-    rating: {
+    ratings: {
       overall: 4,
       culture: 5,
       management: 3,
@@ -600,7 +602,7 @@ const companyReviews = [
     companyId: '22222222-2222-2222-2222-222222222222',
     candidateId: 'dddddddd-dddd-dddd-dddd-dddddddddddd',
     isAnonymous: true,
-    rating: {
+    ratings: {
       overall: 5,
       culture: 5,
       management: 5,
@@ -628,7 +630,7 @@ const companyReviews = [
     companyId: '22222222-2222-2222-2222-222222222223',
     candidateId: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
     isAnonymous: false,
-    rating: {
+    ratings: {
       overall: 3,
       culture: 2,
       management: 3,
@@ -656,7 +658,7 @@ const companyReviews = [
     companyId: '22222222-2222-2222-2222-222222222225',
     candidateId: '11111111-1111-1111-1111-111111111112',
     isAnonymous: false,
-    rating: {
+    ratings: {
       overall: 5,
       culture: 5,
       management: 5,
