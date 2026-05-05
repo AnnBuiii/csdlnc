@@ -149,52 +149,52 @@ INSERT INTO job_postings (id, company_id, title, level, job_type, work_mode, loc
  'Toàn quốc', 40000000, 65000000, 'VND', 'active', '2026-06-20', 167, 5);
 
 -- ── APPLICATIONS ──
-INSERT INTO applications (id, candidate_id, job_id, company_id, status, cover_letter, resume_url, applied_at) VALUES
+INSERT INTO applications (id, candidate_id, job_id, company_id, status, cover_letter, applied_at) VALUES
 -- Candidate 1 applied to 3 jobs
-('44444444-4444-4444-4444-444444444441', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 
+('44444444-4444-4444-4444-444444444441', 'cccccccc-cccc-cccc-cccc-cccccccccccc',
  '33333333-3333-3333-3333-333333333331', '22222222-2222-2222-2222-222222222221',
  'interview', 'Tôi có kinh nghiệm 5 năm với React và Node.js, phù hợp với yêu cầu công việc.',
- 'https://example.com/resumes/nguyen-a.pdf', '2026-04-20 09:30:00'),
+ '2026-04-20 09:30:00'),
 
 ('44444444-4444-4444-4444-444444444442', 'cccccccc-cccc-cccc-cccc-cccccccccccc',
  '33333333-3333-3333-3333-333333333333', '22222222-2222-2222-2222-222222222222',
  'submitted', 'Tôi có kinh nghiệm phát triển ứng dụng di động với React Native.',
- 'https://example.com/resumes/nguyen-a.pdf', '2026-04-21 14:15:00'),
+ '2026-04-21 14:15:00'),
 
 ('44444444-4444-4444-4444-444444444443', 'cccccccc-cccc-cccc-cccc-cccccccccccc',
  '33333333-3333-3333-3333-333333333338', '22222222-2222-2222-2222-222222222222',
- 'reviewing', NULL, 'https://example.com/resumes/nguyen-a.pdf', '2026-04-22 10:45:00'),
+ 'reviewing', NULL, '2026-04-22 10:45:00'),
 
 -- Candidate 2 applied to 2 jobs
 ('44444444-4444-4444-4444-444444444444', 'dddddddd-dddd-dddd-dddd-dddddddddddd',
  '33333333-3333-3333-3333-333333333332', '22222222-2222-2222-2222-222222222221',
  'offered', 'Tôi có bằng Thạc sĩ Data Science và 3 năm kinh nghiệm trong Fintech.',
- 'https://example.com/resumes/tran-b.pdf', '2026-04-18 11:20:00'),
+ '2026-04-18 11:20:00'),
 
 ('44444444-4444-4444-4444-444444444445', 'dddddddd-dddd-dddd-dddd-dddddddddddd',
  '33333333-3333-3333-3333-333333333330', '22222222-2222-2222-2222-222222222225',
- 'interview', NULL, 'https://example.com/resumes/tran-b.pdf', '2026-04-19 16:30:00'),
+ 'interview', NULL, '2026-04-19 16:30:00'),
 
 -- Candidate 3 applied to 2 jobs
 ('44444444-4444-4444-4444-444444444446', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
  '33333333-3333-3333-3333-333333333334', '22222222-2222-2222-2222-222222222223',
  'accepted', 'Tôi có 7 năm kinh nghiệm DevOps và chứng chỉ AWS Solutions Architect.',
- 'https://example.com/resumes/le-c.pdf', '2026-04-17 08:45:00'),
+ '2026-04-17 08:45:00'),
 
 ('44444444-4444-4444-4444-444444444447', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
  '33333333-3333-3333-3333-333333333331', '22222222-2222-2222-2222-222222222221',
- 'rejected', NULL, 'https://example.com/resumes/le-c.pdf', '2026-04-16 13:10:00'),
+ 'rejected', NULL, '2026-04-16 13:10:00'),
 
 -- Candidate 4 applied to 1 job
 ('44444444-4444-4444-4444-444444444448', 'ffffffff-ffff-ffff-ffff-ffffffffffff',
  '33333333-3333-3333-3333-333333333333', '22222222-2222-2222-2222-222222222222',
- 'withdrawn', NULL, 'https://example.com/resumes/pham-d.pdf', '2026-04-15 09:00:00'),
+ 'withdrawn', NULL, '2026-04-15 09:00:00'),
 
 -- Candidate 5 applied to 1 job
 ('44444444-4444-4444-4444-444444444449', '11111111-1111-1111-1111-111111111112',
  '33333333-3333-3333-3333-333333333336', '22222222-2222-2222-2222-222222222225',
  'reviewing', 'Tôi mới tốt nghiệp và rất mong muốn được làm việc tại FPT Software.',
- 'https://example.com/resumes/van-e.pdf', '2026-04-23 10:00:00');
+ '2026-04-23 10:00:00');
 
 -- ── INTERVIEWS ──
 INSERT INTO interviews (id, application_id, candidate_id, job_id, company_id, round, scheduled_at, duration_minutes, type, location, meeting_link, interviewer, status, feedback, score) VALUES
