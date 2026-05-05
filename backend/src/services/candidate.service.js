@@ -122,7 +122,7 @@ class CandidateService {
           `MERGE (s:Skill {name: $name})
            WITH s
            MATCH (c:Candidate {id: $cid})
-           MERGE (c)-[:KNOWS {level: $level}]->(s)`,
+           MERGE (c)-[:HAS_SKILL {level: $level}]->(s)`,
           { name: skill.name, cid: candidateId, level: skill.level || '' }
         );
       }

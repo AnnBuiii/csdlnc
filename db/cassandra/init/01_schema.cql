@@ -1,7 +1,7 @@
 -- =============================================================
 -- Cassandra Init Script – Smart Recruitment System
 -- Keyspace: srs_events
--- Tables: user_activity_log, job_view_stats, search_history
+-- Tables: user_activity_log, job_daily_stats, search_history
 -- =============================================================
 
 -- Tạo keyspace với replication factor 1 (dev)
@@ -41,11 +41,11 @@ CREATE TABLE IF NOT EXISTS user_activity_log (
   AND default_time_to_live = 7776000;  -- TTL: 90 ngày
 
 -- =============================================================
--- TABLE: job_view_stats (NV10)
+-- TABLE: job_daily_stats (NV10)
 -- Thống kê lượt xem tin tuyển dụng theo ngày
 -- Partition: (job_id, stat_date)
 -- =============================================================
-CREATE TABLE IF NOT EXISTS job_view_stats (
+CREATE TABLE IF NOT EXISTS job_daily_stats (
     job_id      TEXT,
     stat_date   DATE,
     hour        INT,

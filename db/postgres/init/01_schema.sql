@@ -64,6 +64,8 @@ CREATE TABLE IF NOT EXISTS companies (
     website     VARCHAR(255),
     description TEXT,
     address     TEXT,
+    phone       VARCHAR(50),
+    email       VARCHAR(255),
     rating      DECIMAL(3,2) NOT NULL DEFAULT 0.00,
     is_verified BOOLEAN NOT NULL DEFAULT FALSE,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -134,7 +136,6 @@ CREATE TABLE IF NOT EXISTS interviews (
     type             interview_type NOT NULL DEFAULT 'online',
     location         TEXT,
     meeting_link     TEXT,
-    location_or_link TEXT,
     interviewer      TEXT,
     notes            TEXT,
     status           interview_status NOT NULL DEFAULT 'scheduled',
@@ -155,10 +156,6 @@ CREATE TABLE IF NOT EXISTS candidate_profiles (
     created_at   TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at   TIMESTAMP NOT NULL DEFAULT NOW()
 );
-
-CREATE TRIGGER trg_candidate_profiles_updated_at  
-    BEFORE UPDATE ON candidate_profiles 
-    FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- ── MATERIALIZED VIEW: pipeline statistics ────────────────────
 -- Dùng cho báo cáo dashboard HR (NV10) – cải thiện query 18x
@@ -185,9 +182,10 @@ BEGIN
 END;
 $$;
 
-CREATE TRIGGER trg_users_updated_at       BEFORE UPDATE ON users        FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-CREATE TRIGGER trg_candidates_updated_at  BEFORE UPDATE ON candidates   FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-CREATE TRIGGER trg_companies_updated_at   BEFORE UPDATE ON companies    FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-CREATE TRIGGER trg_jobs_updated_at        BEFORE UPDATE ON job_postings FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-CREATE TRIGGER trg_apps_updated_at        BEFORE UPDATE ON applications FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-CREATE TRIGGER trg_interviews_updated_at  BEFORE UPDATE ON interviews   FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+CREATE TRIGGER trg_users_updated_at              BEFORE UPDATE ON users              FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+CREATE TRIGGER trg_candidates_updated_at         BEFORE UPDATE ON candidates         FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+CREATE TRIGGER trg_companies_updated_at          BEFORE UPDATE ON companies          FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+CREATE TRIGGER trg_jobs_updated_at               BEFORE UPDATE ON job_postings       FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+CREATE TRIGGER trg_apps_updated_at               BEFORE UPDATE ON applications       FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+CREATE TRIGGER trg_interviews_updated_at         BEFORE UPDATE ON interviews         FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+CREATE TRIGGER trg_candidate_profiles_updated_at BEFORE UPDATE ON candidate_profiles FOR EACH ROW EXECUTE FUNCTION set_updated_at();

@@ -12,7 +12,7 @@ class RecommendService {
     if (cached) return { data: cached, fromCache: true };
 
     const scores = await runCypher(
-      `MATCH (c:Candidate {id: $cid})-[:KNOWS]->(s:Skill)
+      `MATCH (c:Candidate {id: $cid})-[:HAS_SKILL]->(s:Skill)
        MATCH (j:Job {status: 'active'})-[:REQUIRES]->(s)
        WITH j, count(s) AS matchedSkills, j.salaryMax AS salaryMax
        WHERE salaryMax IS NOT NULL
@@ -43,7 +43,7 @@ class RecommendService {
 
     const scores = await runCypher(
       `MATCH (j:Job {id: $jid})-[:REQUIRES]->(s:Skill)
-       MATCH (c:Candidate)-[:KNOWS]->(s)
+       MATCH (c:Candidate)-[:HAS_SKILL]->(s)
        WITH c, count(s) AS matchedSkills, c.location AS location
        RETURN c.id AS candidateId, c.name AS name, location,
               matchedSkills
@@ -70,7 +70,7 @@ class RecommendService {
     if (cached) return { data: cached, fromCache: true };
 
     const similar = await runCypher(
-      `MATCH (c:Candidate {id: $cid})-[:KNOWS]->(s:Skill)<-[:KNOWS]-(other:Candidate)
+      `MATCH (c:Candidate {id: $cid})-[:HAS_SKILL]->(s:Skill)<-[:HAS_SKILL]-(other:Candidate)
        WHERE other.id <> $cid
        WITH other, count(s) AS sharedSkills, collect(s.name) AS commonSkills
        RETURN other.id AS candidateId, other.name AS name,

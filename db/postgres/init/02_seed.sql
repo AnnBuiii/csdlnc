@@ -197,13 +197,13 @@ INSERT INTO applications (id, candidate_id, job_id, company_id, status, cover_le
  'https://example.com/resumes/van-e.pdf', '2026-04-23 10:00:00');
 
 -- ── INTERVIEWS ──
-INSERT INTO interviews (id, application_id, candidate_id, job_id, company_id, round, scheduled_at, duration_minutes, type, location_or_link, interviewer, status, feedback, score) VALUES
+INSERT INTO interviews (id, application_id, candidate_id, job_id, company_id, round, scheduled_at, duration_minutes, type, location, meeting_link, interviewer, status, feedback, score) VALUES
 -- Interview for Candidate 1
 ('55555555-5555-5555-5555-555555555551', '44444444-4444-4444-4444-444444444441',
  'cccccccc-cccc-cccc-cccc-cccccccccccc', '33333333-3333-3333-3333-333333333331',
  '22222222-2222-2222-2222-222222222221', 1,
  '2026-04-25 14:00:00', 60, 'online',
- 'https://meet.google.com/abc-defg-hij', 'Trần Văn H - Tech Lead',
+ NULL, 'https://meet.google.com/abc-defg-hij', 'Trần Văn H - Tech Lead',
  'completed', 'Ứng viên có kiến thức tốt về React Hooks và Node.js performance optimization. Cần cải thiện về system design.', 8),
 
 -- Interview for Candidate 2
@@ -211,7 +211,7 @@ INSERT INTO interviews (id, application_id, candidate_id, job_id, company_id, ro
  'dddddddd-dddd-dddd-dddd-dddddddddddd', '33333333-3333-3333-3333-333333333332',
  '22222222-2222-2222-2222-222222222221', 1,
  '2026-04-26 10:00:00', 45, 'phone',
- NULL, 'Lê Thị K - Data Science Manager',
+ NULL, NULL, 'Lê Thị K - Data Science Manager',
  'completed', 'Ứng viên có kiến thức vững về ML algorithms và SQL optimization. Phù hợp với vị trí.', 9),
 
 -- Interview for Candidate 2 (second round)
@@ -219,7 +219,7 @@ INSERT INTO interviews (id, application_id, candidate_id, job_id, company_id, ro
  'dddddddd-dddd-dddd-dddd-dddddddddddd', '33333333-3333-3333-3333-333333333332',
  '22222222-2222-2222-2222-222222222221', 2,
  '2026-05-02 15:30:00', 90, 'online',
- 'https://meet.google.com/xyz-uvw-rst', 'Nguyễn Văn M - CTO',
+ NULL, 'https://meet.google.com/xyz-uvw-rst', 'Nguyễn Văn M - CTO',
  'scheduled', NULL, NULL),
 
 -- Interview for Candidate 3
@@ -227,7 +227,7 @@ INSERT INTO interviews (id, application_id, candidate_id, job_id, company_id, ro
  'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', '33333333-3333-3333-3333-333333333334',
  '22222222-2222-2222-2222-222222222223', 1,
  '2026-04-24 09:00:00', 75, 'offline',
- 'Tầng 7, Tòa nhà Vincom, 191 Bà Triệu, Hà Nội', 'Phạm Quang N - Head of DevOps',
+ 'Tầng 7, Tòa nhà Vincom, 191 Bà Triệu, Hà Nội', NULL, 'Phạm Quang N - Head of DevOps',
  'completed', 'Kinh nghiệm AWS và Kubernetes rất tốt. Đề xuất salary trong range.', 8),
 
 -- Upcoming interview for Candidate 5
@@ -235,7 +235,7 @@ INSERT INTO interviews (id, application_id, candidate_id, job_id, company_id, ro
  '11111111-1111-1111-1111-111111111112', '33333333-3333-3333-3333-333333333336',
  '22222222-2222-2222-2222-222222222225', 1,
  '2026-05-03 13:00:00', 60, 'online',
- 'https://teams.microsoft.com/l/meetup-join/12345', 'Trịnh Thị P - .NET Team Lead',
+ NULL, 'https://teams.microsoft.com/l/meetup-join/12345', 'Trịnh Thị P - .NET Team Lead',
  'scheduled', NULL, NULL);
 
 -- ── CANDIDATE PROFILES (denormalized) ──

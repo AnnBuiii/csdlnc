@@ -13,6 +13,7 @@ const reviewSchema = new mongoose.Schema({
     culture:         { type: Number, min: 1, max: 5 },
   },
   title:   String,
+  content: String,
   pros:    String,
   cons:    String,
   advice:  String,
