@@ -7,8 +7,7 @@ Thumbs.db
 ~$*
 
 # Environment variables
-.env
-!.env.example
+
 
 # Backend - Node.js
 backend/node_modules/
@@ -16,8 +15,6 @@ backend/package-lock.json
 backend/yarn.lock
 backend/pnpm-lock.yaml
 backend/.npm
-backend/.env.local
-backend/.env.*.local
 backend/npm-debug.log*
 backend/yarn-debug.log*
 backend/yarn-error.log*
@@ -34,8 +31,6 @@ frontend/package-lock.json
 frontend/yarn.lock
 frontend/pnpm-lock.yaml
 frontend/.npm
-frontend/.env.local
-frontend/.env.*.local
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*

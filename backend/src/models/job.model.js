@@ -43,7 +43,7 @@ const jobPostingSchema = new mongoose.Schema({
   benefits:           [String],
   applicationProcess: [String],
   tags:     [String],
-  status:   { type: String, enum: ['draft', 'active', 'expired', 'closed'], default: 'draft', index: true },
+  status:   { type: String, enum: ['draft', 'active', 'expired', 'closed'], default: 'active', index: true },
   deadline: Date,
   viewCount:        { type: Number, default: 0 },
   applicationCount: { type: Number, default: 0 },

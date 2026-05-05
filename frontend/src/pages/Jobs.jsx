@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { jobAPI, recommendationAPI } from '../services/api';
-import authStore from '../store/authStore';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { jobAPI, recommendationAPI } from "../services/api";
+import authStore from "../store/authStore";
 
 export default function Jobs() {
   const [jobs, setJobs] = useState([]);
   const [recommendedJobs, setRecommendedJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useState({
-    keyword: '',
-    location: '',
-    jobType: '',
-    experience: '',
-    salaryMin: '',
-    salaryMax: '',
+    q: "",
+    location: "",
+    jobType: "",
+    experience: "",
+    salaryMin: "",
+    salaryMax: "",
     page: 1,
     limit: 12,
   });
@@ -22,7 +22,7 @@ export default function Jobs() {
 
   useEffect(() => {
     fetchJobs();
-    if (isAuthenticated && user?.role === 'candidate') {
+    if (isAuthenticated && user?.role === "candidate") {
       fetchRecommendations();
     }
   }, [searchParams, isAuthenticated, user]);
@@ -33,7 +33,7 @@ export default function Jobs() {
       const response = await jobAPI.searchJobs(searchParams);
       setJobs(response.data || []);
     } catch (err) {
-      console.error('Error fetching jobs:', err);
+      console.error("Error fetching jobs:", err);
     } finally {
       setLoading(false);
     }
@@ -41,10 +41,12 @@ export default function Jobs() {
 
   const fetchRecommendations = async () => {
     try {
-      const response = await recommendationAPI.getJobRecommendations({ limit: 5 });
+      const response = await recommendationAPI.getJobRecommendations({
+        limit: 5,
+      });
       setRecommendedJobs(response.data || []);
     } catch (err) {
-      console.error('Error fetching recommendations:', err);
+      console.error("Error fetching recommendations:", err);
     }
   };
 
@@ -59,9 +61,11 @@ export default function Jobs() {
   };
 
   const renderLocation = (location) => {
-    if (!location) return 'Unknown';
-    if (typeof location === 'string') return location;
-    return [location.address, location.district, location.city].filter(Boolean).join(', ');
+    if (!location) return "Unknown";
+    if (typeof location === "string") return location;
+    return [location.address, location.district, location.city]
+      .filter(Boolean)
+      .join(", ");
   };
 
   if (loading && jobs.length === 0) {
@@ -83,10 +87,10 @@ export default function Jobs() {
             <label className="form-label">Keyword</label>
             <input
               type="text"
-              name="keyword"
+              name="q"
               className="form-input"
               placeholder="Job title, skills..."
-              value={searchParams.keyword}
+              value={searchParams.q}
               onChange={handleInputChange}
             />
           </div>
@@ -160,26 +164,26 @@ export default function Jobs() {
         </button>
       </form>
 
-      {isAuthenticated && user?.role === 'candidate' && recommendedJobs.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-4">Recommended for You</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recommendedJobs.map((job) => (
-              <div
-                key={job.jobId}
-                className="card hover:shadow-lg transition cursor-pointer"
-                onClick={() => navigate(`/jobs/${job.jobId}`)}
-              >
-                <h3 className="text-xl font-bold mb-2">{job.title}</h3>
-                <p className="text-muted mb-3">{job.companyName}</p>
-                <p className="text-sm text-muted">
-                  📍 {job.location}
-                </p>
-              </div>
-            ))}
+      {isAuthenticated &&
+        user?.role === "candidate" &&
+        recommendedJobs.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold mb-4">Recommended for You</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {recommendedJobs.map((job) => (
+                <div
+                  key={job.jobId}
+                  className="card hover:shadow-lg transition cursor-pointer"
+                  onClick={() => navigate(`/jobs/${job.jobId}`)}
+                >
+                  <h3 className="text-xl font-bold mb-2">{job.title}</h3>
+                  <p className="text-muted mb-3">{job.companyName}</p>
+                  <p className="text-sm text-muted">📍 {job.location}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       {/* Jobs Grid */}
       {jobs.length === 0 ? (
@@ -200,14 +204,17 @@ export default function Jobs() {
               <div className="mb-4 space-y-2">
                 <p className="text-sm">📍 {renderLocation(job.location)}</p>
                 <p className="text-sm">
-                  💰 {job.salaryMin?.toLocaleString()} - {job.salaryMax?.toLocaleString()} VND
+                  💰 {job.salaryMin?.toLocaleString()} -{" "}
+                  {job.salaryMax?.toLocaleString()} VND
                 </p>
                 <p className="text-sm">
                   ⏰ Deadline: {new Date(job.deadline).toLocaleDateString()}
                 </p>
               </div>
 
-              <p className="text-sm text-muted line-clamp-2 mb-4">{job.description}</p>
+              <p className="text-sm text-muted line-clamp-2 mb-4">
+                {job.description}
+              </p>
 
               <div className="flex flex-wrap gap-2 mb-4">
                 {job.requiredSkills?.slice(0, 3).map((skill, idx) => (

@@ -101,7 +101,7 @@ paths:
                                             refreshToken:
                                                 type: string
                 "400":
-                    description: Dữ liệu không hợp lệ
+                    $ref: "#/components/responses/BadRequest"
                 "409":
                     description: Email đã tồn tại
 
@@ -133,7 +133,7 @@ paths:
                 "201":
                     description: Đăng ký thành công
                 "400":
-                    description: Dữ liệu không hợp lệ
+                    $ref: "#/components/responses/BadRequest"
                 "409":
                     description: Email đã tồn tại
 
@@ -188,12 +188,10 @@ paths:
             security:
                 - bearerAuth: []
             requestBody:
-                required: true
                 content:
                     application/json:
                         schema:
                             type: object
-                            required: [refreshToken]
                             properties:
                                 refreshToken:
                                     type: string
@@ -202,7 +200,7 @@ paths:
                 "200":
                     description: Đăng xuất thành công
                 "401":
-                    description: Không có quyền truy cập
+                    $ref: "#/components/responses/Unauthorized"
 
     /auth/refresh:
         post:
@@ -241,14 +239,14 @@ paths:
                             schema:
                                 $ref: "#/components/schemas/User"
                 "401":
-                    description: Không có quyền truy cập
+                    $ref: "#/components/responses/Unauthorized"
 
     # ==================== Candidate Routes ====================
     /candidates/profile:
         get:
             tags: [Candidates]
             summary: Lấy hồ sơ của chính mình
-            description: Ứng viên lấy thông tin hồ sơ của mình
+            description: Ứng viên lấy thông tin hồ sơ của mình (role: candidate)
             security:
                 - bearerAuth: []
             responses:
@@ -258,10 +256,14 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/CandidateProfile"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
         put:
             tags: [Candidates]
             summary: Cập nhật hồ sơ
-            description: Ứng viên cập nhật thông tin hồ sơ
+            description: Ứng viên cập nhật toàn bộ thông tin hồ sơ (role: candidate)
             security:
                 - bearerAuth: []
             requestBody:
@@ -274,13 +276,15 @@ paths:
                 "200":
                     description: Cập nhật thành công
                 "400":
-                    description: Dữ liệu không hợp lệ
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
 
     /candidates/{id}/profile:
         get:
             tags: [Candidates]
             summary: Xem hồ sơ ứng viên (public)
-            description: Xem thông tin hồ sơ ứng viên (không cần đăng nhập)
+            description: Xem thông tin hồ sơ ứng viên công khai (không cần đăng nhập)
             parameters:
                 - name: id
                   in: path
@@ -297,16 +301,224 @@ paths:
                             schema:
                                 $ref: "#/components/schemas/CandidateProfile"
                 "404":
-                    description: Ứng viên không tồn tại
+                    $ref: "#/components/responses/NotFound"
+
+    /candidates/profile/experience:
+        post:
+            tags: [Candidates]
+            summary: Thêm kinh nghiệm làm việc
+            description: Ứng viên thêm một mục kinh nghiệm vào hồ sơ (role: candidate)
+            security:
+                - bearerAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [company, role, startDate]
+                            properties:
+                                company:
+                                    type: string
+                                    example: Công ty XYZ
+                                role:
+                                    type: string
+                                    example: Backend Developer
+                                startDate:
+                                    type: string
+                                    format: date
+                                    example: "2022-01-01"
+                                endDate:
+                                    type: string
+                                    format: date
+                                    example: "2024-01-01"
+                                current:
+                                    type: boolean
+                                    example: false
+                                description:
+                                    type: string
+                                    example: Phát triển API với Node.js
+            responses:
+                "200":
+                    description: Thêm kinh nghiệm thành công
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+
+    /candidates/profile/skills:
+        post:
+            tags: [Candidates]
+            summary: Thêm kỹ năng
+            description: Ứng viên thêm một kỹ năng vào hồ sơ (role: candidate)
+            security:
+                - bearerAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [name]
+                            properties:
+                                name:
+                                    type: string
+                                    example: Node.js
+                                level:
+                                    type: string
+                                    example: Advanced
+            responses:
+                "200":
+                    description: Thêm kỹ năng thành công
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+
+    /candidates/search:
+        get:
+            tags: [Candidates]
+            summary: Tìm kiếm ứng viên
+            description: HR/Admin tìm kiếm ứng viên theo tiêu chí (role: recruiter, admin)
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: keyword
+                  in: query
+                  schema:
+                      type: string
+                  description: Từ khóa tìm kiếm (tên, kỹ năng...)
+                - name: skills
+                  in: query
+                  schema:
+                      type: string
+                  description: Danh sách kỹ năng, phân cách bằng dấu phẩy
+                - name: page
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      default: 1
+                - name: limit
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      maximum: 100
+                      default: 20
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    success:
+                                        type: boolean
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/CandidateProfile"
+                                    meta:
+                                        $ref: "#/components/schemas/PaginationMeta"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+
+    # ==================== Company Routes ====================
+    /companies/profile:
+        get:
+            tags: [Companies]
+            summary: Lấy thông tin công ty của mình
+            description: Recruiter/Admin lấy thông tin công ty của mình (role: recruiter, admin)
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Company"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+        put:
+            tags: [Companies]
+            summary: Cập nhật thông tin công ty
+            description: Recruiter/Admin cập nhật thông tin công ty (role: recruiter, admin)
+            security:
+                - bearerAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                    example: Công ty ABC
+                                industry:
+                                    type: string
+                                    example: Công nghệ thông tin
+                                size:
+                                    type: string
+                                    example: 51-200
+                                logoUrl:
+                                    type: string
+                                    format: uri
+                                    example: https://example.com/logo.png
+                                website:
+                                    type: string
+                                    format: uri
+                                    example: https://example.com
+                                phone:
+                                    type: string
+                                    example: "0912345678"
+                                email:
+                                    type: string
+                                    format: email
+                                    example: hr@company.com
+            responses:
+                "200":
+                    description: Cập nhật thành công
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+
+    /companies/{id}:
+        get:
+            tags: [Companies]
+            summary: Xem thông tin công ty (public)
+            description: Xem thông tin công ty theo ID (không cần đăng nhập)
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                  example: company-uuid-here
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Company"
+                "404":
+                    $ref: "#/components/responses/NotFound"
 
     # ==================== Job Routes ====================
     /jobs:
         get:
             tags: [Jobs]
             summary: Tìm kiếm công việc
-            description: Tìm kiếm và lọc công việc (công khai)
+            description: Tìm kiếm và lọc công việc (công khai, không bắt buộc đăng nhập)
             parameters:
-                - name: keyword
+                - name: q
                   in: query
                   schema:
                       type: string
@@ -320,27 +532,26 @@ paths:
                   in: query
                   schema:
                       type: string
-                      enum: [fulltime, parttime, remote, hybrid]
                   description: Loại công việc
-                - name: experience
+                - name: workMode
                   in: query
                   schema:
                       type: string
-                      enum: [intern, fresher, junior, senior, manager]
-                  description: Yêu cầu kinh nghiệm
+                      enum: [Onsite, Remote, Hybrid]
+                  description: Hình thức làm việc
                 - name: page
                   in: query
                   schema:
                       type: integer
                       minimum: 1
-                  description: Số trang
+                      default: 1
                 - name: limit
                   in: query
                   schema:
                       type: integer
                       minimum: 1
                       maximum: 100
-                  description: Số lượng mỗi trang
+                      default: 20
             responses:
                 "200":
                     description: Thành công
@@ -361,7 +572,7 @@ paths:
         post:
             tags: [Jobs]
             summary: Tạo tin tuyển dụng
-            description: Nhà tuyển dụng tạo tin tuyển dụng mới
+            description: Nhà tuyển dụng tạo tin tuyển dụng mới (role: recruiter, admin)
             security:
                 - bearerAuth: []
             requestBody:
@@ -378,51 +589,138 @@ paths:
                                 description:
                                     type: string
                                     example: Tuyển dụng lập trình viên backend
-                                requirements:
+                                level:
+                                    type: string
+                                    example: Senior
+                                jobType:
                                     type: array
                                     items:
                                         type: string
-                                    example: ["Node.js", "PostgreSQL", "Redis"]
+                                    example: ["Full-time"]
+                                workMode:
+                                    type: string
+                                    enum: [Onsite, Remote, Hybrid]
+                                    example: Hybrid
+                                location:
+                                    type: object
+                                    properties:
+                                        city:
+                                            type: string
+                                            example: Hà Nội
+                                        district:
+                                            type: string
+                                        address:
+                                            type: string
+                                salary:
+                                    type: object
+                                    properties:
+                                        min:
+                                            type: integer
+                                            minimum: 0
+                                            example: 20000000
+                                        max:
+                                            type: integer
+                                            minimum: 0
+                                            example: 40000000
+                                        isNegotiable:
+                                            type: boolean
+                                        isPublic:
+                                            type: boolean
+                                requirements:
+                                    type: object
+                                    properties:
+                                        skills:
+                                            type: array
+                                            items:
+                                                type: string
+                                        yearsOfExperience:
+                                            type: integer
+                                        education:
+                                            type: string
+                                benefits:
+                                    type: array
+                                    items:
+                                        type: string
+                                tags:
+                                    type: array
+                                    items:
+                                        type: string
+                                deadline:
+                                    type: string
+                                    format: date
+                                    example: "2025-12-31"
                                 salaryMin:
                                     type: integer
                                     minimum: 0
                                     example: 20000000
+                                    description: Shorthand – dùng thay vì salary.min
                                 salaryMax:
                                     type: integer
                                     minimum: 0
                                     example: 40000000
-                                jobType:
-                                    type: string
-                                    enum: [fulltime, parttime, remote, hybrid]
-                                    example: fulltime
-                                location:
-                                    type: string
-                                    example: Hà Nội
-                                deadline:
-                                    type: string
-                                    format: date
-                                    example: 2024-12-31
+                                    description: Shorthand – dùng thay vì salary.max
             responses:
                 "201":
                     description: Tạo tin thành công
                 "400":
-                    description: Dữ liệu không hợp lệ
+                    $ref: "#/components/responses/BadRequest"
                 "401":
-                    description: Không có quyền truy cập
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+
+    /jobs/company/mine:
+        get:
+            tags: [Jobs]
+            summary: Tin tuyển dụng của công ty tôi
+            description: Recruiter/Admin xem danh sách tin tuyển dụng của công ty mình (role: recruiter, admin)
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: status
+                  in: query
+                  schema:
+                      type: string
+                      enum: [draft, active, expired, closed]
+                - name: page
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      default: 1
+                - name: limit
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      maximum: 100
+                      default: 20
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    success:
+                                        type: boolean
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Job"
+                                    meta:
+                                        $ref: "#/components/schemas/PaginationMeta"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
 
     /jobs/{id}:
         get:
             tags: [Jobs]
             summary: Chi tiết tin tuyển dụng
-            description: Lấy thông tin chi tiết của một tin tuyển dụng
+            description: Lấy thông tin chi tiết của một tin tuyển dụng (không bắt buộc đăng nhập)
             parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                      type: string
-                      format: uuid
-                  example: 123e4567-e89b-12d3-a456-426614174000
+                - $ref: "#/components/parameters/UUIDId"
             responses:
                 "200":
                     description: Thành công
@@ -430,21 +728,18 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/JobDetail"
+                "400":
+                    $ref: "#/components/responses/BadRequest"
                 "404":
-                    description: Tin tuyển dụng không tồn tại
+                    $ref: "#/components/responses/NotFound"
 
     /jobs/{id}/related:
         get:
             tags: [Jobs]
             summary: Công việc liên quan
-            description: Lấy danh sách công việc liên quan
+            description: Lấy danh sách công việc liên quan đến một tin tuyển dụng
             parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                      type: string
-                      format: uuid
+                - $ref: "#/components/parameters/UUIDId"
             responses:
                 "200":
                     description: Thành công
@@ -454,13 +749,46 @@ paths:
                                 type: array
                                 items:
                                     $ref: "#/components/schemas/Job"
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+
+    /jobs/{id}/status:
+        patch:
+            tags: [Jobs]
+            summary: Cập nhật trạng thái tin tuyển dụng
+            description: Recruiter/Admin thay đổi trạng thái tin tuyển dụng (role: recruiter, admin)
+            security:
+                - bearerAuth: []
+            parameters:
+                - $ref: "#/components/parameters/UUIDId"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [status]
+                            properties:
+                                status:
+                                    type: string
+                                    enum: [draft, active, closed]
+                                    example: closed
+            responses:
+                "200":
+                    description: Cập nhật thành công
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
 
     # ==================== Application Routes ====================
     /applications:
         post:
             tags: [Applications]
             summary: Nộp đơn ứng tuyển
-            description: Ứng viên nộp đơn ứng tuyển công việc
+            description: Ứng viên nộp đơn ứng tuyển công việc (role: candidate)
             security:
                 - bearerAuth: []
             requestBody:
@@ -475,10 +803,6 @@ paths:
                                     type: string
                                     format: uuid
                                     example: 123e4567-e89b-12d3-a456-426614174000
-                                resumeUrl:
-                                    type: string
-                                    format: uri
-                                    example: https://storage.example.com/resume.pdf
                                 coverLetter:
                                     type: string
                                     example: Tôi rất mong muốn được làm việc tại công ty...
@@ -486,15 +810,17 @@ paths:
                 "201":
                     description: Nộp đơn thành công
                 "400":
-                    description: Dữ liệu không hợp lệ
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
                 "404":
-                    description: Công việc không tồn tại
+                    $ref: "#/components/responses/NotFound"
 
     /applications/mine:
         get:
             tags: [Applications]
             summary: Đơn ứng tuyển của tôi
-            description: Ứng viên xem danh sách đơn ứng tuyển của mình
+            description: Ứng viên xem danh sách đơn ứng tuyển của mình (role: candidate)
             security:
                 - bearerAuth: []
             parameters:
@@ -503,25 +829,19 @@ paths:
                   schema:
                       type: integer
                       minimum: 1
+                      default: 1
                 - name: limit
                   in: query
                   schema:
                       type: integer
                       minimum: 1
                       maximum: 50
+                      default: 20
                 - name: status
                   in: query
                   schema:
                       type: string
-                      enum:
-                          [
-                              pending,
-                              reviewed,
-                              shortlisted,
-                              interviewed,
-                              rejected,
-                              hired,
-                          ]
+                      enum: [submitted, reviewing, interview, offered, accepted, rejected]
             responses:
                 "200":
                     description: Thành công
@@ -538,13 +858,136 @@ paths:
                                             $ref: "#/components/schemas/Application"
                                     meta:
                                         $ref: "#/components/schemas/PaginationMeta"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+
+    /applications/job/{jobId}:
+        get:
+            tags: [Applications]
+            summary: Danh sách đơn theo tin tuyển dụng
+            description: HR/Admin xem danh sách đơn ứng tuyển của một tin (role: recruiter, admin)
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: jobId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      format: uuid
+                - name: status
+                  in: query
+                  schema:
+                      type: string
+                      enum: [submitted, reviewing, interview, offered, accepted, rejected]
+                - name: page
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      default: 1
+                - name: limit
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      maximum: 100
+                      default: 20
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    success:
+                                        type: boolean
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Application"
+                                    meta:
+                                        $ref: "#/components/schemas/PaginationMeta"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+
+    /applications/job/{jobId}/pipeline:
+        get:
+            tags: [Applications]
+            summary: Thống kê pipeline tuyển dụng
+            description: HR/Admin xem thống kê số lượng đơn theo từng trạng thái (role: recruiter, admin)
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: jobId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      format: uuid
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    success:
+                                        type: boolean
+                                    data:
+                                        type: object
+                                        description: Số lượng đơn theo từng trạng thái
+                                        example:
+                                            submitted: 10
+                                            reviewing: 5
+                                            interview: 3
+                                            offered: 1
+                                            accepted: 1
+                                            rejected: 2
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+
+    /applications/{id}/status:
+        patch:
+            tags: [Applications]
+            summary: Cập nhật trạng thái đơn ứng tuyển
+            description: HR/Admin cập nhật trạng thái xử lý đơn ứng tuyển (role: recruiter, admin)
+            security:
+                - bearerAuth: []
+            parameters:
+                - $ref: "#/components/parameters/UUIDId"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [status]
+                            properties:
+                                status:
+                                    type: string
+                                    enum: [submitted, reviewing, interview, offered, accepted, rejected]
+                                    example: reviewing
+            responses:
+                "200":
+                    description: Cập nhật thành công
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
 
     # ==================== Interview Routes ====================
     /interviews:
         post:
             tags: [Interviews]
             summary: Lên lịch phỏng vấn
-            description: Nhà tuyển dụng lên lịch phỏng vấn ứng viên
+            description: Nhà tuyển dụng tạo lịch phỏng vấn cho ứng viên (role: recruiter, admin)
             security:
                 - bearerAuth: []
             requestBody:
@@ -561,24 +1004,62 @@ paths:
                                 scheduledAt:
                                     type: string
                                     format: date-time
+                                    example: "2025-06-15T09:00:00Z"
                                 type:
                                     type: string
-                                    enum: [phone, video, onsite]
+                                    enum: [online, offline, phone]
+                                    example: online
                                 notes:
                                     type: string
+                                    example: Phỏng vấn qua Google Meet
             responses:
                 "201":
                     description: Tạo lịch phỏng vấn thành công
                 "400":
-                    description: Dữ liệu không hợp lệ
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
                 "404":
-                    description: Đơn ứng tuyển không tồn tại
+                    $ref: "#/components/responses/NotFound"
+
+    /interviews/company:
+        get:
+            tags: [Interviews]
+            summary: Lịch phỏng vấn của công ty
+            description: Recruiter/Admin xem toàn bộ lịch phỏng vấn của công ty (role: recruiter, admin)
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      default: 1
+                - name: limit
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      maximum: 100
+                      default: 20
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Interview"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
 
     /interviews/mine:
         get:
             tags: [Interviews]
             summary: Lịch phỏng vấn của tôi
-            description: Ứng viên xem danh sách lịch phỏng vấn
+            description: Ứng viên xem danh sách lịch phỏng vấn của mình (role: candidate)
             security:
                 - bearerAuth: []
             responses:
@@ -590,13 +1071,81 @@ paths:
                                 type: array
                                 items:
                                     $ref: "#/components/schemas/Interview"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+
+    /interviews/{id}/result:
+        patch:
+            tags: [Interviews]
+            summary: Ghi kết quả phỏng vấn
+            description: Recruiter/Admin cập nhật trạng thái và kết quả phỏng vấn (role: recruiter, admin)
+            security:
+                - bearerAuth: []
+            parameters:
+                - $ref: "#/components/parameters/UUIDId"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [status]
+                            properties:
+                                status:
+                                    type: string
+                                    enum: [completed, cancelled]
+                                    example: completed
+                                result:
+                                    type: string
+                                    enum: [passed, failed]
+                                    example: passed
+                                notes:
+                                    type: string
+            responses:
+                "200":
+                    description: Cập nhật thành công
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+
+    /interviews/{id}/reschedule:
+        patch:
+            tags: [Interviews]
+            summary: Đổi lịch phỏng vấn
+            description: Recruiter/Admin thay đổi thời gian phỏng vấn (role: recruiter, admin)
+            security:
+                - bearerAuth: []
+            parameters:
+                - $ref: "#/components/parameters/UUIDId"
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [scheduledAt]
+                            properties:
+                                scheduledAt:
+                                    type: string
+                                    format: date-time
+                                    example: "2025-06-20T10:00:00Z"
+                                notes:
+                                    type: string
+            responses:
+                "200":
+                    description: Đổi lịch thành công
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
 
     # ==================== Recommendation Routes ====================
     /recommendations/jobs:
         get:
             tags: [Recommendations]
-            summary: Đề xuất công việc
-            description: Ứng viên nhận đề xuất công việc dựa trên hồ sơ
+            summary: Đề xuất công việc cho ứng viên
+            description: Hệ thống gợi ý công việc phù hợp dựa trên hồ sơ (role: candidate)
             security:
                 - bearerAuth: []
             parameters:
@@ -605,7 +1154,7 @@ paths:
                   schema:
                       type: integer
                       minimum: 1
-                      maximum: 20
+                      maximum: 50
                       default: 10
             responses:
                 "200":
@@ -616,26 +1165,333 @@ paths:
                                 type: array
                                 items:
                                     $ref: "#/components/schemas/Job"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
 
-    # ==================== Health Check ====================
-    /health:
+    /recommendations/candidates/{jobId}:
         get:
-            summary: Kiểm tra trạng thái hệ thống
-            description: Endpoint kiểm tra hệ thống có hoạt động không
+            tags: [Recommendations]
+            summary: Đề xuất ứng viên cho HR
+            description: Hệ thống gợi ý ứng viên phù hợp cho một tin tuyển dụng (role: recruiter, admin)
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: jobId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      format: uuid
+                - name: limit
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      maximum: 50
+                      default: 10
             responses:
                 "200":
-                    description: Hệ thống hoạt động bình thường
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/CandidateProfile"
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+
+    /recommendations/similar-candidates:
+        get:
+            tags: [Recommendations]
+            summary: Ứng viên tương tự
+            description: Tìm ứng viên có hồ sơ tương tự với ứng viên hiện tại (role: candidate)
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/CandidateProfile"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+
+    # ==================== Review Routes ====================
+    /reviews:
+        post:
+            tags: [Reviews]
+            summary: Gửi đánh giá công ty
+            description: Ứng viên gửi đánh giá cho một công ty (role: candidate). Đánh giá cần admin duyệt trước khi hiển thị.
+            security:
+                - bearerAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [companyId, ratings]
+                            properties:
+                                companyId:
+                                    type: string
+                                    example: company-id-here
+                                ratings:
+                                    type: object
+                                    required: [overall]
+                                    properties:
+                                        overall:
+                                            type: integer
+                                            minimum: 1
+                                            maximum: 5
+                                            example: 4
+                                        workLife:
+                                            type: integer
+                                            minimum: 1
+                                            maximum: 5
+                                        salary:
+                                            type: integer
+                                            minimum: 1
+                                            maximum: 5
+                                        management:
+                                            type: integer
+                                            minimum: 1
+                                            maximum: 5
+                                        culture:
+                                            type: integer
+                                            minimum: 1
+                                            maximum: 5
+                                title:
+                                    type: string
+                                    example: Môi trường làm việc tốt
+                                content:
+                                    type: string
+                                    example: Công ty có văn hóa tốt, đồng nghiệp thân thiện
+                                pros:
+                                    type: string
+                                cons:
+                                    type: string
+                                isAnonymous:
+                                    type: boolean
+                                    default: false
+            responses:
+                "201":
+                    description: Gửi đánh giá thành công, đang chờ duyệt
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+
+    /reviews/company/{companyId}:
+        get:
+            tags: [Reviews]
+            summary: Xem đánh giá của công ty
+            description: Xem danh sách đánh giá đã được duyệt của một công ty (public)
+            parameters:
+                - name: companyId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                - name: page
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      default: 1
+                - name: limit
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      maximum: 50
+                      default: 10
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Review"
+
+    /reviews/{id}/approve:
+        patch:
+            tags: [Reviews]
+            summary: Duyệt hoặc từ chối đánh giá
+            description: Admin duyệt hoặc từ chối một đánh giá công ty (role: admin)
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [approved]
+                            properties:
+                                approved:
+                                    type: boolean
+                                    example: true
+            responses:
+                "200":
+                    description: Thành công
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+
+    # ==================== Analytics Routes ====================
+    /analytics/recruiter:
+        get:
+            tags: [Analytics]
+            summary: Dashboard nhà tuyển dụng
+            description: Thống kê tổng quan cho nhà tuyển dụng (role: recruiter, admin)
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/RecruiterDashboard"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+
+    /analytics/admin:
+        get:
+            tags: [Analytics]
+            summary: Dashboard quản trị viên
+            description: Thống kê toàn hệ thống cho admin (role: admin)
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/AdminDashboard"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+
+    /analytics/activity:
+        get:
+            tags: [Analytics]
+            summary: Lịch sử hành vi người dùng
+            description: Lấy lịch sử hành vi của người dùng hiện tại theo ngày (yêu cầu đăng nhập)
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: date
+                  in: query
+                  schema:
+                      type: string
+                      format: date
+                  description: Ngày cần lấy lịch sử (mặc định hôm nay)
+                  example: "2025-05-01"
+            responses:
+                "200":
+                    description: Thành công
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+
+    /analytics/jobs/{id}:
+        get:
+            tags: [Analytics]
+            summary: Thống kê tin tuyển dụng
+            description: Xem thống kê lượt xem và ứng tuyển của một tin tuyển dụng (role: recruiter, admin)
+            security:
+                - bearerAuth: []
+            parameters:
+                - $ref: "#/components/parameters/UUIDId"
+                - name: days
+                  in: query
+                  schema:
+                      type: integer
+                      minimum: 1
+                      maximum: 90
+                      default: 30
+                  description: Số ngày muốn thống kê
+            responses:
+                "200":
+                    description: Thành công
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+
+    # ==================== Notification Routes ====================
+    /notifications:
+        get:
+            tags: [Notifications]
+            summary: Lấy danh sách thông báo
+            description: Lấy tất cả thông báo của người dùng hiện tại (yêu cầu đăng nhập)
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: Thành công
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Notification"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+        delete:
+            tags: [Notifications]
+            summary: Đánh dấu tất cả thông báo đã đọc
+            description: Đánh dấu toàn bộ thông báo của người dùng là đã đọc (yêu cầu đăng nhập)
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: Thành công
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+
+    /notifications/count:
+        get:
+            tags: [Notifications]
+            summary: Đếm thông báo chưa đọc
+            description: Lấy số lượng thông báo chưa đọc (yêu cầu đăng nhập)
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: Thành công
                     content:
                         application/json:
                             schema:
                                 type: object
                                 properties:
-                                    status:
-                                        type: string
-                                        example: ok
-                                    timestamp:
-                                        type: string
-                                        format: date-time
+                                    success:
+                                        type: boolean
+                                    data:
+                                        type: object
+                                        properties:
+                                            count:
+                                                type: integer
+                                                example: 5
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
 
 components:
     securitySchemes:
@@ -643,6 +1499,42 @@ components:
             type: http
             scheme: bearer
             bearerFormat: JWT
+
+    parameters:
+        UUIDId:
+            name: id
+            in: path
+            required: true
+            schema:
+                type: string
+                format: uuid
+            example: 123e4567-e89b-12d3-a456-426614174000
+
+    responses:
+        BadRequest:
+            description: Dữ liệu không hợp lệ
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Error"
+        Unauthorized:
+            description: Chưa xác thực hoặc token không hợp lệ
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Error"
+        Forbidden:
+            description: Không có quyền thực hiện hành động này
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Error"
+        NotFound:
+            description: Không tìm thấy tài nguyên
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Error"
 
     schemas:
         User:
@@ -691,22 +1583,34 @@ components:
                 skills:
                     type: array
                     items:
-                        type: string
-                    example: ["JavaScript", "React", "Node.js"]
-                education:
-                    type: array
-                    items:
-                        $ref: "#/components/schemas/Education"
+                        type: object
+                        properties:
+                            name:
+                                type: string
+                            level:
+                                type: string
+                    example:
+                        - name: JavaScript
+                          level: Advanced
+                        - name: Node.js
+                          level: Intermediate
                 workExperience:
                     type: array
                     items:
                         $ref: "#/components/schemas/WorkExperience"
+                education:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Education"
                 resumeUrl:
                     type: string
                     format: uri
                 avatarUrl:
                     type: string
                     format: uri
+                isPublic:
+                    type: boolean
+                    default: true
                 createdAt:
                     type: string
                     format: date-time
@@ -720,32 +1624,74 @@ components:
                 jobId:
                     type: string
                     format: uuid
+                companyId:
+                    type: string
+                companyInfo:
+                    type: object
+                    properties:
+                        name:
+                            type: string
+                        logoUrl:
+                            type: string
+                            format: uri
+                        industry:
+                            type: string
+                        size:
+                            type: string
                 title:
                     type: string
-                companyName:
-                    type: string
-                location:
+                level:
                     type: string
                 jobType:
+                    type: array
+                    items:
+                        type: string
+                workMode:
                     type: string
-                    enum: [fulltime, parttime, remote, hybrid]
-                salaryMin:
-                    type: integer
-                salaryMax:
-                    type: integer
-                currency:
-                    type: string
-                    default: VND
-                experience:
-                    type: string
-                    enum: [intern, fresher, junior, senior, manager]
+                    enum: [Onsite, Remote, Hybrid]
+                location:
+                    type: object
+                    properties:
+                        city:
+                            type: string
+                        district:
+                            type: string
+                        address:
+                            type: string
+                        isRemoteAllowed:
+                            type: boolean
+                salary:
+                    type: object
+                    properties:
+                        min:
+                            type: integer
+                        max:
+                            type: integer
+                        currency:
+                            type: string
+                            default: VND
+                        isNegotiable:
+                            type: boolean
+                        isPublic:
+                            type: boolean
                 status:
                     type: string
-                    enum: [draft, active, closed]
+                    enum: [draft, active, expired, closed]
                 deadline:
                     type: string
                     format: date
+                viewCount:
+                    type: integer
+                applicationCount:
+                    type: integer
+                tags:
+                    type: array
+                    items:
+                        type: string
                 createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
                     type: string
                     format: date-time
 
@@ -757,19 +1703,28 @@ components:
                       description:
                           type: string
                       requirements:
-                          type: array
-                          items:
-                              type: string
+                          type: object
+                          properties:
+                              skills:
+                                  type: array
+                                  items:
+                                      type: string
+                              yearsOfExperience:
+                                  type: integer
+                              education:
+                                  type: string
+                              languageRequirements:
+                                  type: array
+                                  items:
+                                      type: string
                       benefits:
                           type: array
                           items:
                               type: string
-                      company:
-                          $ref: "#/components/schemas/Company"
-                      applicationCount:
-                          type: integer
-                      viewCount:
-                          type: integer
+                      applicationProcess:
+                          type: array
+                          items:
+                              type: string
 
         Application:
             type: object
@@ -785,18 +1740,7 @@ components:
                     format: uuid
                 status:
                     type: string
-                    enum:
-                        [
-                            pending,
-                            reviewed,
-                            shortlisted,
-                            interviewed,
-                            rejected,
-                            hired,
-                        ]
-                resumeUrl:
-                    type: string
-                    format: uri
+                    enum: [submitted, reviewing, interview, offered, accepted, rejected]
                 coverLetter:
                     type: string
                 appliedAt:
@@ -830,13 +1774,13 @@ components:
                     format: date-time
                 type:
                     type: string
-                    enum: [phone, video, onsite]
+                    enum: [online, offline, phone]
                 status:
                     type: string
                     enum: [scheduled, completed, cancelled, no_show]
                 result:
                     type: string
-                    enum: [pending, passed, failed]
+                    enum: [passed, failed]
                 notes:
                     type: string
                 createdAt:
@@ -851,7 +1795,6 @@ components:
             properties:
                 companyId:
                     type: string
-                    format: uuid
                 name:
                     type: string
                 description:
@@ -864,13 +1807,14 @@ components:
                 logoUrl:
                     type: string
                     format: uri
-                location:
+                size:
                     type: string
-                employeeCount:
+                    example: 51-200
+                phone:
                     type: string
-                    enum: [1-10, 11-50, 51-200, 201-500, 501-1000, 1000+]
-                foundedYear:
-                    type: integer
+                email:
+                    type: string
+                    format: email
                 avgRating:
                     type: number
                     minimum: 0
@@ -880,6 +1824,100 @@ components:
                 createdAt:
                     type: string
                     format: date-time
+
+        Review:
+            type: object
+            properties:
+                reviewId:
+                    type: string
+                companyId:
+                    type: string
+                candidateId:
+                    type: string
+                ratings:
+                    type: object
+                    properties:
+                        overall:
+                            type: integer
+                            minimum: 1
+                            maximum: 5
+                        workLife:
+                            type: integer
+                        salary:
+                            type: integer
+                        management:
+                            type: integer
+                        culture:
+                            type: integer
+                title:
+                    type: string
+                content:
+                    type: string
+                pros:
+                    type: string
+                cons:
+                    type: string
+                isAnonymous:
+                    type: boolean
+                status:
+                    type: string
+                    enum: [pending, approved, rejected]
+                createdAt:
+                    type: string
+                    format: date-time
+
+        Notification:
+            type: object
+            properties:
+                notificationId:
+                    type: string
+                userId:
+                    type: string
+                type:
+                    type: string
+                    example: application_status_changed
+                title:
+                    type: string
+                message:
+                    type: string
+                isRead:
+                    type: boolean
+                data:
+                    type: object
+                    description: Dữ liệu kèm theo thông báo
+                createdAt:
+                    type: string
+                    format: date-time
+
+        RecruiterDashboard:
+            type: object
+            properties:
+                totalJobs:
+                    type: integer
+                activeJobs:
+                    type: integer
+                totalApplications:
+                    type: integer
+                pendingApplications:
+                    type: integer
+                upcomingInterviews:
+                    type: integer
+
+        AdminDashboard:
+            type: object
+            properties:
+                totalUsers:
+                    type: integer
+                totalCandidates:
+                    type: integer
+                totalRecruiters:
+                    type: integer
+                totalJobs:
+                    type: integer
+                totalApplications:
+                    type: integer
+                pendingReviews:
+                    type: integer
 
         Education:
             type: object
@@ -902,7 +1940,7 @@ components:
             properties:
                 company:
                     type: string
-                position:
+                role:
                     type: string
                 startDate:
                     type: string
@@ -942,10 +1980,8 @@ components:
                     example: Đã xảy ra lỗi
                 error:
                     type: string
-                    example: ValidationError
                 statusCode:
                     type: integer
-                    example: 400
                 timestamp:
                     type: string
                     format: date-time
