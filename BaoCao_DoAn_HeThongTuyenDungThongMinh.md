@@ -266,7 +266,11 @@ erDiagram
         string password_hash
         enum role
         boolean is_active
+        string oauth_provider
+        string oauth_id
+        timestamp last_login
         timestamp created_at
+        timestamp updated_at
     }
     candidates {
         UUID id PK
@@ -275,9 +279,12 @@ erDiagram
         string phone
         date date_of_birth
         string location
+        string avatar_url
         text bio
         int expected_salary
         int years_experience
+        timestamp created_at
+        timestamp updated_at
     }
     companies {
         UUID id PK
@@ -285,8 +292,16 @@ erDiagram
         string name
         string industry
         string size
+        string logo_url
         string website
+        text description
+        text address
+        string phone
+        string email
         decimal rating
+        boolean is_verified
+        timestamp created_at
+        timestamp updated_at
     }
     job_postings {
         UUID id PK
@@ -294,32 +309,55 @@ erDiagram
         string title
         string level
         string job_type
+        string work_mode
         string location
         int salary_min
         int salary_max
+        string currency
         enum status
         date deadline
+        int view_count
+        int application_count
         timestamp created_at
+        timestamp updated_at
     }
     applications {
         UUID id PK
         UUID candidate_id FK
         UUID job_id FK
+        UUID company_id FK
         enum status
         text cover_letter
         text resume_url
         timestamp applied_at
+        timestamp updated_at
     }
     interviews {
         UUID id PK
         UUID application_id FK
+        UUID candidate_id FK
+        UUID job_id FK
+        UUID company_id FK
         int round
         timestamp scheduled_at
         int duration_minutes
         enum type
-        text location_or_link
+        text location
+        text meeting_link
+        text interviewer
+        text notes
         enum status
         text feedback
+        smallint score
+        timestamp created_at
+        timestamp updated_at
+    }
+    candidate_profiles {
+        UUID candidate_id PK
+        text summary
+        jsonb skills
+        timestamp created_at
+        timestamp updated_at
     }
 
     users ||--o| candidates : "có hồ sơ"
@@ -328,6 +366,7 @@ erDiagram
     candidates ||--o{ applications : "nộp đơn"
     job_postings ||--o{ applications : "nhận đơn"
     applications ||--o{ interviews : "dẫn đến"
+    candidates ||--|| candidate_profiles : "hồ sơ bổ sung"
 ```
 
 ### Các ràng buộc quan trọng
