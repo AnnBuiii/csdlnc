@@ -12,8 +12,10 @@ import CandidateProfile from './pages/CandidateProfile';
 import Applications from './pages/Applications';
 import Company from './pages/Company';
 import CreateJob from './pages/CreateJob';
+import EditJob from './pages/EditJob';
 import Interviews from './pages/Interviews';
 import Candidates from './pages/Candidates';
+import JobApplications from './pages/JobApplications';
 
 import './index.css';
 
@@ -71,6 +73,22 @@ function App() {
               element={
                 <ProtectedRoute requiredRole="recruiter">
                   <CreateJob />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/edit-job/:id"
+              element={
+                <ProtectedRoute requiredRole="recruiter">
+                  <EditJob />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/jobs/:id/applications"
+              element={
+                <ProtectedRoute requiredRole="recruiter">
+                  <JobApplications />
                 </ProtectedRoute>
               }
             />

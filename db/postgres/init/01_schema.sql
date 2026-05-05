@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS job_postings (
     company_id  UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
     title       VARCHAR(255) NOT NULL,
     level       VARCHAR(50),             -- Intern/Junior/Senior/Lead/Manager
-    job_type    VARCHAR(50),             -- Full-time/Part-time/Contract/Freelance
+    job_type    VARCHAR(50),             -- Full-time/Part-time/Remote/Hybrid
     work_mode   VARCHAR(50),             -- Onsite/Remote/Hybrid
     location    VARCHAR(200),
     salary_min  INTEGER,

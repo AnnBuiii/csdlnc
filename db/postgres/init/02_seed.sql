@@ -133,7 +133,7 @@ INSERT INTO job_postings (id, company_id, title, level, job_type, work_mode, loc
  'Hà Nội', 10000000, 18000000, 'VND', 'active', '2026-06-05', 76, 20),
 
 ('33333333-3333-3333-3333-333333333337', '22222222-2222-2222-2222-222222222221',
- 'UX/UI Designer', 'Mid-level', 'Contract', 'Remote',
+ 'UX/UI Designer', 'Mid-level', 'Part-time', 'Remote',
  'Toàn quốc', 20000000, 35000000, 'VND', 'active', '2026-05-28', 112, 9),
 
 ('33333333-3333-3333-3333-333333333338', '22222222-2222-2222-2222-222222222222',

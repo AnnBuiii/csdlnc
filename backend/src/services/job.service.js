@@ -105,6 +105,83 @@ class JobService {
     return { id: pgJob.id, mongoId: mongoJob._id, createdAt: pgJob.created_at };
   }
 
+  // ── NV03: Cập nhật nội dung tin ──────────────────────────────
+  async updateJob(jobId, companyId, data) {
+    const {
+      title,
+      description,
+      location,
+      jobType,
+      salaryMin,
+      salaryMax,
+      deadline,
+      skills,
+      benefits,
+      status,
+    } = data;
+
+    const allowedStatuses = ["draft", "active", "closed"];
+    const safeStatus = allowedStatuses.includes(status) ? status : null;
+
+    const res = await query(
+      `UPDATE job_postings SET
+         title = COALESCE($1, title),
+         job_type = COALESCE($2, job_type),
+         location = COALESCE($3, location),
+         salary_min = COALESCE($4, salary_min),
+         salary_max = COALESCE($5, salary_max),
+         deadline = COALESCE($6, deadline),
+         status = COALESCE($7, status),
+         updated_at = NOW()
+       WHERE id = $8 AND company_id = $9
+       RETURNING id`,
+      [
+        title,
+        jobType,
+        location,
+        salaryMin || null,
+        salaryMax || null,
+        deadline,
+        safeStatus,
+        jobId,
+        companyId,
+      ],
+    );
+    if (!res.rows.length) {
+      const err = new Error("Tin không tồn tại hoặc bạn không có quyền.");
+      err.statusCode = 404;
+      throw err;
+    }
+
+    const mongoUpdate = {
+      ...(title && { title }),
+      ...(description && { description }),
+      ...(location && {
+        location: typeof location === "string" ? { city: location } : location,
+      }),
+      ...(jobType && { jobType: [jobType] }),
+      ...(salaryMin !== undefined &&
+        salaryMin !== "" && { "salary.min": Number(salaryMin) }),
+      ...(salaryMax !== undefined &&
+        salaryMax !== "" && { "salary.max": Number(salaryMax) }),
+      ...(deadline && { deadline }),
+      ...(Array.isArray(skills) && {
+        requirements: {
+          skills: skills
+            .filter(Boolean)
+            .map((name) => ({ name, isRequired: true })),
+        },
+      }),
+      ...(Array.isArray(benefits) && { benefits: benefits.filter(Boolean) }),
+      ...(safeStatus && { status: safeStatus }),
+    };
+
+    await JobPosting.updateOne({ jobId }, { $set: mongoUpdate });
+    await invalidateCache("cache:jobs:search:*");
+    await invalidateCache(`cache:job:${jobId}`);
+    return res.rows[0];
+  }
+
   // ── NV03: Cập nhật trạng thái tin ────────────────────────────
   async updateJobStatus(jobId, companyId, status) {
     const allowed = ["draft", "active", "closed"];
@@ -177,6 +254,8 @@ class JobService {
         };
       });
     }
+
+    console.log(filters.jobType);
 
     if (filters.city)
       mongoFilter["location.city"] = new RegExp(filters.city, "i");

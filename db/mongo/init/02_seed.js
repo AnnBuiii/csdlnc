@@ -73,7 +73,7 @@ const candidateProfiles = [
       { name: 'Scrum Master Certified', issuer: 'SCRUMstudy', issueDate: '2021-03' }
     ],
     preferences: {
-      jobTypes: ['Full-time', 'Contract'],
+      jobTypes: ['Full-time', 'Part-time'],
       preferredLocations: ['Hà Nội', 'Remote'],
       industries: ['Công nghệ Thông tin', 'Tài chính - Ngân hàng'],
       expectedSalary: { min: 35000000, max: 60000000, currency: 'VND' }
@@ -239,7 +239,7 @@ const candidateProfiles = [
       { name: 'Red Hat Certified Engineer', issuer: 'Red Hat', issueDate: '2020-05' }
     ],
     preferences: {
-      jobTypes: ['Full-time', 'Contract'],
+      jobTypes: ['Full-time', 'Part-time'],
       preferredLocations: ['Đà Nẵng', 'Remote', 'Hà Nội'],
       industries: ['Công nghệ Thông tin'],
       expectedSalary: { min: 45000000, max: 70000000, currency: 'VND' }
@@ -385,7 +385,7 @@ const candidateProfiles = [
       { name: 'Microsoft Certified: .NET Fundamentals', issuer: 'Microsoft', issueDate: '2024-03' }
     ],
     preferences: {
-      jobTypes: ['Full-time', 'Internship'],
+      jobTypes: ['Full-time', 'Remote'],
       preferredLocations: ['Cần Thơ', 'TP.HCM', 'Remote'],
       industries: ['Công nghệ Thông tin'],
       expectedSalary: { min: 10000000, max: 18000000, currency: 'VND' }

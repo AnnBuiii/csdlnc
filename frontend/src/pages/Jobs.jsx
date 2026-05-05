@@ -114,10 +114,10 @@ export default function Jobs() {
               onChange={handleInputChange}
             >
               <option value="">Any</option>
-              <option value="fulltime">Full-time</option>
-              <option value="parttime">Part-time</option>
-              <option value="remote">Remote</option>
-              <option value="hybrid">Hybrid</option>
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              <option value="Remote">Remote</option>
+              <option value="Hybrid">Hybrid</option>
             </select>
           </div>
           <div>

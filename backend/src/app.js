@@ -27,23 +27,23 @@ const app = express();
 // ── Security middlewares ──────────────────────────────────────
 app.use(helmet());
 app.use(
-    cors({
-        origin: process.env.CORS_ORIGIN || "*",
-        credentials: true,
-    }),
+  cors({
+    origin: process.env.CORS_ORIGIN || "*",
+    credentials: true,
+  }),
 );
 
 // ── Rate limiting ─────────────────────────────────────────────
 app.use(
-    "/api/",
-    rateLimit({
-        windowMs: 60 * 1000, // 1 phút
-        max: 100,
-        message: {
-            success: false,
-            message: "Quá nhiều request, vui lòng thử lại sau.",
-        },
-    }),
+  "/api/",
+  rateLimit({
+    windowMs: 60 * 1000, // 1 phút
+    max: 100,
+    message: {
+      success: false,
+      message: "Quá nhiều request, vui lòng thử lại sau.",
+    },
+  }),
 );
 
 // ── General middlewares ───────────────────────────────────────
@@ -51,24 +51,28 @@ app.use(compression());
 app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(
-    morgan("combined", {
-        stream: { write: (msg) => logger.http(msg.trim()) },
-    }),
+  morgan("combined", {
+    stream: { write: (msg) => logger.http(msg.trim()) },
+  }),
 );
 
 // ── Health check ──────────────────────────────────────────────
 app.get("/health", (req, res) => {
-    res.json({ status: "ok", timestamp: new Date().toISOString() });
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
 // ── API Documentation ─────────────────────────────────────────
 const openapiSpec = YAML.load(path.join(__dirname, "..", "openapi.yaml"));
 app.get("/api-docs/openapi.yaml", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "openapi.yaml"));
+  res.sendFile(path.join(__dirname, "..", "openapi.yaml"));
 });
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpec, {
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(openapiSpec, {
     customSiteTitle: "Smart Recruitment System API",
-}));
+  }),
+);
 
 // ── API Routes ────────────────────────────────────────────────
 app.use("/api/auth", authRoutes);
@@ -84,10 +88,10 @@ app.use("/api/notifications", notificationRoutes);
 
 // ── 404 handler ───────────────────────────────────────────────
 app.use((req, res) => {
-    res.status(404).json({
-        success: false,
-        message: "Endpoint không tồn tại.",
-    });
+  res.status(404).json({
+    success: false,
+    message: "Endpoint không tồn tại.",
+  });
 });
 
 // ── Global error handler ──────────────────────────────────────

@@ -50,6 +50,7 @@ export const jobAPI = {
   getJobDetail: (id) => apiClient.get(`/jobs/${id}`),
   getRelatedJobs: (id) => apiClient.get(`/jobs/${id}/related`),
   createJob: (data) => apiClient.post('/jobs', data),
+  updateJob: (id, data) => apiClient.put(`/jobs/${id}`, data),
   updateJobStatus: (id, status) => apiClient.patch(`/jobs/${id}/status`, { status }),
   getCompanyJobs: (params) => apiClient.get('/jobs/company/mine', { params }),
 };

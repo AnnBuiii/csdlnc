@@ -52,15 +52,15 @@ Hệ thống hỗ trợ đăng ký, đăng nhập, xác thực tài khoản cho 
 
 - NV02 – Quản lý Hồ sơ Ứng viên (CV/Profile)
 
-Ứng viên tạo và duy trì hồ sơ cá nhân bao gồm thông tin cơ bản, kinh nghiệm làm việc, học vấn, kỹ năng, chứng chỉ, portfolio và mức lương kỳ vọng. Hồ sơ có thể được tải lên dưới dạng PDF hoặc điền trực tiếp trên hệ thống.
+Ứng viên tạo và duy trì hồ sơ cá nhân bao gồm thông tin cơ bản, kinh nghiệm làm việc, học vấn, kỹ năng, chứng chỉ, portfolio và mức lương kỳ vọng
 
 -  NV03 – Đăng và Quản lý Tin tuyển dụng (Job Posting)
 
-Nhà tuyển dụng tạo tin tuyển dụng với các thuộc tính: tiêu đề, mô tả công việc, yêu cầu kỹ năng, mức lương, địa điểm, loại hình công việc (full-time, part-time, remote), hạn nộp hồ sơ. Tin có thể được đặt ở trạng thái bản nháp, đang tuyển, đã hết hạn, hoặc đã đóng.
+Nhà tuyển dụng tạo tin tuyển dụng với các thuộc tính: tiêu đề, mô tả công việc, yêu cầu kỹ năng, mức lương, địa điểm, loại hình công việc (full-time, part-time, remote), hạn nộp hồ sơ. Tin có thể được đặt ở trạng thái đang tuyển, đã hết hạn, hoặc đã đóng.
 
 -  NV04 – Tìm kiếm và Lọc Công việc / Ứng viên
 
-Ứng viên tìm kiếm công việc theo từ khóa, ngành nghề, địa điểm, mức lương, kinh nghiệm. Nhà tuyển dụng tìm kiếm ứng viên theo kỹ năng, kinh nghiệm, học vấn. Hệ thống hỗ trợ tìm kiếm full-text và lọc đa tiêu chí.
+Ứng viên tìm kiếm công việc theo từ khóa, ngành nghề, địa điểm, mức lương, kinh nghiệm. Hệ thống hỗ trợ tìm kiếm full-text và lọc đa tiêu chí.
 
 - NV05 – Ứng tuyển và Quản lý Hồ sơ ứng tuyển (Application Management)
 

@@ -11,7 +11,7 @@ const jobPostingSchema = new mongoose.Schema({
   },
   title:    { type: String, required: true },
   level:    String,
-  jobType:  [String],
+  jobType:  [{ type: String, enum: ['Full-time', 'Part-time', 'Remote', 'Hybrid'] }],
   workMode: { type: String, enum: ['Onsite', 'Remote', 'Hybrid'] },
   location: {
     city:            String,

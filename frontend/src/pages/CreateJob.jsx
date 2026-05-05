@@ -9,7 +9,7 @@ export default function CreateJob() {
     title: '',
     description: '',
     location: '',
-    jobType: 'full-time',
+    jobType: 'Full-time',
     salaryMin: '',
     salaryMax: '',
     deadline: '',
@@ -110,10 +110,10 @@ export default function CreateJob() {
                 value={formData.jobType}
                 onChange={handleChange}
               >
-                <option value="full-time">Full-time</option>
-                <option value="part-time">Part-time</option>
-                <option value="contract">Contract</option>
-                <option value="temporary">Temporary</option>
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Remote">Remote</option>
+                <option value="Hybrid">Hybrid</option>
               </select>
             </div>
           </div>

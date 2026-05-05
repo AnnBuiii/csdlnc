@@ -59,6 +59,20 @@ router.post('/',
   }
 );
 
+// ── PUT /api/jobs/:id – Cập nhật nội dung tin ────────────────
+router.put('/:id',
+  authenticate,
+  authorize('recruiter', 'admin'),
+  [param('id').isUUID(), body('title').optional().notEmpty().trim()],
+  validate,
+  async (req, res, next) => {
+    try {
+      const result = await jobService.updateJob(req.params.id, req.user.companyId, req.body);
+      success(res, result, 'Cập nhật tin tuyển dụng thành công.');
+    } catch (err) { next(err); }
+  }
+);
+
 // ── PATCH /api/jobs/:id/status – Cập nhật trạng thái ─────────
 router.patch('/:id/status',
   authenticate,

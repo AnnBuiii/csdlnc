@@ -118,22 +118,22 @@ services:
   # http://localhost:8081
   # Login: srs_admin / srs_mongo_pass (mirrors MONGO_ROOT_* env)
   # ============================================================
-  # mongo-express:
-  #     image: mongo-express:1.0.2
-  #     container_name: srs_mongo_express
-  #     restart: unless-stopped
-  #     environment:
-  #         ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ROOT_USER:-srs_admin}
-  #         ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ROOT_PASSWORD:-srs_mongo_pass}
-  #         ME_CONFIG_MONGODB_URL: mongodb://${MONGO_ROOT_USER:-srs_admin}:${MONGO_ROOT_PASSWORD:-srs_mongo_pass}@mongo:27017/
-  #         ME_CONFIG_BASICAUTH: "false"
-  #     ports:
-  #         - "8081:8081"
-  #     depends_on:
-  #         mongo:
-  #             condition: service_healthy
-  #     networks:
-  #         - srs_network
+  mongo-express:
+    image: mongo-express:1.0.2
+    container_name: srs_mongo_express
+    restart: unless-stopped
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ROOT_USER:-srs_admin}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ROOT_PASSWORD:-srs_mongo_pass}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_ROOT_USER:-srs_admin}:${MONGO_ROOT_PASSWORD:-srs_mongo_pass}@mongo:27017/
+      ME_CONFIG_BASICAUTH: "false"
+    ports:
+      - "8081:8081"
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - srs_network
 
   # ============================================================
   # REDIS – NV08

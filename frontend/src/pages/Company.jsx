@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { companyAPI, jobAPI } from '../services/api';
+import { companyAPI, jobAPI, analyticsAPI } from '../services/api';
 import authStore from '../store/authStore';
 
 export default function Company() {
@@ -29,6 +29,7 @@ export default function Company() {
   useEffect(() => {
     fetchCompanyData();
     fetchJobs();
+    fetchStats();
   }, []);
 
   const fetchCompanyData = async () => {
@@ -36,16 +37,23 @@ export default function Company() {
       const response = await companyAPI.getProfile();
       setCompany(response.data);
       setFormData(response.data || {});
-
-      // Mock stats calculation
-      setStats({
-        totalJobs: response.data?.jobsCount || 0,
-        totalApplications: response.data?.applicationsCount || 0,
-        totalInterviews: response.data?.interviewsCount || 0,
-        newApplications: response.data?.newApplicationsCount || 0,
-      });
     } catch (err) {
       console.error('Error fetching company:', err);
+    }
+  };
+
+  const fetchStats = async () => {
+    try {
+      const response = await analyticsAPI.getRecruiterDashboard();
+      const s = response.data;
+      setStats({
+        totalJobs: s?.recentJobs?.length ?? 0,
+        totalApplications: parseInt(s?.applicationStats?.total_applications) || 0,
+        totalInterviews: parseInt(s?.applicationStats?.interview) || 0,
+        newApplications: parseInt(s?.applicationStats?.submitted) || 0,
+      });
+    } catch (err) {
+      console.error('Error fetching stats:', err);
     }
   };
 
@@ -149,7 +157,7 @@ export default function Company() {
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="text-xl font-bold">{job.title}</h3>
-                      <p className="text-muted">{job.location}</p>
+                      <p className="text-muted">{typeof job.location === 'string' ? job.location : job.location?.city}</p>
                     </div>
                     <div className="text-right">
                       <p className="font-semibold">{job.applicationsCount || 0}</p>
@@ -157,11 +165,8 @@ export default function Company() {
                     </div>
                   </div>
                   <div className="mt-4 flex gap-2">
-                    <button className="btn-primary text-sm" onClick={() => navigate(`/jobs/${job.jobId}`)}>
-                      View
-                    </button>
-                    <button className="btn-outline text-sm">Edit</button>
-                    <button className="btn-outline text-sm">Delete</button>
+                    <button className="btn-outline text-sm" onClick={() => navigate(`/edit-job/${job.jobId || job.id}`)}>Edit</button>
+                    <button className="btn-primary text-sm" onClick={() => navigate(`/jobs/${job.jobId || job.id}/applications`)}>View Applications</button>
                   </div>
                 </div>
               ))}

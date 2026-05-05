@@ -32,7 +32,7 @@ db.createCollection('candidate_profiles', {
             required: ['name'],
             properties: {
               name:       { bsonType: 'string' },
-              level:      { enum: ['Beginner', 'Intermediate', 'Advanced', 'Expert'] },
+              level:      { enum: ['beginner', 'intermediate', 'advanced', 'expert'] },
               yearsOfExp: { bsonType: 'int' }
             }
           }
