@@ -19,11 +19,9 @@ CREATE TYPE interview_status AS ENUM ('scheduled', 'completed', 'cancelled', 're
 CREATE TABLE IF NOT EXISTS users (
     id           UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email        VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255),          -- NULL nếu đăng nhập OAuth
+    password_hash VARCHAR(255) NOT NULL,
     role         user_role NOT NULL DEFAULT 'candidate',
     is_active    BOOLEAN NOT NULL DEFAULT TRUE,
-    oauth_provider VARCHAR(50),          -- 'google' | 'linkedin'
-    oauth_id     VARCHAR(255),
     last_login   TIMESTAMP,
     created_at   TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at   TIMESTAMP NOT NULL DEFAULT NOW()
@@ -31,7 +29,6 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE INDEX idx_users_email   ON users (email);
 CREATE INDEX idx_users_role    ON users (role);
-CREATE INDEX idx_users_oauth   ON users (oauth_provider, oauth_id);
 
 -- ── BẢNG candidates ───────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS candidates (
@@ -110,7 +107,6 @@ CREATE TABLE IF NOT EXISTS applications (
     company_id   UUID NOT NULL REFERENCES companies(id),
     status       app_status NOT NULL DEFAULT 'submitted',
     cover_letter TEXT,
-    resume_url   TEXT,
     applied_at   TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at   TIMESTAMP NOT NULL DEFAULT NOW(),
 

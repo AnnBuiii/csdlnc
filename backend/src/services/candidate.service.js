@@ -22,7 +22,7 @@ class CandidateService {
       summary, skills, experience, education,
       certifications, languages, portfolio,
       expectedSalary, jobTypes, preferredLocations, industries,
-      resumeUrl, isPublic,
+      isPublic,
     } = data;
 
     const toArr = (v) => (Array.isArray(v) ? v : []);
@@ -34,7 +34,6 @@ class CandidateService {
     if (location  !== undefined) $set['personalInfo.location']  = location;
     if (avatarUrl !== undefined) $set['personalInfo.avatarUrl'] = avatarUrl;
     if (summary   !== undefined) $set.summary   = summary;
-    if (resumeUrl !== undefined) $set.resumeUrl = resumeUrl;
     if (isPublic  !== undefined) $set.isPublic  = isPublic;
     if (skills         !== undefined) $set.skills         = toArr(skills);
     if (experience     !== undefined) $set.experience     = toArr(experience);

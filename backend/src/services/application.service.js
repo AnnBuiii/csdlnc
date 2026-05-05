@@ -5,7 +5,7 @@ const { parsePagination } = require('../utils/pagination');
 
 class ApplicationService {
   // ── NV05: Nộp đơn ứng tuyển ───────────────────────────────────
-  async apply(candidateId, jobId, { coverLetter, resumeUrl }) {
+  async apply(candidateId, jobId, { coverLetter }) {
     return withTransaction(async (client) => {
       // Kiểm tra job tồn tại và đang active
       const jobRes = await client.query(
@@ -31,10 +31,10 @@ class ApplicationService {
 
       // Tạo đơn
       const res = await client.query(
-        `INSERT INTO applications (candidate_id, job_id, company_id, cover_letter, resume_url)
-         VALUES ($1, $2, $3, $4, $5)
+        `INSERT INTO applications (candidate_id, job_id, company_id, cover_letter)
+         VALUES ($1, $2, $3, $4)
          RETURNING id, status, applied_at`,
-        [candidateId, jobId, jobRes.rows[0].company_id, coverLetter || null, resumeUrl || null]
+        [candidateId, jobId, jobRes.rows[0].company_id, coverLetter || null]
       );
       const app = res.rows[0];
 

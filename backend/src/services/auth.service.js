@@ -133,10 +133,6 @@ class AuthService {
     if (!user.is_active) {
       const err = new Error('Tài khoản đã bị khoá.'); err.statusCode = 403; throw err;
     }
-    if (!user.password_hash) {
-      const err = new Error('Tài khoản này đăng nhập bằng OAuth, không có mật khẩu.'); err.statusCode = 400; throw err;
-    }
-
     const match = await bcrypt.compare(password, user.password_hash);
     if (!match) {
       const err = new Error('Email hoặc mật khẩu không đúng.'); err.statusCode = 401; throw err;
