@@ -85,6 +85,14 @@ class CandidateService {
       { new: true, lean: true }
     );
     if (!profile) { const err = new Error('Hồ sơ không tồn tại.'); err.statusCode = 404; throw err; }
+
+    // Sync new skill edge to Neo4j
+    this._syncProfileToNeo4j(candidateId, {
+      fullName: profile.personalInfo?.fullName,
+      location: profile.personalInfo?.location,
+      skills: [{ name, level }],
+    }).catch(() => {});
+
     return profile;
   }
 

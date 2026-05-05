@@ -13,7 +13,10 @@
     "seed:pg": "node scripts/seed.js --postgres",
     "seed:mongo": "node scripts/seed.js --mongo",
     "seed:neo4j": "node scripts/seed.js --neo4j",
-    "seed:cassandra": "node scripts/seed.js --cassandra"
+    "seed:cassandra": "node scripts/seed.js --cassandra",
+    "neo4j:backfill": "node scripts/neo4j_backfill.js",
+    "neo4j:backfill:candidates": "node scripts/neo4j_backfill.js --candidates",
+    "neo4j:backfill:jobs": "node scripts/neo4j_backfill.js --jobs"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -39,32 +39,32 @@ wait_healthy neo4j 120
 wait_healthy cassandra 180
 
 echo "⚙️  Khởi động backend..."
-docker compose up -d backend
+# docker compose up -d backend
 
-echo "🖥️  Khởi động frontend..."
-docker compose up -d frontend
+# echo "🖥️  Khởi động frontend..."
+# docker compose up -d frontend
 
-wait_port() {
-    local service=$1
-    local port=$2
-    local timeout=${3:-60}
-    local count=0
-    echo -n "   Đang chờ $service (port $port)..."
-    until nc -z localhost $port 2>/dev/null; do
-        sleep 2
-        count=$((count+2))
-        if [ $count -ge $timeout ]; then
-            echo ""
-            echo "⚠️  $service chưa sẵn sàng sau ${timeout}s, tiếp tục..."
-            return 0
-        fi
-        printf "\r   Đang chờ $service (port $port)... %ds" $count
-    done
-    echo " ✓"
-}
+# wait_port() {
+#     local service=$1
+#     local port=$2
+#     local timeout=${3:-60}
+#     local count=0
+#     echo -n "   Đang chờ $service (port $port)..."
+#     until nc -z localhost $port 2>/dev/null; do
+#         sleep 2
+#         count=$((count+2))
+#         if [ $count -ge $timeout ]; then
+#             echo ""
+#             echo "⚠️  $service chưa sẵn sàng sau ${timeout}s, tiếp tục..."
+#             return 0
+#         fi
+#         printf "\r   Đang chờ $service (port $port)... %ds" $count
+#     done
+#     echo " ✓"
+# }
 
-wait_port backend  3000 60
-wait_port frontend 5173 90
+# wait_port backend  3000 60
+# wait_port frontend 5173 90
 
 echo ""
 echo "✅ Hệ thống đã khởi động!"

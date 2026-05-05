@@ -179,6 +179,20 @@ class JobService {
     await JobPosting.updateOne({ jobId }, { $set: mongoUpdate });
     await invalidateCache("cache:jobs:search:*");
     await invalidateCache(`cache:job:${jobId}`);
+
+    // Re-sync Neo4j when skills, title, location, or salary changed
+    if (title || location || salaryMin || salaryMax || Array.isArray(skills)) {
+      const updated = await JobPosting.findOne({ jobId }).lean();
+      this._syncJobToNeo4j(jobId, {
+        title:       updated.title,
+        level:       updated.level,
+        location:    updated.location?.city || updated.location,
+        salaryMin:   updated.salary?.min,
+        salaryMax:   updated.salary?.max,
+        requirements: updated.requirements,
+      }).catch(() => {});
+    }
+
     return res.rows[0];
   }
 

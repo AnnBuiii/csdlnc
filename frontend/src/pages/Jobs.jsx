@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jobAPI, recommendationAPI } from "../services/api";
 import authStore from "../store/authStore";
@@ -7,6 +7,8 @@ export default function Jobs() {
   const [jobs, setJobs] = useState([]);
   const [recommendedJobs, setRecommendedJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingRec, setLoadingRec] = useState(false);
+  const [showRecommended, setShowRecommended] = useState(false);
   const [searchParams, setSearchParams] = useState({
     q: "",
     location: "",
@@ -19,13 +21,11 @@ export default function Jobs() {
   });
   const navigate = useNavigate();
   const { isAuthenticated, user } = authStore();
+  const recommendRef = useRef(null);
 
   useEffect(() => {
     fetchJobs();
-    if (isAuthenticated && user?.role === "candidate") {
-      fetchRecommendations();
-    }
-  }, [searchParams, isAuthenticated, user]);
+  }, [searchParams]);
 
   const fetchJobs = async () => {
     try {
@@ -41,12 +41,15 @@ export default function Jobs() {
 
   const fetchRecommendations = async () => {
     try {
-      const response = await recommendationAPI.getJobRecommendations({
-        limit: 5,
-      });
+      setLoadingRec(true);
+      const response = await recommendationAPI.getJobRecommendations({ limit: 10 });
       setRecommendedJobs(response.data || []);
+      setShowRecommended(true);
+      setTimeout(() => recommendRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
     } catch (err) {
       console.error("Error fetching recommendations:", err);
+    } finally {
+      setLoadingRec(false);
     }
   };
 
@@ -159,31 +162,82 @@ export default function Jobs() {
             />
           </div>
         </div>
-        <button type="submit" className="btn-primary mt-4">
-          Search
-        </button>
+        <div className="flex items-center gap-3 mt-4">
+          <button type="submit" className="btn-primary">
+            Search
+          </button>
+          {isAuthenticated && user?.role === "candidate" && (
+            <button
+              type="button"
+              onClick={fetchRecommendations}
+              disabled={loadingRec}
+              className="btn-secondary flex items-center gap-2"
+            >
+              {loadingRec ? (
+                <>
+                  <span className="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full" />
+                  Finding...
+                </>
+              ) : (
+                <>✨ Find Suggested Jobs</>
+              )}
+            </button>
+          )}
+        </div>
       </form>
 
-      {isAuthenticated &&
-        user?.role === "candidate" &&
-        recommendedJobs.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold mb-4">Recommended for You</h2>
+      {isAuthenticated && user?.role === "candidate" && showRecommended && (
+        <div ref={recommendRef} className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-3xl font-bold">Suggested Jobs for You</h2>
+            <span className="text-sm text-muted">
+              {recommendedJobs.length} job{recommendedJobs.length !== 1 ? "s" : ""} matched your skills
+            </span>
+          </div>
+
+          {recommendedJobs.length === 0 ? (
+            <div className="card text-center py-8">
+              <p className="text-muted">No suggestions found. Try adding more skills to your profile.</p>
+            </div>
+          ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {recommendedJobs.map((job) => (
                 <div
                   key={job.jobId}
-                  className="card hover:shadow-lg transition cursor-pointer"
+                  className="card hover:shadow-lg transition cursor-pointer border-l-4 border-primary"
                   onClick={() => navigate(`/jobs/${job.jobId}`)}
                 >
-                  <h3 className="text-xl font-bold mb-2">{job.title}</h3>
-                  <p className="text-muted mb-3">{job.companyName}</p>
-                  <p className="text-sm text-muted">📍 {job.location}</p>
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-bold">{job.title}</h3>
+                    <span className="badge-primary text-xs ml-2 shrink-0">
+                      {job.matchedSkills} skill{job.matchedSkills !== 1 ? "s" : ""} matched
+                    </span>
+                  </div>
+                  <p className="text-muted mb-2">{job.companyInfo?.name || job.companyName}</p>
+                  <div className="space-y-1 mb-3">
+                    <p className="text-sm">📍 {renderLocation(job.location)}</p>
+                    {job.salary?.min && (
+                      <p className="text-sm">
+                        💰 {job.salary.min?.toLocaleString()} – {job.salary.max?.toLocaleString()} {job.salary.currency || "VND"}
+                      </p>
+                    )}
+                  </div>
+                  {job.matchedSkillNames?.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {job.matchedSkillNames.slice(0, 4).map((skill, idx) => (
+                        <span key={idx} className="badge-secondary text-xs">
+                          ✓ {skill}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <button className="w-full btn-primary text-sm">View Details</button>
                 </div>
               ))}
             </div>
-          </div>
-        )}
+          )}
+        </div>
+      )}
 
       {/* Jobs Grid */}
       {jobs.length === 0 ? (
@@ -217,9 +271,9 @@ export default function Jobs() {
               </p>
 
               <div className="flex flex-wrap gap-2 mb-4">
-                {job.requiredSkills?.slice(0, 3).map((skill, idx) => (
+                {job.requirements?.skills?.slice(0, 3).map((skill, idx) => (
                   <span key={idx} className="badge-primary">
-                    {skill}
+                    {skill.name}
                   </span>
                 ))}
               </div>

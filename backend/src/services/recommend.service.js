@@ -1,9 +1,9 @@
-const neo4j = require('neo4j-driver');
-const { runCypher, writeTransaction } = require('../config/neo4j');
-const { getCache, setCache } = require('../config/redis');
-const JobPosting = require('../models/job.model');
-const CandidateProfile = require('../models/candidateProfile.model');
-const crypto = require('crypto');
+const neo4j = require("neo4j-driver");
+const { runCypher, writeTransaction } = require("../config/neo4j");
+const { getCache, setCache } = require("../config/redis");
+const JobPosting = require("../models/job.model");
+const CandidateProfile = require("../models/candidateProfile.model");
+const crypto = require("crypto");
 
 class RecommendService {
   // ── NV06: Gợi ý việc làm cho ứng viên ────────────────────────
@@ -12,26 +12,48 @@ class RecommendService {
     const cached = await getCache(cacheKey);
     if (cached) return { data: cached, fromCache: true };
 
-    const normalizedLimit = Number.isInteger(limit) && limit >= 0 ? neo4j.int(limit) : neo4j.int(10);
+    const normalizedLimit =
+      Number.isInteger(limit) && limit >= 0 ? neo4j.int(limit) : neo4j.int(10);
     const scores = await runCypher(
       `MATCH (c:Candidate {id: $cid})-[:HAS_SKILL]->(s:Skill)
        MATCH (j:Job {status: 'active'})-[:REQUIRES]->(s)
-       WITH j, count(s) AS matchedSkills, j.salaryMax AS salaryMax
-       WHERE salaryMax IS NOT NULL
+       WITH j, count(s) AS matchedSkills, collect(s.name) AS matchedSkillNames, j.salaryMax AS salaryMax
        RETURN j.id AS jobId, j.title AS title, j.location AS location,
-              matchedSkills, salaryMax
+              matchedSkills, matchedSkillNames, salaryMax
        ORDER BY matchedSkills DESC, salaryMax DESC
        LIMIT $limit`,
-      { cid: candidateId, limit: normalizedLimit }
+      { cid: candidateId, limit: normalizedLimit },
     );
+
+    console.log(scores);
 
     if (!scores.length) return { data: [], fromCache: false };
 
-    const jobIds = scores.map(r => r.get('jobId'));
+    const jobIds = scores.map((r) => r.get("jobId"));
+    const scoreMap = Object.fromEntries(
+      scores.map((r) => [
+        r.get("jobId"),
+        {
+          matchedSkills: r.get("matchedSkills").toInt
+            ? r.get("matchedSkills").toInt()
+            : Number(r.get("matchedSkills")),
+          matchedSkillNames: r.get("matchedSkillNames") || [],
+        },
+      ]),
+    );
+
     const jobs = await JobPosting.find({ jobId: { $in: jobIds } }).lean();
-    // Preserve ranking order
-    const jobMap = Object.fromEntries(jobs.map(j => [j.jobId, j]));
-    const ranked = jobIds.map(id => jobMap[id]).filter(Boolean);
+    const jobMap = Object.fromEntries(jobs.map((j) => [j.jobId, j]));
+    const ranked = jobIds
+      .map((id) => {
+        if (!jobMap[id]) return null;
+        return {
+          ...jobMap[id],
+          matchedSkills: scoreMap[id]?.matchedSkills ?? 0,
+          matchedSkillNames: scoreMap[id]?.matchedSkillNames ?? [],
+        };
+      })
+      .filter(Boolean);
 
     await setCache(cacheKey, ranked, 300);
     return { data: ranked, fromCache: false };
@@ -43,7 +65,8 @@ class RecommendService {
     const cached = await getCache(cacheKey);
     if (cached) return { data: cached, fromCache: true };
 
-    const normalizedLimit = Number.isInteger(limit) && limit >= 0 ? neo4j.int(limit) : neo4j.int(10);
+    const normalizedLimit =
+      Number.isInteger(limit) && limit >= 0 ? neo4j.int(limit) : neo4j.int(10);
     const scores = await runCypher(
       `MATCH (j:Job {id: $jid})-[:REQUIRES]->(s:Skill)
        MATCH (c:Candidate)-[:HAS_SKILL]->(s)
@@ -52,15 +75,19 @@ class RecommendService {
               matchedSkills
        ORDER BY matchedSkills DESC
        LIMIT $limit`,
-      { jid: jobId, limit: normalizedLimit }
+      { jid: jobId, limit: normalizedLimit },
     );
 
     if (!scores.length) return { data: [], fromCache: false };
 
-    const candIds = scores.map(r => r.get('candidateId'));
-    const candidates = await CandidateProfile.find({ candidateId: { $in: candIds } }).lean();
-    const candMap = Object.fromEntries(candidates.map(c => [c.candidateId, c]));
-    const ranked = candIds.map(id => candMap[id]).filter(Boolean);
+    const candIds = scores.map((r) => r.get("candidateId"));
+    const candidates = await CandidateProfile.find({
+      candidateId: { $in: candIds },
+    }).lean();
+    const candMap = Object.fromEntries(
+      candidates.map((c) => [c.candidateId, c]),
+    );
+    const ranked = candIds.map((id) => candMap[id]).filter(Boolean);
 
     await setCache(cacheKey, ranked, 300);
     return { data: ranked, fromCache: false };
@@ -80,15 +107,15 @@ class RecommendService {
               other.location AS location, sharedSkills, commonSkills
        ORDER BY sharedSkills DESC
        LIMIT 10`,
-      { cid: candidateId }
+      { cid: candidateId },
     );
 
-    const result = similar.map(r => ({
-      candidateId: r.get('candidateId'),
-      name:         r.get('name'),
-      location:     r.get('location'),
-      sharedSkills: r.get('sharedSkills').toInt(),
-      commonSkills: r.get('commonSkills'),
+    const result = similar.map((r) => ({
+      candidateId: r.get("candidateId"),
+      name: r.get("name"),
+      location: r.get("location"),
+      sharedSkills: r.get("sharedSkills").toInt(),
+      commonSkills: r.get("commonSkills"),
     }));
 
     await setCache(cacheKey, result, 300);
@@ -109,15 +136,15 @@ class RecommendService {
               other.location AS location, sharedSkills
        ORDER BY sharedSkills DESC
        LIMIT 6`,
-      { jid: jobId }
+      { jid: jobId },
     );
 
     if (!related.length) return [];
 
-    const jobIds = related.map(r => r.get('jobId'));
+    const jobIds = related.map((r) => r.get("jobId"));
     const jobs = await JobPosting.find({ jobId: { $in: jobIds } }).lean();
-    const jobMap = Object.fromEntries(jobs.map(j => [j.jobId, j]));
-    const result = jobIds.map(id => jobMap[id]).filter(Boolean);
+    const jobMap = Object.fromEntries(jobs.map((j) => [j.jobId, j]));
+    const result = jobIds.map((id) => jobMap[id]).filter(Boolean);
 
     await setCache(cacheKey, result, 120);
     return result;

@@ -91,7 +91,7 @@ export default function JobDetail() {
               <div>
                 <p className="text-sm text-muted">Salary</p>
                 <p className="font-semibold">
-                  {job.salaryMin?.toLocaleString()} - {job.salaryMax?.toLocaleString()} VND
+                  {job.salary?.min?.toLocaleString()} - {job.salary?.max?.toLocaleString()} {job.salary?.currency || 'VND'}
                 </p>
               </div>
               <div>
@@ -111,18 +111,11 @@ export default function JobDetail() {
               {job.description}
             </div>
 
-            <h2 className="text-2xl font-bold mb-4">Requirements</h2>
-            <ul className="list-disc list-inside space-y-2 mb-6">
-              {safeArray(job.requirements).map((req, idx) => (
-                <li key={idx}>{req}</li>
-              ))}
-            </ul>
-
             <h2 className="text-2xl font-bold mb-4">Required Skills</h2>
             <div className="flex flex-wrap gap-2 mb-6">
-              {safeArray(job.requiredSkills).map((skill, idx) => (
+              {(job.requirements?.skills || []).map((skill, idx) => (
                 <span key={idx} className="badge-primary">
-                  {skill}
+                  {skill.name}
                 </span>
               ))}
             </div>
@@ -142,17 +135,10 @@ export default function JobDetail() {
             <button
               onClick={handleApply}
               disabled={applying}
-              className="w-full btn-primary disabled:opacity-50 mb-4"
+              className="w-full btn-primary disabled:opacity-50"
             >
               {applying ? 'Applying...' : 'Apply Now'}
             </button>
-            <button className="w-full btn-outline">Save Job</button>
-          </div>
-
-          <div className="card">
-            <h3 className="text-lg font-bold mb-4">About Company</h3>
-            <p className="text-muted">{job.companyDescription}</p>
-            <button className="w-full btn-secondary mt-4">View Company</button>
           </div>
         </div>
       </div>
