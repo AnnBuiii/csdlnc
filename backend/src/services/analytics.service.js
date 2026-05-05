@@ -99,7 +99,8 @@ class AnalyticsService {
          WHERE entity_id = ? AND event_type = 'view_job'
            AND event_date >= ?
          GROUP BY event_date
-         ORDER BY event_date`,
+         ORDER BY event_date
+         ALLOW FILTERING`,
         [jobId, fromDateStr]
       ),
     ]);
