@@ -25,29 +25,34 @@ class CandidateService {
       resumeUrl, isPublic,
     } = data;
 
-    const update = {
-      personalInfo: { fullName, email, phone, location, avatarUrl },
-      summary,
-      skills:         skills         || [],
-      experience:     experience     || [],
-      education:      education      || [],
-      certifications: certifications  || [],
-      languages:      languages       || [],
-      portfolio:      portfolio      || [],
-      preferences: {
-        expectedSalary:      expectedSalary       || {},
-        jobTypes:            jobTypes             || [],
-        preferredLocations:  preferredLocations   || [],
-        industries:          industries           || [],
-      },
-      resumeUrl,
-      isPublic: isPublic !== undefined ? isPublic : true,
-    };
+    const toArr = (v) => (Array.isArray(v) ? v : []);
+    // Build $set using dot-notation so missing fields don't overwrite existing ones
+    const $set = {};
+    if (fullName  !== undefined) $set['personalInfo.fullName']  = fullName;
+    if (email     !== undefined) $set['personalInfo.email']     = email;
+    if (phone     !== undefined) $set['personalInfo.phone']     = phone;
+    if (location  !== undefined) $set['personalInfo.location']  = location;
+    if (avatarUrl !== undefined) $set['personalInfo.avatarUrl'] = avatarUrl;
+    if (summary   !== undefined) $set.summary   = summary;
+    if (resumeUrl !== undefined) $set.resumeUrl = resumeUrl;
+    if (isPublic  !== undefined) $set.isPublic  = isPublic;
+    if (skills         !== undefined) $set.skills         = toArr(skills);
+    if (experience     !== undefined) $set.experience     = toArr(experience);
+    if (education      !== undefined) $set.education      = toArr(education);
+    if (certifications !== undefined) $set.certifications = toArr(certifications);
+    if (languages      !== undefined) $set.languages      = toArr(languages);
+    if (portfolio      !== undefined) $set.portfolio      = toArr(portfolio);
+    if (jobTypes           !== undefined) $set['preferences.jobTypes']           = toArr(jobTypes);
+    if (preferredLocations !== undefined) $set['preferences.preferredLocations'] = toArr(preferredLocations);
+    if (industries         !== undefined) $set['preferences.industries']         = toArr(industries);
+    if (expectedSalary !== undefined && typeof expectedSalary === 'object' && !Array.isArray(expectedSalary)) {
+      $set['preferences.expectedSalary'] = expectedSalary;
+    }
 
     let profile = await CandidateProfile.findOneAndUpdate(
       { candidateId },
-      { $set: update },
-      { new: true, upsert: true, lean: true }
+      { $set },
+      { new: true, upsert: true, lean: true, runValidators: false }
     );
 
     // Cập nhật Neo4j node (skills graph)

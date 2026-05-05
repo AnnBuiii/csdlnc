@@ -3,6 +3,7 @@ const { getCache, setCache } = require('../config/redis');
 const JobPosting = require('../models/job.model');
 const CandidateProfile = require('../models/candidateProfile.model');
 const crypto = require('crypto');
+const neo4j = require('neo4j-driver');
 
 class RecommendService {
   // ── NV06: Gợi ý việc làm cho ứng viên ────────────────────────
@@ -20,7 +21,7 @@ class RecommendService {
               matchedSkills, salaryMax
        ORDER BY matchedSkills DESC, salaryMax DESC
        LIMIT $limit`,
-      { cid: candidateId, limit }
+      { cid: candidateId, limit: neo4j.int(limit) }
     );
 
     if (!scores.length) return { data: [], fromCache: false };
@@ -49,7 +50,7 @@ class RecommendService {
               matchedSkills
        ORDER BY matchedSkills DESC
        LIMIT $limit`,
-      { jid: jobId, limit }
+      { jid: jobId, limit: neo4j.int(limit) }
     );
 
     if (!scores.length) return { data: [], fromCache: false };

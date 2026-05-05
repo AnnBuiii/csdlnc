@@ -7,6 +7,7 @@ const {
   setRefreshToken, getRefreshToken, deleteRefreshToken,
 } = require('../config/redis');
 const { writeTransaction } = require('../config/neo4j');
+const CandidateProfile = require('../models/candidateProfile.model');
 
 class AuthService {
   // ── NV01: Đăng ký ứng viên ──────────────────────────────────
@@ -42,6 +43,23 @@ class AuthService {
         [user.id, fullName, phone || null, location || null]
       );
       const candidateId = candRes.rows[0].id;
+
+      // Tạo MongoDB profile (upsert để idempotent)
+      CandidateProfile.findOneAndUpdate(
+        { candidateId },
+        {
+          $setOnInsert: {
+            candidateId,
+            userId: user.id,
+            personalInfo: { fullName, phone: phone || '', location: location || '', email },
+            skills: [], experience: [], education: [], certifications: [],
+            languages: [], portfolio: [],
+            preferences: { expectedSalary: {}, jobTypes: [], preferredLocations: [], industries: [] },
+            isPublic: true,
+          },
+        },
+        { upsert: true, new: true }
+      ).catch(() => {});
 
       // Tạo node trong Neo4j (bất đồng bộ, không block transaction)
       this._createCandidateNode(candidateId, { fullName, location }).catch(() => {});

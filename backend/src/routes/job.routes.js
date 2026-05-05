@@ -16,7 +16,7 @@ router.get('/', optionalAuth, async (req, res, next) => {
 
 // ── GET /api/jobs/:id – Chi tiết tin tuyển dụng ───────────────
 router.get('/:id',
-  [param('id').isUUID()],
+  [param('id').matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)],
   validate,
   optionalAuth,
   async (req, res, next) => {
@@ -30,7 +30,7 @@ router.get('/:id',
 
 // ── GET /api/jobs/:id/related – Công việc liên quan (NV06) ────
 router.get('/:id/related',
-  [param('id').isUUID()],
+  [param('id').matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)],
   validate,
   async (req, res, next) => {
     try {
