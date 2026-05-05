@@ -7,11 +7,27 @@
  * Usage: node scripts/seed.js [--all | --postgres | --mongo | --neo4j | --cassandra]
  */
 
-require('dotenv').config({ path: '../../.env' });
-const { execSync, spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const { fileURLToPath } = require('url');
+const { execSync, spawn } = require('child_process');
+
+const envPath = path.join(__dirname, '../../.env');
+if (fs.existsSync(envPath)) {
+  require('dotenv').config({ path: envPath });
+} else {
+  require('dotenv').config();
+}
+
+const POSTGRES_USER = process.env.POSTGRES_USER || 'srs_user';
+const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD || 'srs_password';
+const POSTGRES_DB = process.env.POSTGRES_DB || 'srs_db';
+const MONGO_ROOT_USER = process.env.MONGO_ROOT_USER || 'srs_admin';
+const MONGO_ROOT_PASSWORD = process.env.MONGO_ROOT_PASSWORD || 'srs_mongo_pass';
+const MONGO_DB = process.env.MONGO_DB || 'srs_mongo';
+const NEO4J_USER = process.env.NEO4J_USER || 'neo4j';
+const NEO4J_PASSWORD = process.env.NEO4J_PASSWORD || 'srs_neo4j_pass';
+const CASSANDRA_USER = process.env.CASSANDRA_USER || 'cassandra';
+const CASSANDRA_PASSWORD = process.env.CASSANDRA_PASSWORD || 'cassandra';
 
 // Colors for console output
 const colors = {
@@ -127,7 +143,7 @@ async function seedPostgreSQL() {
   console.log(`\n${colors.cyan}══════════════ PostgreSQL Seeding ══════════════${colors.reset}`);
   
   // Check PostgreSQL connection
-  if (!checkDatabaseConnection('PostgreSQL', 'docker exec srs-postgres pg_isready -U postgres')) {
+  if (!checkDatabaseConnection('PostgreSQL', `docker compose exec postgres pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}`)) {
     return false;
   }
   
@@ -135,7 +151,7 @@ async function seedPostgreSQL() {
   if (!options.force) {
     try {
       const checkData = execSync(
-        'docker exec srs-postgres psql -U postgres -d srs_postgres -c "SELECT COUNT(*) FROM users;"',
+        `docker compose exec postgres psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "SELECT COUNT(*) FROM users;"`,
         { stdio: 'pipe', encoding: 'utf8' }
       );
       const count = parseInt(checkData.match(/\d+/)?.[0] || '0');
@@ -151,7 +167,7 @@ async function seedPostgreSQL() {
   // Run PostgreSQL seed script
   const seedFile = 'db/postgres/init/02_seed.sql';
   const result = runCommand(
-    `docker exec -i srs-postgres psql -U postgres -d srs_postgres -f - < ${seedFile}`,
+    `docker compose exec -i postgres psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f - < ${seedFile}`,
     'Running PostgreSQL seed script'
   );
   
@@ -167,14 +183,18 @@ async function seedMongoDB() {
   console.log(`\n${colors.cyan}══════════════ MongoDB Seeding ═══════════════${colors.reset}`);
   
   // Check MongoDB connection
-  if (!checkDatabaseConnection('MongoDB', 'docker exec srs-mongo mongo --eval "db.adminCommand(\'ping\')"')) {
+  if (!checkDatabaseConnection('MongoDB', `docker compose exec mongo mongosh --username ${MONGO_ROOT_USER} --password ${MONGO_ROOT_PASSWORD} --authenticationDatabase admin --eval "db.adminCommand('ping')"`)) {
     return false;
   }
   
   // Run MongoDB seed script
   const seedFile = 'db/mongo/init/02_seed.js';
   const result = runCommand(
-    `docker exec -i srs-mongo mongo srs_mongo ${seedFile}`,
+    `docker compose exec -i mongo mongosh \
+      --username ${MONGO_ROOT_USER} \
+      --password ${MONGO_ROOT_PASSWORD} \
+      --authenticationDatabase admin \
+      ${MONGO_DB} < ${seedFile}`,
     'Running MongoDB seed script'
   );
   
@@ -190,14 +210,14 @@ async function seedNeo4j() {
   console.log(`\n${colors.cyan}══════════════ Neo4j Seeding ═════════════════${colors.reset}`);
   
   // Check Neo4j connection
-  if (!checkDatabaseConnection('Neo4j', 'docker exec srs-neo4j cypher-shell --username neo4j --password password "RETURN 1;"')) {
+  if (!checkDatabaseConnection('Neo4j', `docker compose exec neo4j cypher-shell --username ${NEO4J_USER} --password ${NEO4J_PASSWORD} "RETURN 1;"`)) {
     return false;
   }
   
   // Run Neo4j seed script
   const seedFile = 'db/neo4j/init/02_seed.cypher';
   const result = runCommand(
-    `docker exec -i srs-neo4j cypher-shell --username neo4j --password password --format plain < ${seedFile}`,
+    `docker compose exec -i neo4j cypher-shell --username ${NEO4J_USER} --password ${NEO4J_PASSWORD} --format plain < ${seedFile}`,
     'Running Neo4j seed script'
   );
   
@@ -213,14 +233,14 @@ async function seedCassandra() {
   console.log(`\n${colors.cyan}══════════════ Cassandra Seeding ═════════════${colors.reset}`);
   
   // Check Cassandra connection
-  if (!checkDatabaseConnection('Cassandra', 'docker exec srs-cassandra cqlsh -e "DESCRIBE KEYSPACES;"')) {
+  if (!checkDatabaseConnection('Cassandra', `docker compose exec cassandra cqlsh -u ${CASSANDRA_USER} -p ${CASSANDRA_PASSWORD} -e "DESCRIBE KEYSPACES;"`)) {
     return false;
   }
   
   // Run Cassandra seed script
   const seedFile = 'db/cassandra/init/02_seed.cql';
   const result = runCommand(
-    `docker exec -i srs-cassandra cqlsh -f ${seedFile}`,
+    `docker compose exec -i cassandra cqlsh -u ${CASSANDRA_USER} -p ${CASSANDRA_PASSWORD} -f ${seedFile}`,
     'Running Cassandra seed script'
   );
   
@@ -246,7 +266,7 @@ async function runSeeding() {
   try {
     // Start Docker containers if not running
     console.log(`${colors.yellow}🔧 Starting Docker containers if needed...${colors.reset}`);
-    runCommand('docker-compose up -d postgres mongo neo4j cassandra', 'Starting database containers');
+    runCommand('docker compose up -d postgres mongo neo4j cassandra', 'Starting database containers');
     
     // Wait for containers to be ready
     console.log(`${colors.yellow}⏳ Waiting for databases to be ready...${colors.reset}`);

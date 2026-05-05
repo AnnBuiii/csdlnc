@@ -69,24 +69,24 @@ services:
     # http://localhost:5050
     # Login: admin@srs.local / srs_pgadmin_pass (or PGADMIN_* env)
     # ============================================================
-    pgadmin:
-        image: dpage/pgadmin4:latest
-        container_name: srs_pgadmin
-        restart: unless-stopped
-        environment:
-            PGADMIN_DEFAULT_EMAIL: admin@srs.dev
-            PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-srs_pgadmin_pass}
-            PGADMIN_CONFIG_SERVER_MODE: "False"
-            PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
-        volumes:
-            - pgadmin_data:/var/lib/pgadmin
-        ports:
-            - "5050:80"
-        depends_on:
-            postgres:
-                condition: service_healthy
-        networks:
-            - srs_network
+    # pgadmin:
+    #     image: dpage/pgadmin4:latest
+    #     container_name: srs_pgadmin
+    #     restart: unless-stopped
+    #     environment:
+    #         PGADMIN_DEFAULT_EMAIL: admin@srs.dev
+    #         PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-srs_pgadmin_pass}
+    #         PGADMIN_CONFIG_SERVER_MODE: "False"
+    #         PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    #     volumes:
+    #         - pgadmin_data:/var/lib/pgadmin
+    #     ports:
+    #         - "5050:80"
+    #     depends_on:
+    #         postgres:
+    #             condition: service_healthy
+    #     networks:
+    #         - srs_network
 
     # ============================================================
     # MONGODB – NV02, NV03, NV04, NV09
@@ -118,22 +118,22 @@ services:
     # http://localhost:8081
     # Login: srs_admin / srs_mongo_pass (mirrors MONGO_ROOT_* env)
     # ============================================================
-    mongo-express:
-        image: mongo-express:1.0.2
-        container_name: srs_mongo_express
-        restart: unless-stopped
-        environment:
-            ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ROOT_USER:-srs_admin}
-            ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ROOT_PASSWORD:-srs_mongo_pass}
-            ME_CONFIG_MONGODB_URL: mongodb://${MONGO_ROOT_USER:-srs_admin}:${MONGO_ROOT_PASSWORD:-srs_mongo_pass}@mongo:27017/
-            ME_CONFIG_BASICAUTH: "false"
-        ports:
-            - "8081:8081"
-        depends_on:
-            mongo:
-                condition: service_healthy
-        networks:
-            - srs_network
+    # mongo-express:
+    #     image: mongo-express:1.0.2
+    #     container_name: srs_mongo_express
+    #     restart: unless-stopped
+    #     environment:
+    #         ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ROOT_USER:-srs_admin}
+    #         ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ROOT_PASSWORD:-srs_mongo_pass}
+    #         ME_CONFIG_MONGODB_URL: mongodb://${MONGO_ROOT_USER:-srs_admin}:${MONGO_ROOT_PASSWORD:-srs_mongo_pass}@mongo:27017/
+    #         ME_CONFIG_BASICAUTH: "false"
+    #     ports:
+    #         - "8081:8081"
+    #     depends_on:
+    #         mongo:
+    #             condition: service_healthy
+    #     networks:
+    #         - srs_network
 
     # ============================================================
     # REDIS – NV08
@@ -175,19 +175,19 @@ services:
     # No login required; add Redis connection manually on first visit:
     #   Host: redis  Port: 6379  Password: srs_redis_pass
     # ============================================================
-    redisinsight:
-        image: redis/redisinsight:latest
-        container_name: srs_redisinsight
-        restart: unless-stopped
-        volumes:
-            - redisinsight_data:/data
-        ports:
-            - "5540:5540"
-        depends_on:
-            redis:
-                condition: service_healthy
-        networks:
-            - srs_network
+    # redisinsight:
+    #     image: redis/redisinsight:latest
+    #     container_name: srs_redisinsight
+    #     restart: unless-stopped
+    #     volumes:
+    #         - redisinsight_data:/data
+    #     ports:
+    #         - "5540:5540"
+    #     depends_on:
+    #         redis:
+    #             condition: service_healthy
+    #     networks:
+    #         - srs_network
 
     # ============================================================
     # NEO4J – NV06
@@ -254,92 +254,72 @@ services:
     # CASSANDRA WEB – Browser UI for Cassandra
     # http://localhost:8888
     # ============================================================
-    cassandra-web:
-        image: ipushc/cassandra-web:latest
-        container_name: srs_cassandra_web
-        restart: unless-stopped
-        environment:
-            CASSANDRA_HOST: cassandra
-            CASSANDRA_PORT: 9042
-            CASSANDRA_USERNAME: ${CASSANDRA_USER:-cassandra}
-            CASSANDRA_PASSWORD: ${CASSANDRA_PASSWORD:-cassandra}
-        ports:
-            - "8083:8083"
-        depends_on:
-            cassandra:
-                condition: service_healthy
-        networks:
-            - srs_network
+    # cassandra-web:
+    #     image: ipushc/cassandra-web:latest
+    #     container_name: srs_cassandra_web
+    #     restart: unless-stopped
+    #     environment:
+    #         CASSANDRA_HOST: cassandra
+    #         CASSANDRA_PORT: 9042
+    #         CASSANDRA_USERNAME: ${CASSANDRA_USER:-cassandra}
+    #         CASSANDRA_PASSWORD: ${CASSANDRA_PASSWORD:-cassandra}
+    #     ports:
+    #         - "8083:8083"
+    #     depends_on:
+    #         cassandra:
+    #             condition: service_healthy
+    #     networks:
+    #         - srs_network
 
     # ============================================================
     # BACKEND – Node.js API Server
     # ============================================================
-    backend:
-        build:
-            context: ./backend
-            dockerfile: Dockerfile
-            target: ${NODE_ENV:-development}
-        container_name: srs_backend
-        restart: unless-stopped
-        environment:
-            NODE_ENV: ${NODE_ENV:-development}
-            PORT: 3000
-            JWT_SECRET: ${JWT_SECRET:-change_me_super_secret_jwt_key_256bit}
-            JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
-            # PostgreSQL
-            DATABASE_URL: postgresql://${POSTGRES_USER:-srs_user}:${POSTGRES_PASSWORD:-srs_password}@postgres:5432/${POSTGRES_DB:-srs_db}
-            POSTGRES_HOST: postgres
-            POSTGRES_PORT: 5432
-            POSTGRES_DB: ${POSTGRES_DB:-srs_db}
-            POSTGRES_USER: ${POSTGRES_USER:-srs_user}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-srs_password}
-            # MongoDB
-            MONGO_URI: mongodb://${MONGO_ROOT_USER:-srs_admin}:${MONGO_ROOT_PASSWORD:-srs_mongo_pass}@mongo:27017/${MONGO_DB:-srs_mongo}?authSource=admin
-            MONGO_HOST: mongo
-            MONGO_PORT: 27017
-            MONGO_DB: ${MONGO_DB:-srs_mongo}
-            MONGO_ROOT_USER: ${MONGO_ROOT_USER:-srs_admin}
-            MONGO_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-srs_mongo_pass}
-            # Redis
-            REDIS_URL: redis://:${REDIS_PASSWORD:-srs_redis_pass}@redis:6379
-            REDIS_HOST: redis
-            REDIS_PORT: 6379
-            REDIS_PASSWORD: ${REDIS_PASSWORD:-srs_redis_pass}
-            REDIS_SESSION_TTL: 3600
-            REDIS_CACHE_TTL: 300
-            # Neo4j
-            NEO4J_URI: bolt://neo4j:7687
-            NEO4J_HOST: neo4j
-            NEO4J_BOLT_PORT: 7687
-            NEO4J_USER: ${NEO4J_USER:-neo4j}
-            NEO4J_PASSWORD: ${NEO4J_PASSWORD:-srs_neo4j_pass}
-            # Cassandra
-            CASSANDRA_CONTACT_POINTS: cassandra
-            CASSANDRA_HOST: cassandra
-            CASSANDRA_PORT: 9042
-            CASSANDRA_KEYSPACE: ${CASSANDRA_KEYSPACE:-srs_events}
-            CASSANDRA_USER: ${CASSANDRA_USER:-cassandra}
-            CASSANDRA_PASSWORD: ${CASSANDRA_PASSWORD:-cassandra}
-            CASSANDRA_REPLICATION_FACTOR: 1
-        volumes:
-            - ./backend:/app
-            - /app/node_modules
-            - backend_uploads:/app/uploads
-        ports:
-            - "3000:3000"
-        depends_on:
-            postgres:
-                condition: service_healthy
-            mongo:
-                condition: service_healthy
-            redis:
-                condition: service_healthy
-            neo4j:
-                condition: service_healthy
-            cassandra:
-                condition: service_healthy
-        networks:
-            - srs_network
+    # backend:
+    #     build:
+    #         context: ./backend
+    #         dockerfile: Dockerfile
+    #         target: ${NODE_ENV:-development}
+    #     container_name: srs_backend
+    #     restart: unless-stopped
+    #     env_file:
+    #         - .env
+    #     environment:
+    #         NODE_ENV: ${NODE_ENV:-development}
+    #         PORT: 3000
+    #         # PostgreSQL
+    #         DATABASE_URL: postgresql://${POSTGRES_USER:-srs_user}:${POSTGRES_PASSWORD:-srs_password}@postgres:5432/${POSTGRES_DB:-srs_db}
+    #         # MongoDB
+    #         MONGO_URI: mongodb://${MONGO_ROOT_USER:-srs_admin}:${MONGO_ROOT_PASSWORD:-srs_mongo_pass}@mongo:27017/${MONGO_DB:-srs_mongo}?authSource=admin
+    #         # Redis
+    #         REDIS_URL: redis://:${REDIS_PASSWORD:-srs_redis_pass}@redis:6379
+    #         # Neo4j
+    #         NEO4J_URI: bolt://neo4j:7687
+    #         NEO4J_USER: ${NEO4J_USER:-neo4j}
+    #         NEO4J_PASSWORD: ${NEO4J_PASSWORD:-srs_neo4j_pass}
+    #         # Cassandra
+    #         CASSANDRA_CONTACT_POINTS: cassandra
+    #         CASSANDRA_KEYSPACE: ${CASSANDRA_KEYSPACE:-srs_events}
+    #         CASSANDRA_USER: ${CASSANDRA_USER:-cassandra}
+    #         CASSANDRA_PASSWORD: ${CASSANDRA_PASSWORD:-cassandra}
+    #     volumes:
+    #         - ./backend:/app
+    #         - /app/node_modules
+    #         - backend_uploads:/app/uploads
+    #     ports:
+    #         - "3000:3000"
+    #     depends_on:
+    #         postgres:
+    #             condition: service_healthy
+    #         mongo:
+    #             condition: service_healthy
+    #         redis:
+    #             condition: service_healthy
+    #         neo4j:
+    #             condition: service_healthy
+    #         cassandra:
+    #             condition: service_healthy
+    #     networks:
+    #         - srs_network
 
     # ============================================================
     # FRONTEND – React/Next.js (tuỳ chọn)

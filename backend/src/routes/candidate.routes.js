@@ -11,6 +11,7 @@ const { success, paginated } = require('../utils/response');
 // GET /api/candidates/profile – Lấy hồ sơ của mình
 router.get('/profile', authenticate, authorize('candidate'), async (req, res, next) => {
   try {
+    console.log(req.user.candidateId)
     const profile = await candidateService.getProfile(req.user.candidateId);
     success(res, profile);
   } catch (err) { next(err); }

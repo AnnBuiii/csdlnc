@@ -1,3 +1,4 @@
+const neo4j = require('neo4j-driver');
 const { runCypher, writeTransaction } = require('../config/neo4j');
 const { getCache, setCache } = require('../config/redis');
 const JobPosting = require('../models/job.model');
@@ -12,6 +13,7 @@ class RecommendService {
     const cached = await getCache(cacheKey);
     if (cached) return { data: cached, fromCache: true };
 
+    const normalizedLimit = Number.isInteger(limit) && limit >= 0 ? neo4j.int(limit) : neo4j.int(10);
     const scores = await runCypher(
       `MATCH (c:Candidate {id: $cid})-[:HAS_SKILL]->(s:Skill)
        MATCH (j:Job {status: 'active'})-[:REQUIRES]->(s)
@@ -21,7 +23,7 @@ class RecommendService {
               matchedSkills, salaryMax
        ORDER BY matchedSkills DESC, salaryMax DESC
        LIMIT $limit`,
-      { cid: candidateId, limit: neo4j.int(limit) }
+      { cid: candidateId, limit: normalizedLimit }
     );
 
     if (!scores.length) return { data: [], fromCache: false };
@@ -42,6 +44,7 @@ class RecommendService {
     const cached = await getCache(cacheKey);
     if (cached) return { data: cached, fromCache: true };
 
+    const normalizedLimit = Number.isInteger(limit) && limit >= 0 ? neo4j.int(limit) : neo4j.int(10);
     const scores = await runCypher(
       `MATCH (j:Job {id: $jid})-[:REQUIRES]->(s:Skill)
        MATCH (c:Candidate)-[:HAS_SKILL]->(s)
@@ -50,7 +53,7 @@ class RecommendService {
               matchedSkills
        ORDER BY matchedSkills DESC
        LIMIT $limit`,
-      { jid: jobId, limit: neo4j.int(limit) }
+      { jid: jobId, limit: normalizedLimit }
     );
 
     if (!scores.length) return { data: [], fromCache: false };

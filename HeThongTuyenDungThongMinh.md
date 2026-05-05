@@ -382,7 +382,7 @@ style: |
 <strong>Môn học:</strong> Cơ sở dữ liệu Quan hệ và NoSQL<br>
 <strong>Nhóm thực hiện:</strong> [Tên nhóm]<br>
 <strong>Giảng viên hướng dẫn:</strong> [Tên giảng viên]<br>
-<strong>Năm học:</strong> 2024 – 2025
+<strong>Năm học:</strong> 2025 – 2026
 </div>
 
 ---
@@ -416,7 +416,7 @@ Xác định các nghiệp vụ cốt lõi, khảo sát hệ thống thực tế
 
 # Giới thiệu hệ thống
 
-**Smart Recruitment System (SRS)** là nền tảng ứng dụng công nghệ thông tin hiện đại hỗ trợ toàn bộ quy trình tuyển dụng — từ đăng tin, tiếp nhận hồ sơ, sàng lọc, phỏng vấn đến onboarding.
+**Smart Recruitment System (SRS)** là nền tảng ứng dụng công nghệ thông tin hỗ trợ quy trình tuyển dụng — từ đăng tin, tiếp nhận hồ sơ, sàng lọc, phỏng vấn đến onboarding.
 
 ## 3 nhóm người dùng chính
 
@@ -519,7 +519,7 @@ Phân tích đặc thù từng nghiệp vụ và lựa chọn loại cơ sở d�
 
 | Loại CSDL | Đặc điểm | Công nghệ |
 |---|---|---|
-| **Relational DB** | Schema cố định, ACID, JOIN phức tạp | PostgreSQL, MySQL |
+| **Relational DB** | Schema cố định, ACID, JOIN phức tạp | PostgreSQL |
 | **Document Store** | Schema linh hoạt, lưu JSON/BSON | MongoDB |
 | **Key-Value Store** | Đọc/ghi cực nhanh, TTL, cache/session | Redis |
 | **Column Family** | Write-optimized, time-series, event log | Cassandra |
@@ -640,21 +640,21 @@ Thiết kế chi tiết ERD PostgreSQL, MongoDB Collections, Neo4j Graph Model, 
 │  users   │    │ candidates  │    │  companies   │
 │──────────│    │─────────────│    │──────────────│
 │ id (PK)  │──<─│ user_id(FK) │    │ id (PK)      │
-│ email    │    │ full_name   │    │ user_id (FK) │──>──┐
-│ role     │──<─│ location    │    │ name         │     │
-│ is_active│    │ expected_   │    │ industry     │     │
-└──────────┘    │   salary    │    │ rating       │     │
-                └──────┬──────┘    └──────────────┘     │
-                       │                                  │
-              ┌────────▼──────────────────────────────┐  │
-              │            applications               │  │
-              │──────────────────────────────────────│  │
-              │ id (PK)  │ candidate_id (FK)          │  │
-              │ job_id (FK) → job_postings            │  │
-              │ status: submitted→review→interview→offer│ │
-              │ UNIQUE(candidate_id, job_id)          │  │
-              └────────────────┬──────────────────────┘  │
-                               │              ┌───────────▼────────┐
+│ email    │    │ full_name   │    │ user_id (FK) │──>──────┐
+│ role     │──<─│ location    │    │ name         │         │
+│ is_active│    │ expected_   │    │ industry     │         │
+└──────────┘    │   salary    │    │ rating       │         │
+                └──────┬──────┘    └──────────────┘         │
+                       │                                    │
+              ┌────────▼────────────────────────────────┐   │
+              │            applications                 │   │
+              │───────────────────────────────────────  │   │
+              │ id (PK)  │ candidate_id (FK)            │   │
+              │ job_id (FK) →X job_postings             │   │
+              │ status: submitted→review→interview→offer│   │
+              │ UNIQUE(candidate_id, job_id)            │   │
+              └────────────────┬────────────────────────┘   │
+                               │              ┌─────────────▼──────┐
                     ┌──────────▼──────────┐   │   job_postings     │
                     │     interviews      │   │────────────────────│
                     │─────────────────────│   │ id (PK)            │
@@ -788,14 +788,14 @@ RETURN j.title, count(s) AS matchScore ORDER BY matchScore DESC LIMIT 10
 ```
                      ┌─────────────────────────────┐
                      │        Ứng dụng (Node.js)   │
-                     │  API Gateway + JWT Auth      │
-                     └───┬──────┬──────┬──────┬─────┘
+                     │  API Gateway + JWT Auth     │
+                     └───┬──────┬──────┬──────┬────┘
                          │      │      │      │      │
               ┌──────────▼┐  ┌──▼──┐  ┌▼──┐ ┌▼──┐ ┌▼──────────┐
               │PostgreSQL │  │Mongo│  │Neo│ │Red│ │Cassandra  │
               │           │  │DB   │  │4j │ │is │ │           │
               │ Core logic│  │Docs │  │AI │ │⚡ │ │Analytics  │
-              │ ACID ✓    │  │JSON │  │ML │ │<1ms│ │Time-series│
+              │ ACID ✓    |  │JSON │  │ML │ │<1ms│ │Time-series│
               └───────────┘  └─────┘  └───┘ └───┘ └───────────┘
                NV01,05,07   NV02-04  NV06  NV08     NV10
                               NV09
