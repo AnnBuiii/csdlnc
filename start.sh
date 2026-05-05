@@ -41,8 +41,8 @@ wait_healthy cassandra 180
 echo "⚙️  Khởi động backend..."
 docker compose up -d backend
 
-echo "🖥️  Khởi động UI tools..."
-docker compose up -d pgadmin mongo-express redisinsight cassandra-web
+echo "🖥️  Khởi động frontend..."
+docker compose up -d frontend
 
 wait_port() {
     local service=$1
@@ -63,27 +63,23 @@ wait_port() {
     echo " ✓"
 }
 
-wait_port pgadmin        5050 60
-wait_port mongo-express  8081 60
-wait_port redisinsight   5540 60
-wait_port cassandra-web  8888 60
+wait_port backend  3000 60
+wait_port frontend 5173 90
 
 echo ""
 echo "✅ Hệ thống đã khởi động!"
 echo ""
 echo "📌 Các endpoint:"
+echo "   Frontend       : http://localhost:5173"
 echo "   API Backend    : http://localhost:3000"
 echo "   Neo4j Browser  : http://localhost:7474  (user: neo4j)"
-echo "   pgAdmin        : http://localhost:5050  (PostgreSQL UI)"
-echo "   Mongo Express  : http://localhost:8081  (MongoDB UI)"
-echo "   RedisInsight   : http://localhost:5540  (Redis UI)"
-echo "   Cassandra Web  : http://localhost:8888  (Cassandra UI)"
 echo "   PostgreSQL     : localhost:5432"
 echo "   MongoDB        : localhost:27017"
 echo "   Redis          : localhost:6379"
 echo "   Cassandra      : localhost:9042"
 echo ""
 echo "📋 Lệnh hữu ích:"
+echo "   docker compose logs -f frontend    # Xem log frontend"
 echo "   docker compose logs -f backend     # Xem log backend"
 echo "   docker compose ps                  # Kiểm tra trạng thái"
 echo "   docker compose down                # Dừng tất cả"

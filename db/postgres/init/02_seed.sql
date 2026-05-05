@@ -18,23 +18,23 @@ REFRESH MATERIALIZED VIEW mv_pipeline_stats;
 -- ── USERS ──
 INSERT INTO users (id, email, password_hash, role, is_active) VALUES
 -- Candidates
-('11111111-1111-1111-1111-111111111111', 'nguyenvana@example.com', '$2b$10$abcdefghijklmnopqrstuv', 'candidate', true),
-('22222222-2222-2222-2222-222222222222', 'tranthib@example.com', '$2b$10$abcdefghijklmnopqrstuv', 'candidate', true),
-('33333333-3333-3333-3333-333333333333', 'lethic@example.com', '$2b$10$abcdefghijklmnopqrstuv', 'candidate', true),
-('44444444-4444-4444-4444-444444444444', 'phamd@example.com', '$2b$10$abcdefghijklmnopqrstuv', 'candidate', true),
-('55555555-5555-5555-5555-555555555555', 'vane@example.com', '$2b$10$abcdefghijklmnopqrstuv', 'candidate', true),
+('11111111-1111-1111-1111-111111111111', 'nguyenvana@example.com', '$$2a$12$.BYmq08IkIWwSxXnVw5fU.oHdAlLnUFCsqkE5uvs/vwHMtZwanAC6', 'candidate', true),
+('22222222-2222-2222-2222-222222222222', 'tranthib@example.com', '$$2a$12$.BYmq08IkIWwSxXnVw5fU.oHdAlLnUFCsqkE5uvs/vwHMtZwanAC6', 'candidate', true),
+('33333333-3333-3333-3333-333333333333', 'lethic@example.com', '$$2a$12$.BYmq08IkIWwSxXnVw5fU.oHdAlLnUFCsqkE5uvs/vwHMtZwanAC6', 'candidate', true),
+('44444444-4444-4444-4444-444444444444', 'phamd@example.com', '$$2a$12$.BYmq08IkIWwSxXnVw5fU.oHdAlLnUFCsqkE5uvs/vwHMtZwanAC6', 'candidate', true),
+('55555555-5555-5555-5555-555555555555', 'vane@example.com', '$$2a$12$.BYmq08IkIWwSxXnVw5fU.oHdAlLnUFCsqkE5uvs/vwHMtZwanAC6', 'candidate', true),
 -- Recruiters
-('66666666-6666-6666-6666-666666666666', 'hr@techviet.com', '$2b$10$abcdefghijklmnopqrstuv', 'recruiter', true),
-('77777777-7777-7777-7777-777777777777', 'tuyendung@fintech.vn', '$2b$10$abcdefghijklmnopqrstuv', 'recruiter', true),
-('88888888-8888-8888-8888-888888888888', 'hr@vincommerce.vn', '$2b$10$abcdefghijklmnopqrstuv', 'recruiter', true),
-('99999999-9999-9999-9999-999999999999', 'recruiter@mbbank.com', '$2b$10$abcdefghijklmnopqrstuv', 'recruiter', true),
-('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'talent@fpt.com', '$2b$10$abcdefghijklmnopqrstuv', 'recruiter', true),
+('66666666-6666-6666-6666-666666666666', 'hr@techviet.com', '$$2a$12$.BYmq08IkIWwSxXnVw5fU.oHdAlLnUFCsqkE5uvs/vwHMtZwanAC6', 'recruiter', true),
+('77777777-7777-7777-7777-777777777777', 'tuyendung@fintech.vn', '$$2a$12$.BYmq08IkIWwSxXnVw5fU.oHdAlLnUFCsqkE5uvs/vwHMtZwanAC6', 'recruiter', true),
+('88888888-8888-8888-8888-888888888888', 'hr@vincommerce.vn', '$$2a$12$.BYmq08IkIWwSxXnVw5fU.oHdAlLnUFCsqkE5uvs/vwHMtZwanAC6', 'recruiter', true),
+('99999999-9999-9999-9999-999999999999', 'recruiter@mbbank.com', '$$2a$12$.BYmq08IkIWwSxXnVw5fU.oHdAlLnUFCsqkE5uvs/vwHMtZwanAC6', 'recruiter', true),
+('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'talent@fpt.com', '$$2a$12$.BYmq08IkIWwSxXnVw5fU.oHdAlLnUFCsqkE5uvs/vwHMtZwanAC6', 'recruiter', true),
 -- Admin
-('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'admin@recruitment.vn', '$2b$10$abcdefghijklmnopqrstuv', 'admin', true);
+('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'admin@recruitment.vn', '$$2a$12$.BYmq08IkIWwSxXnVw5fU.oHdAlLnUFCsqkE5uvs/vwHMtZwanAC6', 'admin', true);
 
 -- ── CANDIDATES ──
 INSERT INTO candidates (id, user_id, full_name, phone, date_of_birth, location, avatar_url, bio, expected_salary, years_experience) VALUES
-('cccccccc-cccc-cccc-cccc-cccccccccccc', '11111111-1111-1111-1111-111111111111', 
+('cccccccc-cccc-cccc-cccc-cccccccccccc', '11111111-1111-1111-1111-111111111111',
  'Nguyễn Văn A', '0987123456', '1995-05-15', 'Hà Nội',
  'https://example.com/avatars/nguyen-a.jpg',
  'Lập trình viên Full-stack với 5 năm kinh nghiệm, chuyên về JavaScript/TypeScript, React, Node.js. Từng làm việc tại các công ty startup và doanh nghiệp lớn.',
@@ -240,7 +240,7 @@ INSERT INTO interviews (id, application_id, candidate_id, job_id, company_id, ro
 
 -- ── CANDIDATE PROFILES (denormalized) ──
 INSERT INTO candidate_profiles (candidate_id, summary, skills) VALUES
-('cccccccc-cccc-cccc-cccc-cccccccccccc', 
+('cccccccc-cccc-cccc-cccc-cccccccccccc',
  'Senior Full-stack Developer với kinh nghiệm xây dựng ứng dụng web quy mô lớn.',
  '["JavaScript", "TypeScript", "React", "Node.js", "Express", "MongoDB", "PostgreSQL", "AWS", "Docker", "Git"]'),
 

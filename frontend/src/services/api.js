@@ -50,8 +50,8 @@ export const jobAPI = {
   getJobDetail: (id) => apiClient.get(`/jobs/${id}`),
   getRelatedJobs: (id) => apiClient.get(`/jobs/${id}/related`),
   createJob: (data) => apiClient.post('/jobs', data),
-  updateJob: (id, data) => apiClient.put(`/jobs/${id}`, data),
-  deleteJob: (id) => apiClient.delete(`/jobs/${id}`),
+  updateJobStatus: (id, status) => apiClient.patch(`/jobs/${id}/status`, { status }),
+  getCompanyJobs: (params) => apiClient.get('/jobs/company/mine', { params }),
 };
 
 // Candidate APIs
@@ -61,31 +61,31 @@ export const candidateAPI = {
   updateProfile: (data) => apiClient.put('/candidates/profile', data),
   addExperience: (data) => apiClient.post('/candidates/profile/experience', data),
   addSkill: (data) => apiClient.post('/candidates/profile/skills', data),
-  searchCandidates: (params) => apiClient.get('/candidates', { params }),
+  searchCandidates: (params) => apiClient.get('/candidates/search', { params }),
 };
 
 // Company APIs
 export const companyAPI = {
   getProfile: () => apiClient.get('/companies/profile'),
   updateProfile: (data) => apiClient.put('/companies/profile', data),
-  getJobs: (params) => apiClient.get('/companies/jobs', { params }),
 };
 
 // Application APIs
 export const applicationAPI = {
   applyJob: (data) => apiClient.post('/applications', data),
   getApplications: (params) => apiClient.get('/applications/mine', { params }),
-  getApplicationDetail: (id) => apiClient.get(`/applications/${id}`),
-  updateApplicationStatus: (id, data) => apiClient.put(`/applications/${id}`, data),
+  getApplicationsByJob: (jobId, params) => apiClient.get(`/applications/job/${jobId}`, { params }),
+  getJobPipeline: (jobId) => apiClient.get(`/applications/job/${jobId}/pipeline`),
+  updateApplicationStatus: (id, status) => apiClient.patch(`/applications/${id}/status`, { status }),
 };
 
 // Interview APIs
 export const interviewAPI = {
   scheduleInterview: (data) => apiClient.post('/interviews', data),
   getInterviews: (params) => apiClient.get('/interviews/mine', { params }),
-  getInterviewDetail: (id) => apiClient.get(`/interviews/${id}`),
-  updateInterview: (id, data) => apiClient.put(`/interviews/${id}`, data),
-  completeInterview: (id, data) => apiClient.post(`/interviews/${id}/complete`, data),
+  getCompanyInterviews: (params) => apiClient.get('/interviews/company', { params }),
+  rescheduleInterview: (id, data) => apiClient.patch(`/interviews/${id}/reschedule`, data),
+  updateInterviewResult: (id, data) => apiClient.patch(`/interviews/${id}/result`, data),
 };
 
 // Recommendation APIs
@@ -96,22 +96,23 @@ export const recommendationAPI = {
 // Review APIs
 export const reviewAPI = {
   submitReview: (data) => apiClient.post('/reviews', data),
-  getReviews: (params) => apiClient.get('/reviews', { params }),
-  getReviewDetail: (id) => apiClient.get(`/reviews/${id}`),
+  getCompanyReviews: (companyId, params) => apiClient.get(`/reviews/company/${companyId}`, { params }),
+  approveReview: (id, approved) => apiClient.patch(`/reviews/${id}/approve`, { approved }),
 };
 
 // Analytics APIs
 export const analyticsAPI = {
-  getDashboardStats: () => apiClient.get('/analytics/dashboard'),
+  getRecruiterDashboard: () => apiClient.get('/analytics/recruiter'),
+  getAdminDashboard: () => apiClient.get('/analytics/admin'),
+  getUserActivity: (date) => apiClient.get('/analytics/activity', { params: date ? { date } : {} }),
   getJobStats: (jobId) => apiClient.get(`/analytics/jobs/${jobId}`),
-  getCandidateStats: () => apiClient.get('/analytics/candidates'),
 };
 
 // Notification APIs
 export const notificationAPI = {
-  getNotifications: (params) => apiClient.get('/notifications', { params }),
-  markAsRead: (id) => apiClient.put(`/notifications/${id}/read`),
-  deleteNotification: (id) => apiClient.delete(`/notifications/${id}`),
+  getNotifications: () => apiClient.get('/notifications'),
+  getUnreadCount: () => apiClient.get('/notifications/count'),
+  markAllRead: () => apiClient.delete('/notifications'),
 };
 
 export default apiClient;

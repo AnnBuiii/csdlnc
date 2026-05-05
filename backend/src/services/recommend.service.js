@@ -4,7 +4,6 @@ const { getCache, setCache } = require('../config/redis');
 const JobPosting = require('../models/job.model');
 const CandidateProfile = require('../models/candidateProfile.model');
 const crypto = require('crypto');
-const neo4j = require('neo4j-driver');
 
 class RecommendService {
   // ── NV06: Gợi ý việc làm cho ứng viên ────────────────────────

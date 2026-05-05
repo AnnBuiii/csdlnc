@@ -51,7 +51,7 @@ export default function Company() {
 
   const fetchJobs = async () => {
     try {
-      const response = await companyAPI.getJobs({ limit: 20 });
+      const response = await jobAPI.getCompanyJobs({ limit: 20 });
       setJobs(response.data || []);
     } catch (err) {
       console.error('Error fetching jobs:', err);
