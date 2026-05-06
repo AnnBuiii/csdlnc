@@ -107,6 +107,7 @@ export const analyticsAPI = {
   getAdminDashboard: () => apiClient.get('/analytics/admin'),
   getUserActivity: (date) => apiClient.get('/analytics/activity', { params: date ? { date } : {} }),
   getJobStats: (jobId) => apiClient.get(`/analytics/jobs/${jobId}`),
+  getCompanyJobClicks: () => apiClient.get('/analytics/company/job-clicks'),
 };
 
 // Notification APIs

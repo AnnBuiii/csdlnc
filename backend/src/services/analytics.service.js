@@ -1,5 +1,4 @@
 const { query } = require('../config/postgres');
-const { execute } = require('../config/cassandra');
 const { parsePagination } = require('../utils/pagination');
 const JobPosting = require('../models/job.model');
 
@@ -21,8 +20,7 @@ class AnalyticsService {
         [companyId]
       ),
       query(
-        `SELECT id, title, status,
-                view_count, application_count, created_at
+        `SELECT id, title, status, application_count, created_at
          FROM job_postings
          WHERE company_id = $1
          ORDER BY created_at DESC
@@ -82,50 +80,18 @@ class AnalyticsService {
   }
 
   // ── NV10: Thống kê một tin tuyển dụng ────────────────────────
-  async getJobStats(jobId, days = 30) {
-    const fromDate = new Date();
-    fromDate.setDate(fromDate.getDate() - parseInt(days));
-    const fromDateStr = fromDate.toISOString().split('T')[0]; // 'YYYY-MM-DD'
-
-    const [stats, viewEvents] = await Promise.all([
-      query(
-        `SELECT id, title, status, view_count, application_count, created_at, deadline
-         FROM job_postings WHERE id = $1`,
-        [jobId]
-      ),
-      execute(
-        `SELECT event_date, count(*) AS views
-         FROM user_activity_log
-         WHERE entity_id = ? AND event_type = 'view_job'
-           AND event_date >= ?
-         GROUP BY event_date
-         ORDER BY event_date
-         ALLOW FILTERING`,
-        [jobId, fromDateStr]
-      ),
-    ]);
+  async getJobStats(jobId) {
+    const stats = await query(
+      `SELECT id, title, status, application_count, created_at, deadline
+       FROM job_postings WHERE id = $1`,
+      [jobId]
+    );
 
     return {
-      job:        stats.rows[0] || null,
-      viewHistory: viewEvents.rows || [],
+      job: stats.rows[0] || null,
     };
   }
 
-  // ── NV10: Lịch sử hành vi người dùng (Cassandra) ─────────────
-  async getUserActivity(userId, date) {
-    if (!date) {
-      const now = new Date();
-      date = now.toISOString().split('T')[0];
-    }
-    const rows = await execute(
-      `SELECT event_id, event_type, entity_id, entity_type, event_time
-       FROM user_activity_log
-       WHERE user_id = ? AND event_date = ?
-       ORDER BY event_time DESC`,
-      [userId, date]
-    );
-    return rows.rows || [];
-  }
 }
 
 module.exports = new AnalyticsService();

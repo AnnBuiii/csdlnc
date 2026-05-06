@@ -7,7 +7,6 @@ const {
   incrJobView,
 } = require("../config/redis");
 const { writeTransaction } = require("../config/neo4j");
-const { execute } = require("../config/cassandra");
 const { parsePagination } = require("../utils/pagination");
 const JobPosting = require("../models/job.model");
 const crypto = require("crypto");
@@ -184,11 +183,11 @@ class JobService {
     if (title || location || salaryMin || salaryMax || Array.isArray(skills)) {
       const updated = await JobPosting.findOne({ jobId }).lean();
       this._syncJobToNeo4j(jobId, {
-        title:       updated.title,
-        level:       updated.level,
-        location:    updated.location?.city || updated.location,
-        salaryMin:   updated.salary?.min,
-        salaryMax:   updated.salary?.max,
+        title: updated.title,
+        level: updated.level,
+        location: updated.location?.city || updated.location,
+        salaryMin: updated.salary?.min,
+        salaryMax: updated.salary?.max,
         requirements: updated.requirements,
       }).catch(() => {});
     }
@@ -324,11 +323,7 @@ class JobService {
 
     if (!cached) await setCache(cacheKey, job, 120);
 
-    // Ghi lượt xem (Redis counter + Cassandra event log)
     await incrJobView(jobId);
-    if (userId) {
-      this._logActivity(userId, "view_job", jobId, "job").catch(() => {});
-    }
 
     return job;
   }
@@ -336,21 +331,25 @@ class JobService {
   // ── NV03: Danh sách tin của công ty ─────────────────────────
   async getCompanyJobs(companyId, paginationQuery) {
     const { page, limit, offset } = parsePagination(paginationQuery);
-    const res = await query(
-      `SELECT id, title, level, job_type, location, status, deadline,
-              view_count, created_at
-       FROM job_postings
-       WHERE company_id = $1
-       ORDER BY created_at DESC
-       LIMIT $2 OFFSET $3`,
-      [companyId, limit, offset],
-    );
-    const total = await query(
-      "SELECT COUNT(*) FROM job_postings WHERE company_id = $1",
-      [companyId],
-    );
+    const [res, total] = await Promise.all([
+      query(
+        `SELECT id, title, level, job_type, location, status, deadline,
+                application_count, created_at
+         FROM job_postings
+         WHERE company_id = $1
+         ORDER BY created_at DESC
+         LIMIT $2 OFFSET $3`,
+        [companyId, limit, offset],
+      ),
+      query("SELECT COUNT(*) FROM job_postings WHERE company_id = $1", [
+        companyId,
+      ]),
+    ]);
+
+    const jobs = res.rows;
+
     return {
-      data: res.rows,
+      data: jobs,
       meta: { total: parseInt(total.rows[0].count), page, limit },
     };
   }
@@ -386,18 +385,6 @@ class JobService {
         );
       }
     });
-  }
-
-  // ── Private: ghi event log vào Cassandra ─────────────────────
-  async _logActivity(userId, eventType, entityId, entityType) {
-    const now = new Date();
-    const date = now.toISOString().split("T")[0];
-    await execute(
-      `INSERT INTO user_activity_log
-         (user_id, event_date, event_time, event_id, event_type, entity_id, entity_type)
-       VALUES (?, ?, ?, uuid(), ?, ?, ?)`,
-      [userId, date, now, eventType, entityId, entityType],
-    );
   }
 }
 

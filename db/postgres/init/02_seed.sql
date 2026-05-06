@@ -107,46 +107,46 @@ INSERT INTO companies (id, user_id, name, industry, size, logo_url, website, des
  4.7, true);
 
 -- ── JOB POSTINGS ──
-INSERT INTO job_postings (id, company_id, title, level, job_type, work_mode, location, salary_min, salary_max, currency, status, deadline, view_count, application_count) VALUES
+INSERT INTO job_postings (id, company_id, title, level, job_type, work_mode, location, salary_min, salary_max, currency, status, deadline, application_count) VALUES
 ('33333333-3333-3333-3333-333333333331', '22222222-2222-2222-2222-222222222221',
  'Senior Full-stack Developer (ReactJS/NodeJS)', 'Senior', 'Full-time', 'Hybrid',
- 'Hà Nội', 35000000, 60000000, 'VND', 'active', '2026-05-30', 245, 18),
+ 'Hà Nội', 35000000, 60000000, 'VND', 'active', '2026-05-30', 18),
 
 ('33333333-3333-3333-3333-333333333332', '22222222-2222-2222-2222-222222222221',
  'Data Scientist', 'Mid-level', 'Full-time', 'Remote',
- 'TP.HCM', 25000000, 40000000, 'VND', 'active', '2026-06-15', 189, 12),
+ 'TP.HCM', 25000000, 40000000, 'VND', 'active', '2026-06-15', 12),
 
 ('33333333-3333-3333-3333-333333333333', '22222222-2222-2222-2222-222222222222',
  'Mobile App Developer (iOS/Android)', 'Senior', 'Full-time', 'Onsite',
- 'Đà Nẵng', 30000000, 50000000, 'VND', 'active', '2026-05-25', 156, 8),
+ 'Đà Nẵng', 30000000, 50000000, 'VND', 'active', '2026-05-25', 8),
 
 ('33333333-3333-3333-3333-333333333334', '22222222-2222-2222-2222-222222222223',
  'DevOps Engineer', 'Mid-level', 'Full-time', 'Hybrid',
- 'Hà Nội', 28000000, 45000000, 'VND', 'active', '2026-06-10', 134, 6),
+ 'Hà Nội', 28000000, 45000000, 'VND', 'active', '2026-06-10', 6),
 
 ('33333333-3333-3333-3333-333333333335', '22222222-2222-2222-2222-222222222224',
  'Java Backend Developer', 'Junior', 'Full-time', 'Onsite',
- 'TP.HCM', 15000000, 25000000, 'VND', 'active', '2026-05-20', 98, 15),
+ 'TP.HCM', 15000000, 25000000, 'VND', 'active', '2026-05-20', 15),
 
 ('33333333-3333-3333-3333-333333333336', '22222222-2222-2222-2222-222222222225',
  '.NET Developer', 'Fresher/Junior', 'Full-time', 'Hybrid',
- 'Hà Nội', 10000000, 18000000, 'VND', 'active', '2026-06-05', 76, 20),
+ 'Hà Nội', 10000000, 18000000, 'VND', 'active', '2026-06-05', 20),
 
 ('33333333-3333-3333-3333-333333333337', '22222222-2222-2222-2222-222222222221',
  'UX/UI Designer', 'Mid-level', 'Part-time', 'Remote',
- 'Toàn quốc', 20000000, 35000000, 'VND', 'active', '2026-05-28', 112, 9),
+ 'Toàn quốc', 20000000, 35000000, 'VND', 'active', '2026-05-28', 9),
 
 ('33333333-3333-3333-3333-333333333338', '22222222-2222-2222-2222-222222222222',
  'QA Automation Engineer', 'Senior', 'Full-time', 'Onsite',
- 'TP.HCM', 32000000, 48000000, 'VND', 'active', '2026-06-12', 89, 7),
+ 'TP.HCM', 32000000, 48000000, 'VND', 'active', '2026-06-12', 7),
 
 ('33333333-3333-3333-3333-333333333339', '22222222-2222-2222-2222-222222222223',
  'Business Analyst (IT Projects)', 'Mid-level', 'Full-time', 'Hybrid',
- 'Hà Nội', 22000000, 38000000, 'VND', 'active', '2026-06-01', 145, 11),
+ 'Hà Nội', 22000000, 38000000, 'VND', 'active', '2026-06-01', 11),
 
 ('33333333-3333-3333-3333-333333333330', '22222222-2222-2222-2222-222222222225',
  'AI/ML Engineer', 'Senior', 'Full-time', 'Remote',
- 'Toàn quốc', 40000000, 65000000, 'VND', 'active', '2026-06-20', 167, 5);
+ 'Toàn quốc', 40000000, 65000000, 'VND', 'active', '2026-06-20', 5);
 
 -- ── APPLICATIONS ──
 INSERT INTO applications (id, candidate_id, job_id, company_id, status, cover_letter, applied_at) VALUES

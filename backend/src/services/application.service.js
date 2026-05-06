@@ -1,6 +1,5 @@
 const { query, withTransaction } = require("../config/postgres");
 const { runCypher, writeTransaction } = require("../config/neo4j");
-const { execute } = require("../config/cassandra");
 const { parsePagination } = require("../utils/pagination");
 
 class ApplicationService {
@@ -46,9 +45,6 @@ class ApplicationService {
         `UPDATE job_postings SET application_count = application_count + 1 WHERE id = $1`,
         [jobId],
       );
-
-      // Ghi log Cassandra
-      this._logApplication(candidateId, jobId, "submitted").catch(() => {});
 
       // Tạo relationship trong Neo4j (NV06)
       this._linkCandidateJob(candidateId, jobId).catch(() => {});
@@ -179,23 +175,6 @@ class ApplicationService {
   }
 
   // ── Private helpers ────────────────────────────────────────────
-  async _logApplication(candidateId, jobId, eventType) {
-    const now = new Date();
-    await execute(
-      `INSERT INTO user_activity_log
-         (user_id, event_date, event_time, event_id, event_type, entity_id, entity_type)
-       VALUES (?, ?, ?, uuid(), ?, ?, ?)`,
-      [
-        candidateId,
-        now.toISOString().split("T")[0],
-        now,
-        eventType,
-        jobId,
-        "job",
-      ],
-    );
-  }
-
   async _linkCandidateJob(candidateId, jobId) {
     await runCypher(
       `MATCH (c:Candidate {id: $cid}), (j:Job {id: $jid})

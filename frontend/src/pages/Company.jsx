@@ -153,18 +153,35 @@ export default function Company() {
           ) : (
             <div className="space-y-4">
               {jobs.map((job) => (
-                <div key={job.jobId} className="card">
+                <div key={job.jobId || job.id} className="card">
                   <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-xl font-bold">{job.title}</h3>
-                      <p className="text-muted">{typeof job.location === 'string' ? job.location : job.location?.city}</p>
+                    <div className="flex-1 min-w-0">
+                      <h3
+                        className="text-xl font-bold hover:text-primary cursor-pointer transition"
+                        onClick={() => navigate(`/jobs/${job.jobId || job.id}`)}
+                      >
+                        {job.title}
+                      </h3>
+                      <p className="text-muted">
+                        {typeof job.location === 'string' ? job.location : job.location?.city}
+                      </p>
+                      <span className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full font-medium ${
+                        job.status === 'active' ? 'bg-green-100 text-green-700' :
+                        job.status === 'closed' ? 'bg-red-100 text-red-700' :
+                        'bg-gray-100 text-gray-600'
+                      }`}>
+                        {job.status}
+                      </span>
                     </div>
-                    <div className="text-right">
-                      <p className="font-semibold">{job.applicationsCount || 0}</p>
-                      <p className="text-sm text-muted">Applications</p>
+                    <div className="flex gap-6 text-right ml-4 shrink-0">
+                      <div>
+                        <p className="font-semibold">{job.application_count ?? 0}</p>
+                        <p className="text-sm text-muted">Applications</p>
+                      </div>
                     </div>
                   </div>
                   <div className="mt-4 flex gap-2">
+                    <button className="btn-outline text-sm" onClick={() => navigate(`/jobs/${job.jobId || job.id}`)}>View Job</button>
                     <button className="btn-outline text-sm" onClick={() => navigate(`/edit-job/${job.jobId || job.id}`)}>Edit</button>
                     <button className="btn-primary text-sm" onClick={() => navigate(`/jobs/${job.jobId || job.id}/applications`)}>View Applications</button>
                   </div>

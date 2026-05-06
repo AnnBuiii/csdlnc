@@ -3,8 +3,8 @@
 /**
  * Smart Recruitment System - Database Seed Runner
  * 
- * This script seeds all databases (PostgreSQL, MongoDB, Neo4j, Cassandra) with realistic Vietnamese data.
- * Usage: node scripts/seed.js [--all | --postgres | --mongo | --neo4j | --cassandra]
+ * This script seeds all databases (PostgreSQL, MongoDB, Neo4j) with realistic Vietnamese data.
+ * Usage: node scripts/seed.js [--all | --postgres | --mongo | --neo4j]
  */
 
 const fs = require('fs');
@@ -26,8 +26,6 @@ const MONGO_ROOT_PASSWORD = process.env.MONGO_ROOT_PASSWORD || 'srs_mongo_pass';
 const MONGO_DB = process.env.MONGO_DB || 'srs_mongo';
 const NEO4J_USER = process.env.NEO4J_USER || 'neo4j';
 const NEO4J_PASSWORD = process.env.NEO4J_PASSWORD || 'srs_neo4j_pass';
-const CASSANDRA_USER = process.env.CASSANDRA_USER || 'cassandra';
-const CASSANDRA_PASSWORD = process.env.CASSANDRA_PASSWORD || 'cassandra';
 
 // Colors for console output
 const colors = {
@@ -57,13 +55,12 @@ const options = {
   postgres: args.includes('--postgres') || args.includes('--pg'),
   mongo: args.includes('--mongo') || args.includes('--mongodb'),
   neo4j: args.includes('--neo4j'),
-  cassandra: args.includes('--cassandra'),
   help: args.includes('--help') || args.includes('-h'),
   force: args.includes('--force') || args.includes('-f')
 };
 
 // If no specific option is provided, seed all databases
-if (!options.all && !options.postgres && !options.mongo && !options.neo4j && !options.cassandra) {
+if (!options.all && !options.postgres && !options.mongo && !options.neo4j) {
   options.all = true;
 }
 
@@ -74,9 +71,8 @@ if (options.help) {
 ${colors.bright}Options:${colors.reset}
   --all, -a         Seed all databases (default)
   --postgres, --pg  Seed PostgreSQL only
-  --mongo           Seed MongoDB only  
+  --mongo           Seed MongoDB only
   --neo4j           Seed Neo4j only
-  --cassandra       Seed Cassandra only
   --force, -f       Force seed even if databases are not empty
   --help, -h        Show this help message
 
@@ -84,13 +80,12 @@ ${colors.bright}Examples:${colors.reset}
   node scripts/seed.js                     # Seed all databases
   node scripts/seed.js --postgres --mongo  # Seed PostgreSQL and MongoDB
   node scripts/seed.js --force             # Force seed all databases
-  
+
 ${colors.bright}Note:${colors.reset}
   - Make sure Docker containers are running
   - PostgreSQL seed script: db/postgres/init/02_seed.sql
   - MongoDB seed script: db/mongo/init/02_seed.js
   - Neo4j seed script: db/neo4j/init/02_seed.cypher
-  - Cassandra seed script: db/cassandra/init/02_seed.cql
 `);
   process.exit(0);
 }
@@ -229,36 +224,12 @@ async function seedNeo4j() {
   return false;
 }
 
-async function seedCassandra() {
-  console.log(`\n${colors.cyan}══════════════ Cassandra Seeding ═════════════${colors.reset}`);
-  
-  // Check Cassandra connection
-  if (!checkDatabaseConnection('Cassandra', `docker compose exec cassandra cqlsh -u ${CASSANDRA_USER} -p ${CASSANDRA_PASSWORD} -e "DESCRIBE KEYSPACES;"`)) {
-    return false;
-  }
-  
-  // Run Cassandra seed script
-  const seedFile = 'db/cassandra/init/02_seed.cql';
-  const result = runCommand(
-    `docker compose exec -i cassandra cqlsh -u ${CASSANDRA_USER} -p ${CASSANDRA_PASSWORD} -f ${seedFile}`,
-    'Running Cassandra seed script'
-  );
-  
-  if (result.success) {
-    console.log(`${colors.green}🎉 Cassandra seeded successfully!${colors.reset}`);
-    return true;
-  }
-  
-  return false;
-}
-
 // Main seeding function
 async function runSeeding() {
   const results = {
     postgres: { success: false, message: 'Skipped' },
     mongo: { success: false, message: 'Skipped' },
     neo4j: { success: false, message: 'Skipped' },
-    cassandra: { success: false, message: 'Skipped' }
   };
   
   const totalStartTime = Date.now();
@@ -266,7 +237,7 @@ async function runSeeding() {
   try {
     // Start Docker containers if not running
     console.log(`${colors.yellow}🔧 Starting Docker containers if needed...${colors.reset}`);
-    runCommand('docker compose up -d postgres mongo neo4j cassandra', 'Starting database containers');
+    runCommand('docker compose up -d postgres mongo neo4j', 'Starting database containers');
     
     // Wait for containers to be ready
     console.log(`${colors.yellow}⏳ Waiting for databases to be ready...${colors.reset}`);
@@ -290,13 +261,7 @@ async function runSeeding() {
         ? { success: true, message: 'Seeded successfully' }
         : { success: false, message: 'Failed' };
     }
-    
-    if (options.all || options.cassandra) {
-      results.cassandra = await seedCassandra()
-        ? { success: true, message: 'Seeded successfully' }
-        : { success: false, message: 'Failed' };
-    }
-    
+
   } catch (error) {
     console.log(`${colors.red}❌ Unexpected error: ${error.message}${colors.reset}`);
   }

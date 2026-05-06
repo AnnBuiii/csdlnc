@@ -4,7 +4,6 @@ const { connectPostgres } = require('./config/postgres');
 const { connectMongo }    = require('./config/mongo');
 const { connectRedis }    = require('./config/redis');
 const { connectNeo4j }    = require('./config/neo4j');
-const { connectCassandra } = require('./config/cassandra');
 const logger = require('./config/logger');
 const { initSocketIO } = require('./config/socket');
 const http = require('http');
@@ -39,7 +38,6 @@ async function bootstrap() {
     await connectMongo();
     await connectRedis();
     await connectNeo4j();
-    await connectCassandra();
 
     // Check if database is empty and seed if needed
     await checkAndSeedDatabase();

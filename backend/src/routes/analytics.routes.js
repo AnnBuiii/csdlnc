@@ -19,14 +19,6 @@ router.get('/admin', authenticate, authorize('admin'), async (req, res, next) =>
   } catch (err) { next(err); }
 });
 
-// GET /api/analytics/activity – Lịch sử hành vi (Cassandra)
-router.get('/activity', authenticate, async (req, res, next) => {
-  try {
-    const data = await analyticsService.getUserActivity(req.user.userId, req.query.date);
-    success(res, data);
-  } catch (err) { next(err); }
-});
-
 // GET /api/analytics/jobs/:id – Thống kê một tin tuyển dụng
 router.get('/jobs/:id', authenticate, authorize('recruiter', 'admin'), async (req, res, next) => {
   try {

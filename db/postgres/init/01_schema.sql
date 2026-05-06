@@ -86,7 +86,6 @@ CREATE TABLE IF NOT EXISTS job_postings (
     currency    VARCHAR(10) NOT NULL DEFAULT 'VND',
     status      job_status NOT NULL DEFAULT 'draft',
     deadline    DATE,
-    view_count  INTEGER NOT NULL DEFAULT 0,
     application_count INTEGER NOT NULL DEFAULT 0,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW()
