@@ -823,99 +823,172 @@ await db.collection('job_postings').createIndex({
 ### 4.3.2. DML – Thao tác dữ liệu MongoDB
 
 ```javascript
-// 1. Tạo hồ sơ ứng viên mới
-const candidateProfile = {
-  candidateId: 'candidate_001',
-  userId: 'user_001',
-  personalInfo: {
-    fullName: 'Nguyễn Văn An',
-    email: 'an.nguyen@email.com',
-    location: 'Hồ Chí Minh'
+// 1. Tạo hồ sơ ứng viên khi đăng ký (idempotent upsert)
+await CandidateProfile.findOneAndUpdate(
+  { candidateId },
+  {
+    $setOnInsert: {
+      candidateId,
+      userId,
+      personalInfo: { fullName, phone: phone || '', location: location || '', email },
+      skills: [], experience: [], education: [],
+      certifications: [], languages: [], portfolio: [],
+      preferences: {
+        expectedSalary: {}, jobTypes: [],
+        preferredLocations: [], industries: [],
+      },
+      isPublic: true,
+    },
   },
-  skills: [
-    { name: 'Java', level: 'Advanced', yearsOfExp: 4 },
-    { name: 'Spring Boot', level: 'Advanced', yearsOfExp: 3 }
-  ],
-  experience: [],
-  education: [],
-  isPublic: true,
-  createdAt: new Date(),
-  updatedAt: new Date()
-};
-await db.collection('candidate_profiles').insertOne(candidateProfile);
+  { upsert: true, new: true }
+);
 
-// 2. Cập nhật thêm kinh nghiệm làm việc
-await db.collection('candidate_profiles').updateOne(
-  { candidateId: 'candidate_001' },
+// 2. Cập nhật hồ sơ ứng viên (chỉ các trường được cung cấp, dùng dot notation)
+const $set = {};
+if (fullName)              $set['personalInfo.fullName'] = fullName;
+if (location)              $set['personalInfo.location'] = location;
+if (skills)                $set.skills     = skills;
+if (experience)            $set.experience = experience;
+if (education)             $set.education  = education;
+if (preferredLocations)    $set['preferences.preferredLocations'] = preferredLocations;
+
+await CandidateProfile.findOneAndUpdate(
+  { candidateId },
+  { $set },
+  { new: true, upsert: true, runValidators: false }
+);
+
+// 3. Thêm kinh nghiệm làm việc vào mảng
+await CandidateProfile.findOneAndUpdate(
+  { candidateId },
   {
     $push: {
       experience: {
-        company: 'Công ty XYZ',
-        role: 'Senior Backend Developer',
-        startDate: '2022-01',
-        endDate: null,
-        isCurrent: true,
-        description: 'Phát triển microservices...'
-      }
+        company, role, startDate, endDate,
+        isCurrent: !!isCurrent, description,
+        achievements: achievements || [],
+      },
     },
-    $set: { updatedAt: new Date() }
+  },
+  { new: true }
+);
+
+// 4. Thêm kỹ năng mới vào mảng
+await CandidateProfile.findOneAndUpdate(
+  { candidateId },
+  { $push: { skills: { name, level, yearsOfExp: yearsOfExp || 0 } } },
+  { new: true }
+);
+
+// 5. Tìm kiếm ứng viên đa tiêu chí (full-text + regex + phân trang)
+const mongoFilter = { isPublic: true };
+if (q)        mongoFilter.$text = { $search: q };
+if (city)     mongoFilter['personalInfo.location'] = new RegExp(city, 'i');
+if (skill)    mongoFilter['skills.name']           = new RegExp(skill, 'i');
+if (level)    mongoFilter['skills.level']          = level;
+if (industry) mongoFilter['preferences.industries'] = new RegExp(industry, 'i');
+
+const sortOpts = q ? { score: { $meta: 'textScore' } } : { updatedAt: -1 };
+
+const [candidates, total] = await Promise.all([
+  CandidateProfile.find(mongoFilter, q ? { score: { $meta: 'textScore' } } : {})
+    .sort(sortOpts).skip(offset).limit(limit).lean(),
+  CandidateProfile.countDocuments(mongoFilter),
+]);
+
+// 6. Tạo tin tuyển dụng (nhúng thông tin công ty để đọc nhanh)
+await JobPosting.create({
+  jobId,
+  companyId,
+  companyInfo: { name, logoUrl, industry, size },
+  title, level, jobType: [jobType], workMode,
+  location: { city: location },
+  salary:   { min: salaryMin, max: salaryMax, currency, isPublic: true },
+  description,
+  requirements: { skills: skills.map(s => ({ name: s, isRequired: true })) },
+  benefits, applicationProcess, tags, deadline,
+});
+
+// 7. Tìm kiếm tin tuyển dụng (fuzzy AND-of-ORs + lọc đa tiêu chí + phân trang)
+const jobFilter = { status: 'active' };
+if (q) {
+  const terms = q.trim().split(/\s+/).map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  jobFilter.$and = terms.map(w => ({
+    $or: [
+      { title:                       new RegExp(w, 'i') },
+      { description:                 new RegExp(w, 'i') },
+      { tags:                        new RegExp(w, 'i') },
+      { 'companyInfo.name':          new RegExp(w, 'i') },
+      { 'requirements.skills.name':  new RegExp(w, 'i') },
+    ],
+  }));
+}
+if (city)      jobFilter['location.city']           = new RegExp(city, 'i');
+if (level)     jobFilter.level                      = level;
+if (workMode)  jobFilter.workMode                   = workMode;
+if (salaryMin) jobFilter['salary.max']              = { $gte: parseInt(salaryMin) };
+if (salaryMax) jobFilter['salary.min']              = { $lte: parseInt(salaryMax) };
+if (skills)    jobFilter['requirements.skills.name'] = { $in: skills };
+
+const [jobs, jobTotal] = await Promise.all([
+  JobPosting.find(jobFilter).sort({ createdAt: -1 }).skip(offset).limit(limit).lean(),
+  JobPosting.countDocuments(jobFilter),
+]);
+
+// 8. Cập nhật tin tuyển dụng (chỉ các trường được cung cấp)
+await JobPosting.updateOne(
+  { jobId },
+  {
+    $set: {
+      ...(title       && { title }),
+      ...(description && { description }),
+      ...(location    && { location: { city: location } }),
+      ...(salaryMin   && { 'salary.min': Number(salaryMin) }),
+      ...(salaryMax   && { 'salary.max': Number(salaryMax) }),
+      ...(Array.isArray(skills) && {
+        requirements: { skills: skills.map(s => ({ name: s, isRequired: true })) },
+      }),
+    },
   }
 );
 
-// 3. Tìm kiếm ứng viên theo kỹ năng (phù hợp cho tin tuyển dụng)
-const matchingCandidates = await db.collection('candidate_profiles').find({
-  'skills.name': { $all: ['Java', 'Spring Boot'] },
-  'preferences.preferredLocations': { $in: ['Hồ Chí Minh', 'Remote'] },
-  isPublic: true
-}).project({
-  candidateId: 1,
-  'personalInfo.fullName': 1,
-  skills: 1,
-  'preferences.expectedSalary': 1
-}).limit(20).toArray();
+// 9. Tạo đánh giá công ty
+await CompanyReview.create({
+  companyId, candidateId,
+  isAnonymous: isAnonymous !== undefined ? isAnonymous : true,
+  ratings, title, pros, cons, advice, interviewExperience,
+  isApproved: false, isVerified: false,
+});
 
-// 4. Full-text search tin tuyển dụng
-const jobResults = await db.collection('job_postings').find({
-  $text: { $search: 'senior backend java spring boot' },
-  status: 'active',
-  deadline: { $gte: new Date() }
-}, {
-  score: { $meta: 'textScore' }
-}).sort({
-  score: { $meta: 'textScore' }
-}).limit(10).toArray();
+// 10. Lấy đánh giá công ty (chỉ đã duyệt) kèm thống kê điểm trung bình
+const [reviews, total, stats] = await Promise.all([
+  CompanyReview.find({ companyId, isApproved: true })
+    .sort({ 'ratings.overall': -1, createdAt: -1 })
+    .skip(offset).limit(limit).lean(),
+  CompanyReview.countDocuments({ companyId, isApproved: true }),
+  CompanyReview.aggregate([
+    { $match: { companyId, isApproved: true } },
+    {
+      $group: {
+        _id: null,
+        overall:         { $avg: '$ratings.overall' },
+        workLifeBalance: { $avg: '$ratings.workLifeBalance' },
+        salary:          { $avg: '$ratings.salary' },
+        management:      { $avg: '$ratings.management' },
+        careerGrowth:    { $avg: '$ratings.careerGrowth' },
+        culture:         { $avg: '$ratings.culture' },
+        count:           { $sum: 1 },
+      },
+    },
+  ]),
+]);
 
-// 5. Lọc công việc theo nhiều tiêu chí
-const filteredJobs = await db.collection('job_postings').find({
-  status: 'active',
-  'location.city': { $in: ['Hồ Chí Minh', 'Hà Nội'] },
-  'salary.min': { $gte: 20000000 },
-  'requirements.skills.name': { $in: ['Java', 'Python'] },
-  deadline: { $gte: new Date() }
-}).sort({ createdAt: -1 }).skip(0).limit(20).toArray();
-
-// 6. Aggregate: Top kỹ năng được yêu cầu nhiều nhất
-const topSkills = await db.collection('job_postings').aggregate([
-  { $match: { status: 'active' } },
-  { $unwind: '$requirements.skills' },
-  { $group: { _id: '$requirements.skills.name', count: { $sum: 1 } } },
-  { $sort: { count: -1 } },
-  { $limit: 10 }
-]).toArray();
-
-// 7. Aggregate: Thống kê mức lương theo ngành
-const salaryStats = await db.collection('job_postings').aggregate([
-  { $match: { status: 'active', 'salary.isPublic': true } },
-  {
-    $group: {
-      _id: '$companyInfo.industry',
-      avgSalaryMin: { $avg: '$salary.min' },
-      avgSalaryMax: { $avg: '$salary.max' },
-      jobCount: { $sum: 1 }
-    }
-  },
-  { $sort: { avgSalaryMax: -1 } }
-]).toArray();
+// 11. Duyệt / từ chối đánh giá (Admin)
+await CompanyReview.findByIdAndUpdate(
+  reviewId,
+  { $set: { isApproved: approved } },
+  { new: true }
+);
 ```
 
 ## 4.4. Graph Store – Neo4j: Khai báo và thao tác
@@ -938,86 +1011,53 @@ CREATE INDEX skill_category IF NOT EXISTS FOR (s:Skill) ON (s.category);
 ### 4.4.2. DML – Thao tác dữ liệu Neo4j
 
 ```cypher
-// 1. Tạo node Candidate và kỹ năng, liên kết
-MERGE (c:Candidate {id: 'candidate_001'})
-  SET c.name = 'Nguyễn Văn An', c.location = 'Hồ Chí Minh', c.yearsExp = 4;
+// 1. Tạo / cập nhật node Candidate khi đăng ký hoặc cập nhật hồ sơ
+MERGE (c:Candidate {id: $id})
+SET c.name = $name, c.location = $location;
 
-MERGE (s1:Skill {name: 'Java'}) SET s1.category = 'Programming Language';
-MERGE (s2:Skill {name: 'Spring Boot'}) SET s2.category = 'Framework';
-MERGE (s3:Skill {name: 'PostgreSQL'}) SET s3.category = 'Database';
+// 2. Tạo node Skill và liên kết HAS_SKILL đến Candidate
+MERGE (s:Skill {name: $name})
+WITH s
+MATCH (c:Candidate {id: $cid})
+MERGE (c)-[:HAS_SKILL {level: $level}]->(s);
 
-MATCH (c:Candidate {id: 'candidate_001'}), (s:Skill {name: 'Java'})
-MERGE (c)-[:HAS_SKILL {level: 'Advanced', yearsOfExp: 4}]->(s);
+// 3. Tạo / cập nhật node Job khi đăng tin tuyển dụng
+MERGE (j:Job {id: $id})
+SET j.title    = $title,
+    j.level    = $level,
+    j.location = $location,
+    j.salaryMin = $salaryMin,
+    j.salaryMax = $salaryMax,
+    j.status   = 'active';
 
-MATCH (c:Candidate {id: 'candidate_001'}), (s:Skill {name: 'Spring Boot'})
-MERGE (c)-[:HAS_SKILL {level: 'Advanced', yearsOfExp: 3}]->(s);
+// 4. Tạo node Skill và liên kết REQUIRES đến Job
+MERGE (s:Skill {name: $name})
+WITH s
+MATCH (j:Job {id: $jobId})
+MERGE (j)-[:REQUIRES {isRequired: $req}]->(s);
 
-// 2. Tạo Job và yêu cầu kỹ năng
-MERGE (j:Job {id: 'job_001'})
-  SET j.title = 'Senior Backend Developer', j.level = 'Senior', 
-      j.status = 'active', j.location = 'Hồ Chí Minh';
+// 5. Cập nhật trạng thái Job
+MATCH (j:Job {id: $id})
+SET j.status = $status;
 
-MATCH (j:Job {id: 'job_001'}), (s:Skill {name: 'Java'})
-MERGE (j)-[:REQUIRES {isRequired: true}]->(s);
+// 6. Ghi nhận ứng tuyển – tạo quan hệ APPLIED_TO
+MATCH (c:Candidate {id: $cid}), (j:Job {id: $jid})
+MERGE (c)-[:APPLIED_TO {date: date()}]->(j);
 
-MATCH (j:Job {id: 'job_001'}), (s:Skill {name: 'Spring Boot'})
-MERGE (j)-[:REQUIRES {isRequired: true}]->(s);
+// 7. Gợi ý việc làm cho ứng viên (Job Recommendation)
+// Tìm các Job đang active có kỹ năng trùng với ứng viên,
+// sắp xếp theo số kỹ năng khớp và mức lương tối đa
+MATCH (c:Candidate {id: $cid})-[:HAS_SKILL]->(s:Skill)
+MATCH (j:Job {status: 'active'})-[:REQUIRES]->(s)
+WITH j,
+     count(s)        AS matchedSkills,
+     collect(s.name) AS matchedSkillNames,
+     j.salaryMax     AS salaryMax
+RETURN j.id AS jobId, j.title AS title, j.location AS location,
+       matchedSkills, matchedSkillNames, salaryMax
+ORDER BY matchedSkills DESC, salaryMax DESC
+LIMIT $limit;
 
-// 3. Ghi nhận ứng tuyển
-MATCH (c:Candidate {id: 'candidate_001'}), (j:Job {id: 'job_001'})
-MERGE (c)-[:APPLIED_TO {appliedAt: datetime(), status: 'submitted'}]->(j);
-
-// 4. GỢI Ý VIỆC LÀM cho ứng viên (Job Recommendation)
-// Tìm công việc có kỹ năng trùng khớp mà ứng viên chưa ứng tuyển
-MATCH (c:Candidate {id: 'candidate_001'})-[:HAS_SKILL]->(s:Skill)<-[:REQUIRES]-(j:Job)
-WHERE j.status = 'active'
-  AND NOT (c)-[:APPLIED_TO]->(j)
-WITH j, COUNT(s) AS matchScore
-RETURN j.id, j.title, j.location, matchScore
-ORDER BY matchScore DESC
-LIMIT 10;
-
-// 5. GỢI Ý ỨNG VIÊN cho nhà tuyển dụng (Candidate Recommendation)
-// Tìm ứng viên có kỹ năng phù hợp với tin tuyển dụng
-MATCH (j:Job {id: 'job_001'})-[:REQUIRES]->(s:Skill)<-[:HAS_SKILL]-(c:Candidate)
-WHERE NOT (c)-[:APPLIED_TO]->(j)
-WITH c, COUNT(s) AS matchScore, COLLECT(s.name) AS matchedSkills
-RETURN c.id, c.name, c.location, matchScore, matchedSkills
-ORDER BY matchScore DESC
-LIMIT 20;
-
-// 6. Collaborative Filtering: Tìm ứng viên tương tự
-// (những người đã ứng tuyển vào công việc tương tự)
-MATCH (c1:Candidate {id: 'candidate_001'})-[:APPLIED_TO]->(j:Job)<-[:APPLIED_TO]-(c2:Candidate)
-WHERE c1 <> c2
-WITH c2, COUNT(j) AS commonJobs
-ORDER BY commonJobs DESC
-LIMIT 5;
-
-// 7. Gợi ý nâng cao: Jobs qua ứng viên tương tự (2-hop)
-MATCH (c1:Candidate {id: 'candidate_001'})-[:HAS_SKILL]->(s:Skill)<-[:HAS_SKILL]-(c2:Candidate)
-  -[:APPLIED_TO]->(j:Job)
-WHERE c1 <> c2
-  AND j.status = 'active'
-  AND NOT (c1)-[:APPLIED_TO]->(j)
-WITH j, COUNT(DISTINCT c2) AS socialScore
-RETURN j.id, j.title, socialScore
-ORDER BY socialScore DESC
-LIMIT 10;
-
-// 8. Tính điểm tương đồng giữa các ứng viên (Jaccard similarity)
-MATCH (c1:Candidate {id: 'candidate_001'})-[:HAS_SKILL]->(s:Skill)
-WITH c1, COLLECT(s.name) AS skills1
-MATCH (c2:Candidate)-[:HAS_SKILL]->(s2:Skill)
-WHERE c1 <> c2
-WITH c1, skills1, c2, COLLECT(s2.name) AS skills2
-WITH c1, c2,
-  SIZE([x IN skills1 WHERE x IN skills2]) AS intersection,
-  SIZE(skills1 + [x IN skills2 WHERE NOT x IN skills1]) AS union_size
-WHERE union_size > 0
-RETURN c2.id, c2.name, toFloat(intersection)/union_size AS jaccardScore
-ORDER BY jaccardScore DESC
-LIMIT 10;
 ```
 
 ## 4.5. Key-Value Store – Redis: Khai báo và thao tác
@@ -1025,73 +1065,57 @@ LIMIT 10;
 ### 4.5.1. Quản lý Session và Authentication
 
 ```javascript
-const redis = require('redis');
-const client = redis.createClient({ url: 'redis://localhost:6379' });
+// TTL constants (giây)
+const TTL = { SESSION: 3600, REFRESH: 604800, CACHE_SEARCH: 60, NOTIFICATION: 86400 };
 
-// 1. Lưu session khi đăng nhập thành công
-async function saveSession(userId, sessionData) {
-  const key = `session:${userId}`;
-  await client.hSet(key, {
-    userId: sessionData.userId,
-    email: sessionData.email,
-    role: sessionData.role,
-    loginAt: new Date().toISOString()
-  });
-  await client.expire(key, 3600); // 1 giờ
-}
+// 1. Lưu session khi đăng nhập / đăng ký (hash + TTL 1 giờ)
+await r.hset(`session:${userId}`, {
+  userId, email, role,
+  candidateId: candidateId || '',
+  companyId:   companyId   || '',
+  loginAt:     new Date().toISOString(),
+  deviceInfo:  deviceInfo  || '',
+});
+await r.expire(`session:${userId}`, TTL.SESSION);
 
 // 2. Lấy thông tin session
-async function getSession(userId) {
-  return await client.hGetAll(`session:${userId}`);
-}
+const session = await r.hgetall(`session:${userId}`);
 
 // 3. Xóa session khi đăng xuất
-async function destroySession(userId) {
-  await client.del(`session:${userId}`);
-}
+await r.del(`session:${userId}`);
 
-// 4. Lưu OTP xác thực email
-async function saveOTP(email, otp) {
-  await client.set(`otp:${email}`, otp, { EX: 300 }); // 5 phút
-}
+// 4. Lưu refresh token (string + TTL 7 ngày)
+await r.set(`refresh_token:${token}`, userId, 'EX', TTL.REFRESH);
 
-// 5. Rate limiting (giới hạn request)
-async function checkRateLimit(ip) {
-  const key = `rate_limit:${ip}`;
-  const count = await client.incr(key);
-  if (count === 1) await client.expire(key, 60);
-  return count <= 100; // max 100 request/phút
-}
+// Đọc / xoá refresh token
+const userId   = await r.get(`refresh_token:${token}`);
+await r.del(`refresh_token:${token}`);
 
-// 6. Cache kết quả tìm kiếm
-async function cacheSearchResults(queryHash, results) {
-  const key = `cache:jobs:search:${queryHash}`;
-  await client.set(key, JSON.stringify(results), { EX: 60 });
-}
+// Rotation: xoá token cũ, lưu token mới khi refresh
+await r.del(`refresh_token:${oldToken}`);
+await r.set(`refresh_token:${newToken}`, userId, 'EX', TTL.REFRESH);
 
-async function getCachedSearch(queryHash) {
-  const cached = await client.get(`cache:jobs:search:${queryHash}`);
-  return cached ? JSON.parse(cached) : null;
-}
+// 5. Cache kết quả tìm kiếm việc làm (TTL 60 giây, key = MD5 của tham số)
+const cacheKey = `cache:jobs:search:${md5(JSON.stringify({ ...filters, page, limit }))}`;
+const cached   = await r.get(cacheKey);
+if (cached) return JSON.parse(cached);
 
-// 7. Pub/Sub cho thông báo realtime
-const publisher = redis.createClient();
-const subscriber = redis.createClient();
+await r.set(cacheKey, JSON.stringify(result), 'EX', 60);
 
-// Gửi thông báo
-async function sendNotification(userId, notification) {
-  await publisher.publish(
-    `notifications:${userId}`,
-    JSON.stringify(notification)
-  );
-}
+// Xoá toàn bộ cache tìm kiếm khi tạo / cập nhật tin (pattern delete)
+const keys = await r.keys('cache:jobs:search:*');
+if (keys.length) await r.del(...keys);
 
-// Nhận thông báo (WebSocket server)
-await subscriber.subscribe(`notifications:user_001`, (message) => {
-  const notification = JSON.parse(message);
-  // Gửi qua WebSocket đến client
-  wsClient.send(JSON.stringify(notification));
-});
+// 6. Cache chi tiết tin tuyển dụng (TTL 2 phút)
+await r.set(`cache:job:${jobId}`, JSON.stringify(job), 'EX', 120);
+const detail = await r.get(`cache:job:${jobId}`);
+
+// 7. Cache kết quả gợi ý (TTL 5 phút)
+await r.set(`cache:rec:jobs:${candidateId}`,       JSON.stringify(ranked), 'EX', 300);
+await r.set(`cache:rec:candidates:${jobId}`,        JSON.stringify(ranked), 'EX', 300);
+await r.set(`cache:sim:candidates:${candidateId}`,  JSON.stringify(result), 'EX', 300);
+await r.set(`cache:related:jobs:${jobId}`,          JSON.stringify(result), 'EX', 120);
+
 ```
 
 ---
