@@ -2,7 +2,6 @@
 marp: true
 theme: default
 paginate: true
-backgroundColor: #ffffff
 style: |
   :root {
     --primary: #1a56db;
@@ -17,12 +16,13 @@ style: |
   section {
     font-family: 'Segoe UI', 'Arial', sans-serif;
     color: var(--dark);
+    background-color: #ffffff;
     padding: 40px 56px;
   }
 
   /* COVER SLIDE */
   section.cover {
-    background: linear-gradient(135deg, #1a56db 0%, #7e3af2 60%, #0e9f6e 100%);
+    background: linear-gradient(135deg, #1a56db 0%, #7e3af2 60%, #0e9f6e 100%) !important;
     color: white;
     display: flex;
     flex-direction: column;
@@ -59,7 +59,7 @@ style: |
 
   /* SECTION DIVIDER */
   section.divider {
-    background: linear-gradient(120deg, #1f2937 0%, #374151 100%);
+    background: linear-gradient(120deg, #1f2937 0%, #374151 100%) !important;
     color: white;
     display: flex;
     flex-direction: column;
@@ -165,7 +165,7 @@ style: |
   }
 
   pre {
-    background: #ffffff;
+    background: #f1f5f9;
     color: #1e293b;
     border-radius: 10px;
     padding: 16px 20px;
@@ -341,7 +341,7 @@ style: |
 
   /* CONCLUSION */
   section.conclusion {
-    background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
+    background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%) !important;
     color: white;
     display: flex;
     flex-direction: column;
@@ -354,14 +354,23 @@ style: |
     font-size: 1.8em;
   }
   section.conclusion h2 { color: #d1fae5; }
-  section.conclusion td, section.conclusion th { color: white; }
-  section.conclusion table th { background: rgba(255,255,255,0.15); }
-  section.conclusion table td { border-color: rgba(255,255,255,0.15); }
-  section.conclusion tr:nth-child(even) td { background: rgba(255,255,255,0.06); }
+  section.conclusion td, section.conclusion th { color: white !important; }
+  section.conclusion table th { background: rgba(0,0,0,0.35) !important; color: white !important; }
+  section.conclusion table td { background: rgba(0,0,0,0.15) !important; border-color: rgba(255,255,255,0.2) !important; color: white !important; }
+  section.conclusion tr:nth-child(even) td { background: rgba(0,0,0,0.25) !important; color: white !important; }
+  section.conclusion blockquote {
+    background: rgba(255,255,255,0.08);
+    border-left: 4px solid #6ee7b7;
+    border-radius: 0 8px 8px 0;
+    padding: 12px 18px;
+    margin: 12px 0;
+  }
+  section.conclusion blockquote p, section.conclusion blockquote em,
+  section.conclusion blockquote strong { color: #d1fae5; }
 
   /* THANKS */
   section.thanks {
-    background: linear-gradient(135deg, #1a56db 0%, #7e3af2 100%);
+    background: linear-gradient(135deg, #1a56db 0%, #7e3af2 100%) !important;
     color: white;
     display: flex;
     flex-direction: column;
@@ -381,8 +390,26 @@ style: |
 <div class="meta">
 <strong>Môn học:</strong> Cơ sở dữ liệu Quan hệ và NoSQL<br>
 <strong>Nhóm thực hiện:</strong> [Tên nhóm]<br>
-<strong>Giảng viên hướng dẫn:</strong> [Tên giảng viên]<br>
 <strong>Năm học:</strong> 2025 – 2026
+</div>
+
+---
+
+# Thành viên nhóm
+
+<div class="card-grid" style="grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 24px;">
+<div class="card blue" style="text-align: center; padding: 24px 16px;">
+<div class="card-title" style="font-size: 1.05em; margin-bottom: 10px;">👤 Hồ Sĩ Tuấn</div>
+<div style="font-size: 0.82em; margin-bottom: 4px;"><strong>MSHV:</strong> 24C11031</div>
+</div>
+<div class="card green" style="text-align: center; padding: 24px 16px;">
+<div class="card-title" style="font-size: 1.05em; margin-bottom: 10px;">👤 Trần Trọng Hoàng</div>
+<div style="font-size: 0.82em; margin-bottom: 4px;"><strong>MSHV:</strong> 25C12022</div>
+</div>
+<div class="card purple" style="text-align: center; padding: 24px 16px;">
+<div class="card-title" style="font-size: 1.05em; margin-bottom: 10px;">👤 Bùi Lê Hoài An</div>
+<div style="font-size: 0.82em; margin-bottom: 4px;"><strong>MSHV:</strong> 25C12018</div>
+</div>
 </div>
 
 ---
@@ -435,9 +462,6 @@ Quản lý toàn bộ nền tảng, người dùng, báo cáo thống kê.
 </div>
 </div>
 
-<div class="highlight">
-💡 Hệ thống tích hợp <strong>AI/ML</strong> để phân tích hồ sơ, gợi ý ứng viên phù hợp và cung cấp công cụ quản lý quy trình tuyển dụng toàn diện.
-</div>
 
 ---
 
@@ -445,7 +469,7 @@ Quản lý toàn bộ nền tảng, người dùng, báo cáo thống kê.
 
 | Nền tảng | Điểm nổi bật |
 |---|---|
-| **LinkedIn** | Mạng xã hội nghề nghiệp, gợi ý kết nối, AI matching |
+| **LinkedIn** | Mạng xã hội nghề nghiệp, gợi ý kết nối theo quan hệ |
 | **TopCV** | Thị trường Việt Nam, đa ngành nghề, phân tích CV |
 | **VietnamWorks** | Quản lý hồ sơ, thông báo email, bộ lọc tìm kiếm |
 | **ITViec** | Chuyên IT, đánh giá công ty, cộng đồng lập trình viên |
@@ -455,7 +479,6 @@ Quản lý toàn bộ nền tảng, người dùng, báo cáo thống kê.
 - **Tìm kiếm nâng cao:** Full-text search + lọc đa tiêu chí
 - **Quản lý pipeline:** Theo dõi ứng viên qua nhiều bước
 - **Thông báo realtime:** Email, push notification
-- **AI gợi ý:** Matching giữa ứng viên và công việc
 - **Đánh giá công ty:** Minh bạch thông tin tuyển dụng
 
 ---
@@ -486,7 +509,7 @@ Quản lý toàn bộ nền tảng, người dùng, báo cáo thống kê.
 
 | Mã | Tên nghiệp vụ | Người dùng | Ưu tiên |
 |---|---|---|---|
-| **NV06** | Gợi ý thông minh AI Matching | Tất cả | 🔴 Cao |
+| **NV06** | Gợi ý việc làm phù hợp theo kỹ năng | Tất cả | 🔴 Cao |
 | **NV07** | Lên lịch phỏng vấn | Ứng viên, HR | 🟡 Trung bình |
 | **NV08** | Thông báo và tin nhắn realtime | Tất cả | 🟡 Trung bình |
 | **NV09** | Đánh giá và nhận xét công ty | Ứng viên, HR | 🟡 Trung bình |
@@ -497,8 +520,8 @@ Quản lý toàn bộ nền tảng, người dùng, báo cáo thống kê.
 <div class="stat-grid">
 <div class="stat"><div class="num">10</div><div class="label">Nghiệp vụ chính</div></div>
 <div class="stat green"><div class="num">3</div><div class="label">Nhóm người dùng</div></div>
-<div class="stat purple"><div class="num">5</div><div class="label">Loại CSDL</div></div>
-<div class="stat orange"><div class="num">AI</div><div class="label">Gợi ý thông minh</div></div>
+<div class="stat purple"><div class="num">4</div><div class="label">Loại CSDL</div></div>
+<div class="stat orange"><div class="num">Polyglot</div><div class="label">Persistence</div></div>
 </div>
 
 ---
@@ -522,7 +545,6 @@ Phân tích đặc thù từng nghiệp vụ và lựa chọn loại cơ sở d�
 | **Relational DB** | Schema cố định, ACID, JOIN phức tạp | PostgreSQL |
 | **Document Store** | Schema linh hoạt, lưu JSON/BSON | MongoDB |
 | **Key-Value Store** | Đọc/ghi cực nhanh, TTL, cache/session | Redis |
-| **Column Family** | Write-optimized, time-series, event log | Cassandra |
 | **Graph Store** | Lưu quan hệ thực thể, duyệt đồ thị | Neo4j |
 
 <div class="highlight">
@@ -540,11 +562,10 @@ Phân tích đặc thù từng nghiệp vụ và lựa chọn loại cơ sở d�
 | NV03 – Tin tuyển dụng | Document | MongoDB | Full-text search, linh hoạt |
 | NV04 – Tìm kiếm | Document | MongoDB | Text index, aggregate |
 | NV05 – Ứng tuyển | Relational | PostgreSQL | JOIN, UNIQUE constraint |
-| NV06 – Gợi ý AI | Graph | Neo4j | Quan hệ đồ thị, Cypher |
+| NV06 – Gợi ý việc làm | Graph | Neo4j | Quan hệ đồ thị đa bước, Cypher |
 | NV07 – Lịch phỏng vấn | Relational | PostgreSQL | ACID, liên kết |
 | NV08 – Session/Thông báo | Key-Value | Redis | In-memory, TTL, Pub/Sub |
 | NV09 – Đánh giá | Document | MongoDB | Schema tự do |
-| NV10 – Event Log | Column Family | Cassandra | Time-series, write-heavy |
 
 ---
 
@@ -584,18 +605,17 @@ Phân tích đặc thù từng nghiệp vụ và lựa chọn loại cơ sở d�
 
 ---
 
-# Chi tiết lựa chọn: Neo4j, Redis & Cassandra
+# Chi tiết lựa chọn: Neo4j & Redis
 
-<div class="card-grid" style="gap:14px;">
+<div class="card-grid" style="grid-template-columns:1fr 1fr; gap:14px;">
 <div class="card purple">
 <div class="card-title">🔗 Neo4j — Graph DB</div>
 
-**Dùng cho:** NV06 – Gợi ý AI
+**Dùng cho:** NV06 – Gợi ý việc làm theo kỹ năng
 
-- Mô hình quan hệ: `(Candidate)-[:HAS_SKILL]->(Skill)-[:REQUIRED_BY]->(Job)`
-- Collaborative filtering
-- Cypher query duyệt đa bước
-- Phát hiện ứng viên tương tự
+- Biểu diễn tự nhiên quan hệ đa chiều: `(Candidate)-[:HAS_SKILL]->(Skill)-[:REQUIRES]-(Job)`
+- Cypher query duyệt đồ thị đa bước, không cần JOIN phức tạp
+- Tìm việc làm có kỹ năng trùng khớp với hồ sơ ứng viên
 </div>
 <div class="card red">
 <div class="card-title">⚡ Redis — Key-Value</div>
@@ -606,16 +626,6 @@ Phân tích đặc thù từng nghiệp vụ và lựa chọn loại cơ sở d�
 - Pub/Sub thông báo realtime
 - Cache kết quả tìm kiếm
 - Tốc độ in-memory < 1ms
-</div>
-<div class="card gray">
-<div class="card-title">📊 Cassandra — Column Family</div>
-
-**Dùng cho:** NV10 – Event Log
-
-- Write-optimized, hàng triệu event/ngày
-- Partition key `(user_id, date)`
-- Time-series analytics
-- Scale ngang tuyệt vời
 </div>
 </div>
 
@@ -629,7 +639,7 @@ Phân tích đặc thù từng nghiệp vụ và lựa chọn loại cơ sở d�
 
 # Thiết kế mô hình dữ liệu
 
-Thiết kế chi tiết ERD PostgreSQL, MongoDB Collections, Neo4j Graph Model, Redis Key Structure và Cassandra Tables.
+Thiết kế chi tiết ERD PostgreSQL, MongoDB Collections, Neo4j Graph Model và Redis Key Structure.
 
 ---
 
@@ -743,7 +753,7 @@ Tin tuyển dụng chi tiết:
      └──[SIMILAR_TO{similarityScore}]──► (Candidate)
 ```
 
-**Ứng dụng Cypher gợi ý:**
+**Ví dụ Cypher — tìm việc làm khớp kỹ năng ứng viên:**
 ```cypher
 MATCH (c:Candidate {id: "001"})-[:HAS_SKILL]->(s:Skill)<-[:REQUIRES]-(j:Job)
 WHERE NOT (c)-[:APPLIED]->(j)
@@ -768,37 +778,22 @@ RETURN j.title, count(s) AS matchScore ORDER BY matchScore DESC LIMIT 10
 
 ---
 
-# Cassandra — 3 Bảng chính
-
-| Bảng | Partition Key | Mô tả |
-|---|---|---|
-| `user_activity_log` | `(user_id, event_date)` | Toàn bộ hoạt động người dùng: xem tin, nộp đơn, tìm kiếm |
-| `job_daily_stats` | `(job_id, stat_date)` | Thống kê hàng ngày: lượt xem, ứng tuyển, lưu, nhấp |
-| `search_history` | `(user_id, search_date)` | Lịch sử tìm kiếm + bộ lọc → phân tích hành vi |
-
-**Đặc điểm thiết kế:**
-- `job_daily_stats` dùng kiểu `COUNTER` để ghi tăng nguyên tử
-- Partition key theo ngày → truy vấn khoảng thời gian hiệu quả
-- Cluster nhân bản hệ số **3** để đảm bảo tính sẵn sàng
-
----
-
 # Kiến trúc đa CSDL — Polyglot Persistence
 
 ```
                      ┌─────────────────────────────┐
                      │        Ứng dụng (Node.js)   │
                      │  API Gateway + JWT Auth     │
-                     └───┬──────┬──────┬──────┬────┘
-                         │      │      │      │      │
-              ┌──────────▼┐  ┌──▼──┐  ┌▼──┐ ┌▼──┐ ┌▼──────────┐
-              │PostgreSQL │  │Mongo│  │Neo│ │Red│ │Cassandra  │
-              │           │  │DB   │  │4j │ │is │ │           │
-              │ Core logic│  │Docs │  │AI │ │⚡ │ │Analytics  │
-              │ ACID ✓    |  │JSON │  │ML │ │<1ms│ │Time-series│
-              └───────────┘  └─────┘  └───┘ └───┘ └───────────┘
-               NV01,05,07   NV02-04  NV06  NV08     NV10
-                              NV09
+                     └──┬───────┬───────┬───────┬──┘
+                        │       │       │       │
+             ┌──────────▼┐   ┌──▼───┐ ┌─▼──┐ ┌─▼──┐
+             │PostgreSQL │   │Mongo │ │Neo │ │Red │
+             │           │   │DB    │ │4j  │ │is  │
+             │ Core logic│   │Docs  │ │Graf│ │⚡  │
+             │ ACID ✓    │   │JSON  │ │ DB │ │<1ms│
+             └───────────┘   └──────┘ └────┘ └────┘
+              NV01,05,07     NV02-04  NV06   NV08
+                               NV09
 ```
 
 ---
@@ -811,7 +806,7 @@ RETURN j.title, count(s) AS matchScore ORDER BY matchScore DESC LIMIT 10
 
 # Cài đặt và Triển khai hệ thống
 
-DDL/DML cho PostgreSQL, MongoDB, Neo4j, Redis, Cassandra và thiết kế UI, kết nối backend Node.js.
+DDL/DML cho PostgreSQL, MongoDB, Neo4j, Redis và thiết kế UI, kết nối backend Node.js.
 
 ---
 
@@ -826,11 +821,11 @@ DDL/DML cho PostgreSQL, MongoDB, Neo4j, Redis, Cassandra và thiết kế UI, k�
 ┌────────────────────▼──────────────────────────────────────┐
 │              API GATEWAY / BFF                            │
 │         Node.js + Express + JWT Authentication            │
-└──┬──────────┬──────────┬──────────┬──────────┬────────────┘
-   │          │          │          │          │
-   ▼          ▼          ▼          ▼          ▼
-PostgreSQL  MongoDB    Neo4j     Redis     Cassandra
-(Core DB) (Profiles) (Graph)   (Cache)   (Analytics)
+└──┬──────────┬──────────┬──────────┬────────────────────────┘
+   │          │          │          │
+   ▼          ▼          ▼          ▼
+PostgreSQL  MongoDB    Neo4j     Redis
+(Core DB) (Profiles) (Graph)   (Cache)
 </div>
 
 **Stack công nghệ:** Node.js (Express), React, JWT Auth, WebSocket, Docker
@@ -934,7 +929,7 @@ MERGE (c:Candidate {id: "candidate_001", name: "Nguyễn Văn A"})
 MERGE (s:Skill {name: "Java"})
 MERGE (c)-[:HAS_SKILL {level: "senior", yearsOfExp: 4}]->(s);
 
-// Gợi ý việc làm dựa trên kỹ năng tương đồng
+// Tìm việc làm phù hợp dựa trên kỹ năng ứng viên
 MATCH (c:Candidate {id: $candidateId})-[:HAS_SKILL]->(s:Skill)<-[:REQUIRES]-(j:Job)
 WHERE j.status = 'active' AND NOT (c)-[:APPLIED_TO]->(j)
 RETURN j.id, j.title, COUNT(s) AS score
@@ -954,39 +949,6 @@ await redisClient.publish(`notifications:${userId}`,
 
 ---
 
-# Cassandra — DDL & DML
-
-```sql
--- Tạo Keyspace
-CREATE KEYSPACE smart_recruitment
-  WITH replication = {'class': 'NetworkTopologyStrategy', 'dc1': 3};
-
--- Bảng ghi log hoạt động người dùng
-CREATE TABLE user_activity_log (
-  user_id    UUID,
-  event_date DATE,
-  event_time TIMESTAMP,
-  event_id   UUID,
-  event_type TEXT,        -- view_job, apply_job, search, click_recommend
-  entity_id  UUID,
-  metadata   MAP<TEXT, TEXT>,
-  PRIMARY KEY ((user_id, event_date), event_time, event_id)
-) WITH CLUSTERING ORDER BY (event_time DESC);
-
--- Bảng thống kê với COUNTER type
-CREATE TABLE job_daily_stats (
-  job_id      UUID, stat_date DATE,
-  view_count  COUNTER, apply_count COUNTER, save_count COUNTER,
-  PRIMARY KEY (job_id, stat_date)
-);
-
--- Ghi tăng thống kê
-UPDATE job_daily_stats SET view_count = view_count + 1
-WHERE job_id = uuid() AND stat_date = toDate(now());
-```
-
----
-
 <!-- _class: divider -->
 
 <div class="chapter-num">05</div>
@@ -999,134 +961,130 @@ Indexing, Materialized Views, Caching Pattern, Graph Optimization và Partition 
 
 ---
 
-# PostgreSQL — Kỹ thuật tối ưu
+# PostgreSQL — Composite Index & Partial Index
 
-**1. Composite Index cho query phức tạp:**
 ```sql
--- Lọc tin active, sắp xếp theo deadline
+-- Partial index: chỉ index tin đang active, giảm kích thước index
 CREATE INDEX idx_jobs_status_deadline
   ON job_postings(status, deadline DESC)
   WHERE status = 'active';
 
--- Covering index — không cần truy cập bảng chính
+-- Covering index: trả kết quả ngay từ index, không đọc bảng chính
 CREATE INDEX idx_applications_cover
   ON applications(job_id, status) INCLUDE (candidate_id, applied_at);
 ```
 
-**2. Materialized View cho báo cáo:**
-```sql
-CREATE MATERIALIZED VIEW mv_pipeline_stats AS
-  SELECT j.company_id, a.status, COUNT(*) AS cnt, DATE_TRUNC('day', a.applied_at) AS d
-  FROM applications a JOIN job_postings j ON a.job_id = j.id
-  GROUP BY j.company_id, a.status, d;
-
--- Refresh tự động mỗi giờ
-REFRESH MATERIALIZED VIEW CONCURRENTLY mv_pipeline_stats;
-```
+<div class="highlight">
+<strong>Tác dụng:</strong> Partial index loại bỏ hàng trăm nghìn tin đã đóng khỏi index, giảm I/O đáng kể khi lọc. Covering index cho phép <em>Index-Only Scan</em> — PostgreSQL không cần truy cập heap table, tốc độ tăng gấp nhiều lần với tập dữ liệu lớn.
+</div>
 
 ---
 
-# MongoDB — Kỹ thuật tối ưu
+# PostgreSQL — Materialized View
 
-**1. Text Index cho tìm kiếm toàn văn:**
+```sql
+CREATE MATERIALIZED VIEW mv_pipeline_stats AS
+  SELECT j.company_id, a.status,
+         COUNT(*) AS cnt,
+         DATE_TRUNC('day', a.applied_at) AS day
+  FROM applications a
+  JOIN job_postings j ON a.job_id = j.id
+  GROUP BY j.company_id, a.status, day;
+
+-- Refresh không khóa bảng, đọc vẫn tiếp tục trong khi refresh
+REFRESH MATERIALIZED VIEW CONCURRENTLY mv_pipeline_stats;
+```
+
+<div class="highlight">
+<strong>Tác dụng:</strong> Kết quả GROUP BY được tính sẵn và lưu vào bảng ảo — query báo cáo chỉ đọc từ view thay vì tính lại trên toàn bảng. <code>CONCURRENTLY</code> đảm bảo không có downtime khi cập nhật dữ liệu.
+</div>
+
+---
+
+# MongoDB — Text Index & Compound Index
+
 ```javascript
+// Text index với trọng số: title quan trọng hơn description
 db.job_postings.createIndex(
   { title: "text", description: "text", "requirements.skills": "text" },
   { weights: { title: 10, "requirements.skills": 5, description: 1 },
     default_language: "none" }
 );
 
-// Compound Index cho lọc đa tiêu chí
+// Compound index cho lọc đa tiêu chí (ESR rule: Equality → Sort → Range)
 db.job_postings.createIndex({ status: 1, "location.city": 1, "salary.min": 1 });
 db.candidate_profiles.createIndex({ "skills.name": 1, "preferences.location": 1 });
 ```
 
-**2. Aggregation Pipeline tối ưu:**
+<div class="highlight">
+<strong>Tác dụng:</strong> Text index cho phép tìm kiếm toàn văn nhanh thay vì scan từng document. Weight ưu tiên match ở tiêu đề hơn mô tả. Compound index phục vụ chính xác thứ tự trường trong query, tránh collection scan.
+</div>
+
+---
+
+# MongoDB — Aggregation Pipeline Tối ưu
+
 ```javascript
 db.candidate_profiles.aggregate([
+  // $match sớm nhất có thể để giảm số documents xử lý tiếp theo
   { $match: { "skills.name": { $all: ["Java", "Spring Boot"] },
               "preferences.location": "TP.HCM" }},
+  // $project loại bỏ các field không cần, giảm bộ nhớ
   { $project: { candidateId: 1, skills: 1, experience: 1, _id: 0 }},
   { $sort: { "preferences.expectedSalary": 1 }},
   { $limit: 50 }
 ], { allowDiskUse: true });
 ```
 
+<div class="highlight">
+<strong>Tác dụng:</strong> Đặt <code>$match</code> và <code>$project</code> ở đầu pipeline để MongoDB tận dụng index và giảm kích thước working set ngay từ bước đầu. <code>allowDiskUse</code> cho phép xử lý tập dữ liệu vượt giới hạn RAM 100MB.
+</div>
+
 ---
 
-# Redis — Cache-Aside Pattern & Neo4j Optimization
+# Redis — Cache-Aside Pattern
 
-**Redis Cache-Aside với TTL:**
 ```javascript
-async function getJobRecommendations(userId) {
+async function getJobMatches(userId) {
   const cacheKey = `cache:recommend:${userId}`;
   const cached = await redisClient.get(cacheKey);
-  if (cached) return JSON.parse(cached);           // Cache HIT
+  if (cached) return JSON.parse(cached);  // Cache HIT: trả về < 1ms
 
-  // Cache MISS — query Neo4j
-  const recommendations = await neo4jSession.run(
+  // Cache MISS: query Neo4j rồi lưu lại
+  const matches = await neo4jSession.run(
     `MATCH (c:Candidate {id:$userId})-[:HAS_SKILL]->(s:Skill)<-[:REQUIRES]-(j:Job)
      WHERE j.status='active' AND NOT (c)-[:APPLIED_TO]->(j)
      RETURN j.id, j.title, COUNT(s) AS score ORDER BY score DESC LIMIT 10`,
     { userId });
-  const result = recommendations.records.map(r => ({...}));
-  await redisClient.set(cacheKey, JSON.stringify(result), { EX: 300 }); // TTL 5 phút
+  const result = matches.records.map(r => ({ id: r.get('j.id'), title: r.get('j.title') }));
+  await redisClient.set(cacheKey, JSON.stringify(result), { EX: 300 });
   return result;
 }
 ```
 
-**Neo4j — Index & Optimization:**
+<div class="highlight">
+<strong>Tác dụng:</strong> Graph query trên Neo4j tốn nhiều I/O. Cache-Aside lưu kết quả vào Redis với TTL 5 phút — các request sau trả về ngay lập tức từ bộ nhớ, giảm tải Neo4j đáng kể trong giờ cao điểm.
+</div>
+
+---
+
+# Neo4j — Index & Query Optimization
+
 ```cypher
-CREATE INDEX idx_job_status FOR (j:Job) ON (j.status);
-CREATE INDEX idx_candidate_location FOR (c:Candidate) ON (c.location);
--- Giới hạn depth tránh cartesian product
-MATCH path = (c:Candidate {id: $id})-[:HAS_SKILL*1..2]->(s) RETURN path LIMIT 1000
+-- Index trên property thường dùng để filter, tránh full graph scan
+CREATE INDEX idx_job_status    FOR (j:Job)       ON (j.status);
+CREATE INDEX idx_candidate_loc FOR (c:Candidate) ON (c.location);
+CREATE INDEX idx_skill_name    FOR (s:Skill)     ON (s.name);
+
+-- Giới hạn độ sâu traversal tránh bùng nổ đường đi (combinatorial explosion)
+MATCH (c:Candidate {id: $id})-[:HAS_SKILL*1..2]->(s:Skill)
+RETURN s.name, count(*) AS freq
+ORDER BY freq DESC LIMIT 20
 ```
 
----
-
-# Kết quả Benchmark Thực nghiệm
-
-## PostgreSQL — Hiệu quả Index
-
-| Query | Không Index | Có Index | Cải thiện |
-|---|---|---|---|
-| Lấy danh sách đơn theo job_id | 340 ms | 2.1 ms | **162×** |
-| Lọc tin active theo deadline | 280 ms | 1.8 ms | **155×** |
-| Pipeline statistics (GROUP BY) | 820 ms | 45 ms (MV) | **18×** |
-| JOIN applications + candidates | 510 ms | 12 ms | **42×** |
-
-*Dataset: 500,000 applications · 50,000 job_postings · 200,000 candidates*
-
-## MongoDB — Hiệu quả Index
-
-| Query | Collection Scan | Với Index | Cải thiện |
-|---|---|---|---|
-| Text search job title | 2,800 ms | 35 ms | **80×** |
-| Filter city + status | 1,200 ms | 8 ms | **150×** |
-| Aggregate top skills | 3,500 ms | 180 ms | **19×** |
-
----
-
-# Benchmark: Redis Cache Hit Rate & Cassandra
-
-## Redis — Tỷ lệ Cache Hit
-
-| Scenario | Không Cache | Có Cache (5 min TTL) | Hit Rate |
-|---|---|---|---|
-| Job recommendation | 850 ms (Neo4j) | < 1 ms | **78%** |
-| Search results | 320 ms (MongoDB) | < 1 ms | **65%** |
-| Session validation | 15 ms (PostgreSQL) | < 1 ms | **99%** |
-
-## Cassandra — Write Throughput
-
-| Scenario | Throughput | Latency (p99) |
-|---|---|---|
-| Single write (event log) | 45,000 ops/s | 3.2 ms |
-| Batch write (100 events) | 120,000 ops/s | 8.5 ms |
-| Counter update | 38,000 ops/s | 4.1 ms |
-
-*Test: 3-node cluster · 10 triệu records*
+<div class="highlight">
+<strong>Tác dụng:</strong> Không có index, Neo4j phải quét toàn bộ node để tìm điểm bắt đầu traversal. Index trên <code>status</code> và <code>name</code> giúp xác định node gốc tức thì. Giới hạn <code>*1..2</code> ngăn query duyệt theo hàm mũ số cạnh, kiểm soát thời gian chạy.
+</div>
 
 ---
 
@@ -1139,10 +1097,10 @@ MATCH path = (c:Candidate {id: $id})-[:HAS_SKILL*1..2]->(s) RETURN path LIMIT 10
 | Yêu cầu | Kết quả |
 |---|---|
 | **YC1 – Nghiệp vụ** | 10 nghiệp vụ chính với mô tả chi tiết |
-| **YC2 – Phân tích CSDL** | Lựa chọn & lý giải 5 loại CSDL phù hợp |
-| **YC3 – Thiết kế dữ liệu** | ERD PostgreSQL, 3 MongoDB collections, Neo4j graph, Redis model, 3 Cassandra tables |
+| **YC2 – Phân tích CSDL** | Lựa chọn & lý giải 4 loại CSDL phù hợp |
+| **YC3 – Thiết kế dữ liệu** | ERD PostgreSQL, 3 MongoDB collections, Neo4j graph, Redis model |
 | **YC4 – Cài đặt** | DDL + DML đầy đủ, UI design, kết nối backend Node.js |
-| **YC5 – Hiệu suất** | Index cải thiện tới **162×**, cache hit rate **78–99%** |
+| **YC5 – Hiệu suất** | Composite Index, Materialized View, Cache-Aside Pattern, Neo4j Graph Index |
 
 ## Bài học rút ra
 
@@ -1158,9 +1116,8 @@ MATCH path = (c:Candidate {id: $id})-[:HAS_SKILL*1..2]->(s) RETURN path LIMIT 10
 4. MongoDB Documentation (2024). *MongoDB Manual*. mongodb.com/docs
 5. Neo4j Documentation (2024). *Neo4j Graph Data Science Library*. neo4j.com/docs
 6. Redis Documentation (2024). *Redis Commands Reference*. redis.io/commands
-7. Apache Cassandra Documentation (2024). *Cassandra 4.1 Docs*. cassandra.apache.org
-8. TopCV (2024). *Khảo sát thị trường tuyển dụng Việt Nam 2024*. topcv.vn
-9. LinkedIn Engineering Blog (2024). *How LinkedIn Scales its Graph Data Infrastructure*. engineering.linkedin.com
+7. TopCV (2024). *Khảo sát thị trường tuyển dụng Việt Nam 2024*. topcv.vn
+8. LinkedIn Engineering Blog (2024). *How LinkedIn Scales its Graph Data Infrastructure*. engineering.linkedin.com
 
 ---
 
@@ -1171,7 +1128,7 @@ MATCH path = (c:Candidate {id: $id})-[:HAS_SKILL*1..2]->(s) RETURN path LIMIT 10
 **Hệ thống Tuyển dụng Thông minh**
 *Smart Recruitment System*
 
-PostgreSQL · MongoDB · Neo4j · Redis · Cassandra
+PostgreSQL · MongoDB · Neo4j · Redis
 
 <br>
 

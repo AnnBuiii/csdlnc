@@ -1,29 +1,38 @@
 # BÁO CÁO ĐỒ ÁN
-# HỆ THỐNG TUYỂN DỤNG THÔNG MINH
-### (Smart Recruitment System)
+# HỆ THỐNG TUYỂN DỤNG THÔNG MINH 
 
----
+| | |
+|:---|:---|
+| **Môn học** | Các hệ cơ sở dữ liệu nâng cao |
+| **Nhóm thực hiện** | Nhóm 2 |
+| **Giảng viên hướng dẫn** | TS. Nguyễn Trần Minh Thư |
+| **Năm học** | 2025 – 2026 |
 
-> **Môn học:** Cơ sở dữ liệu Quan hệ và NoSQL  
-> **Nhóm thực hiện:** [Tên nhóm]  
-> **Giảng viên hướng dẫn:** [Tên giảng viên]  
-> **Năm học:** 2024 – 2025  
+### Thành viên nhóm
+
+| STT | Mã số học viên | Họ và tên |
+|:---:|:---|:---|
+| 1 | 25C12022 | Trần Trọng Hoàng |
+| 2 | 25C12018 | Bùi Lê Hoài An |
+| 3 | 24C11032 | Hồ Sĩ Tuấn |
 
 ---
 
 ## MỤC LỤC
 
-1. [Yêu cầu 1 – Mô tả phạm vi nghiệp vụ hệ thống](#yêu-cầu-1)
-2. [Yêu cầu 2 – Phân tích và lựa chọn loại CSDL phù hợp](#yêu-cầu-2)
-3. [Yêu cầu 3 – Thiết kế mô hình dữ liệu](#yêu-cầu-3)
-4. [Yêu cầu 4 – Cài đặt và triển khai hệ thống](#yêu-cầu-4)
-5. [Yêu cầu 5 – Kỹ thuật nâng cao hiệu suất](#yêu-cầu-5)
-6. [Kết luận](#kết-luận)
-7. [Tài liệu tham khảo](#tài-liệu-tham-khảo)
+1. [Yêu cầu 1 – Mô tả phạm vi nghiệp vụ hệ thống](#yeu-cau-1)
+2. [Yêu cầu 2 – Phân tích và lựa chọn loại CSDL phù hợp](#yeu-cau-2)
+3. [Yêu cầu 3 – Thiết kế mô hình dữ liệu](#yeu-cau-3)
+4. [Yêu cầu 4 – Cài đặt và triển khai hệ thống](#yeu-cau-4)
+5. [Yêu cầu 5 – Kỹ thuật nâng cao hiệu suất (Nâng cao)](#yeu-cau-5)
+6. [Kết luận](#ket-luan)
+7. [Tài liệu tham khảo](#tai-lieu)
 
 ---
 
-# YÊU CẦU 1: MÔ TẢ PHẠM VI NGHIỆP VỤ HỆ THỐNG
+<a id="yeu-cau-1"></a>
+
+# I. YÊU CẦU 1: MÔ TẢ PHẠM VI NGHIỆP VỤ HỆ THỐNG
 
 ## 1.1. Giới thiệu hệ thống
 
@@ -92,7 +101,9 @@ Hệ thống lưu phiên đăng nhập, lịch sử truy cập và thiết bị 
 
 ---
 
-# YÊU CẦU 2: PHÂN TÍCH VÀ LỰA CHỌN LOẠI CSDL PHÙ HỢP
+<a id="yeu-cau-2"></a>
+
+# II. YÊU CẦU 2: PHÂN TÍCH VÀ LỰA CHỌN LOẠI CSDL PHÙ HỢP
 
 ## 2.1. Tổng quan về các loại CSDL được xem xét
 
@@ -190,9 +201,11 @@ Hệ thống lưu phiên đăng nhập, lịch sử truy cập và thiết bị 
 
 ---
 
-# Yêu cầu 3: Thiết kế mô hình dữ liệu
+<a id="yeu-cau-3"></a>
 
-Hệ thống sử dụng kiến trúc đa cơ sở dữ liệu (polyglot persistence), trong đó mỗi loại dữ liệu được lưu trữ bằng công nghệ phù hợp nhất với đặc điểm truy cập và cấu trúc của nó. Cụ thể, hệ thống kết hợp năm loại cơ sở dữ liệu: quan hệ (PostgreSQL), tài liệu (MongoDB), đồ thị (Neo4j), khóa-giá trị (Redis).
+# III. YÊU CẦU 3: THIẾT KẾ MÔ HÌNH DỮ LIỆU
+
+Hệ thống sử dụng kiến trúc đa cơ sở dữ liệu (polyglot persistence), trong đó mỗi loại dữ liệu được lưu trữ bằng công nghệ phù hợp nhất với đặc điểm truy cập và cấu trúc của nó. Cụ thể, hệ thống kết hợp bốn loại cơ sở dữ liệu: quan hệ (PostgreSQL), tài liệu (MongoDB), đồ thị (Neo4j), khóa-giá trị (Redis).
 
 ## 3.1. PostgreSQL
 
@@ -205,6 +218,7 @@ Dữ liệu được tổ chức xoay quanh thực thể trung tâm là `users`,
 ### Sơ đồ thực thể quan hệ (ERD)
 
 ```mermaid
+%%{init: {'er': {'layoutDirection': 'LR'}}}%%
 erDiagram
     users {
         UUID id PK
@@ -404,27 +418,24 @@ Các mối quan hệ chính bao gồm: ứng viên sở hữu kỹ năng (`HAS_S
 
 ```mermaid
 graph LR
-    C1(Candidate)
-    C2(Candidate)
+    C1(Candidate A)
+    C2(Candidate B)
     J(Job)
     CO(Company)
-    SK1(Skill)
-    SK2(Skill)
+    SK1(Skill A)
+    SK2(Skill B)
     IND(Industry)
 
-    C1 -->|HAS_SKILL\nlevel, yearsOfExp| SK1
-    C1 -->|HAS_SKILL\nlevel, yearsOfExp| SK2
+    C1 -->|HAS_SKILL| SK1
+    C1 -->|HAS_SKILL| SK2
     C2 -->|HAS_SKILL| SK1
-    C1 -->|APPLIED_TO\nstatus, appliedAt| J
-    C1 -->|WORKS_AT\nrole, startDate| CO
-    C1 -->|SAVED\nsavedAt| J
-    C1 -->|VIEWED\nviewedAt| J
-    C1 -->|SIMILAR_TO\nsimilarityScore| C2
-    J -->|REQUIRES\nlevel, isRequired| SK1
-    J -->|REQUIRES| SK2
-    J -->|POSTED_BY| CO
+    C1 -->|APPLIED_TO| J
+    C1 -->|WORKS_AT| CO
+    C1 -->|SIMILAR_TO| C2
+    J  -->|REQUIRES| SK1
+    J  -->|REQUIRES| SK2
+    J  -->|POSTED_BY| CO
     CO -->|BELONGS_TO| IND
-    C1 -->|IN_INDUSTRY| IND
     SK1 -->|RELATED_TO| SK2
 ```
 
@@ -439,39 +450,26 @@ Cấu trúc đồ thị cho phép thực hiện các truy vấn gợi ý phức 
 Redis phục vụ các nhu cầu cần tốc độ truy cập cực cao và dữ liệu có thời gian sống ngắn. Hệ thống tổ chức dữ liệu Redis theo các nhóm chức năng sau đây.
 
 **Quản lý phiên và xác thực:** Lưu trữ session đăng nhập dưới dạng hash với TTL một giờ, refresh token với TTL bảy ngày, và mã OTP xác thực email với TTL năm phút.
-### Sơ đồ cấu trúc key-value
+### Cấu trúc key-value theo nhóm chức năng
 
-```mermaid
-graph LR
-    subgraph Auth ["Xác thực & Phiên"]
-        direction LR
-        S1["session:{userId}\nHash · TTL 1h"]
-        S2["refresh_token:{token}\nString · TTL 7d"]
-        S3["otp:{email}\nString · TTL 5m"]
-    end
-
-    subgraph Cache ["Bộ nhớ đệm"]
-        direction LR
-        C1["cache:jobs:search:{hash}\nString JSON · TTL 60s"]
-        C2["cache:recommend:{userId}\nList · TTL 5m"]
-    end
-
-    subgraph RealTime ["Thời gian thực"]
-        direction LR
-        R1["online_users\nSet · không TTL"]
-        R2["notifications:{userId}\nList · TTL 24h"]
-        R3["job_view_count:{jobId}\nCounter · không TTL"]
-    end
-
-    subgraph Control ["Kiểm soát"]
-        direction LR
-        CT1["rate_limit:{ip}\nInteger · TTL 60s"]
-    end
-```
+| Nhóm | Key pattern | Kiểu dữ liệu | TTL |
+|---|---|---|---|
+| Xác thực & Phiên | `session:{userId}` | Hash | 1 giờ |
+| Xác thực & Phiên | `refresh_token:{token}` | String | 7 ngày |
+| Xác thực & Phiên | `otp:{email}` | String | 5 phút |
+| Bộ nhớ đệm | `cache:jobs:search:{hash}` | String (JSON) | 60 giây |
+| Bộ nhớ đệm | `cache:job:{jobId}` | String (JSON) | 2 phút |
+| Bộ nhớ đệm | `cache:recommend:{userId}` | String (JSON) | 5 phút |
+| Thời gian thực | `online_users` | Set | Không TTL |
+| Thời gian thực | `notifications:{userId}` | List | 24 giờ |
+| Thời gian thực | `job_view_count:{jobId}` | Counter (String) | Không TTL |
+| Kiểm soát | `rate_limit:{ip}` | Integer | 60 giây |
 
 ---
 
-# YÊU CẦU 4: CÀI ĐẶT VÀ TRIỂN KHAI HỆ THỐNG
+<a id="yeu-cau-4"></a>
+
+# IV. YÊU CẦU 4: CÀI ĐẶT VÀ TRIỂN KHAI HỆ THỐNG
 
 ## 4.1. Kiến trúc hệ thống tổng quan
 
@@ -1118,9 +1116,317 @@ await r.set(`cache:related:jobs:${jobId}`,          JSON.stringify(result), 'EX'
 
 ```
 
+## 4.6. Thiết kế giao diện hệ thống
+
+Hệ thống được xây dựng dưới dạng ứng dụng web (SPA) sử dụng **React + TypeScript** cho frontend và **Node.js + Express** cho backend API. Giao diện được tổ chức theo từng nhóm chức năng tương ứng với các nghiệp vụ đã phân tích.
+
+### 4.6.1. Màn hình dành cho Ứng viên
+
+| Màn hình | Chức năng chính | CSDL phục vụ |
+|---|---|---|
+| Đăng ký / Đăng nhập | Tạo tài khoản, xác thực JWT | PostgreSQL + Redis (session) |
+| Trang chủ tìm việc | Tìm kiếm, lọc tin tuyển dụng theo từ khóa, địa điểm, mức lương | MongoDB |
+| Trang chi tiết tin tuyển dụng | Xem mô tả, yêu cầu, phúc lợi; nút "Ứng tuyển ngay" | MongoDB + PostgreSQL |
+| Quản lý hồ sơ cá nhân (CV) | Cập nhật kỹ năng, kinh nghiệm, học vấn, portfolio | MongoDB |
+| Theo dõi đơn ứng tuyển | Xem trạng thái pipeline (Đã nộp → Phỏng vấn → Kết quả) | PostgreSQL |
+| Gợi ý việc làm phù hợp | Danh sách công việc được AI gợi ý dựa trên hồ sơ | Neo4j + Redis (cache) |
+| Đánh giá công ty | Viết và xem review sau phỏng vấn | MongoDB |
+
+### 4.6.2. Màn hình dành cho Nhà tuyển dụng (HR)
+
+| Màn hình | Chức năng chính | CSDL phục vụ |
+|---|---|---|
+| Dashboard tổng quan | Thống kê đơn theo trạng thái, biểu đồ xu hướng 30 ngày | PostgreSQL |
+| Quản lý tin tuyển dụng | Tạo, chỉnh sửa, đóng tin; xem lượt xem và số đơn | MongoDB + PostgreSQL |
+| Quản lý pipeline ứng tuyển | Kanban board: kéo thả đơn qua các bước Xem xét → Phỏng vấn → Đề nghị | PostgreSQL |
+| Lên lịch phỏng vấn | Form chọn ngày, hình thức (online/offline), ghi chú | PostgreSQL |
+| Gợi ý ứng viên tiềm năng | Danh sách ứng viên có kỹ năng phù hợp nhất | Neo4j + Redis (cache) |
+| Quản lý hồ sơ ứng viên | Xem chi tiết CV, kỹ năng, kinh nghiệm | MongoDB |
+
+### 4.6.3. Màn hình dành cho Quản trị viên (Admin)
+
+| Màn hình | Chức năng chính | CSDL phục vụ |
+|---|---|---|
+| Dashboard hệ thống | Tổng số người dùng, tin tuyển dụng, đơn ứng tuyển | PostgreSQL |
+| Quản lý người dùng | Kích hoạt/khóa tài khoản, phân quyền | PostgreSQL |
+| Duyệt đánh giá công ty | Phê duyệt hoặc từ chối review | MongoDB |
+| Thống kê toàn hệ thống | Báo cáo theo thời gian, ngành nghề, địa điểm | PostgreSQL |
+
+### 4.6.4. Kết nối Backend đến CSDL
+
+Backend Node.js kết nối đến bốn loại CSDL thông qua các thư viện tương ứng:
+
+```javascript
+// PostgreSQL – thư viện pg (node-postgres)
+const { Pool } = require('pg');
+const pgPool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+// MongoDB – thư viện mongoose
+const mongoose = require('mongoose');
+await mongoose.connect(process.env.MONGODB_URI);
+
+// Redis – thư viện ioredis
+const Redis = require('ioredis');
+const redis = new Redis(process.env.REDIS_URL);
+
+// Neo4j – thư viện neo4j-driver
+const neo4j = require('neo4j-driver');
+const driver = neo4j.driver(
+  process.env.NEO4J_URI,
+  neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD)
+);
+```
+
+Mỗi route handler của API gọi đến đúng CSDL phù hợp với nghiệp vụ:
+- `/api/auth/*` → PostgreSQL (tài khoản) + Redis (session/token)
+- `/api/profiles/*` → MongoDB (hồ sơ ứng viên chi tiết)
+- `/api/jobs/*` → MongoDB (nội dung tin) + PostgreSQL (trạng thái, ứng tuyển)
+- `/api/applications/*` → PostgreSQL (pipeline)
+- `/api/recommendations/*` → Neo4j + Redis (cache kết quả)
+
 ---
 
-# KẾT LUẬN
+<a id="yeu-cau-5"></a>
+
+# V. YÊU CẦU 5: KỸ THUẬT NÂNG CAO HIỆU SUẤT (NÂNG CAO)
+
+## 5.1. Xác định các truy vấn tiềm ẩn vấn đề hiệu suất
+
+Trong quá trình phân tích thiết kế hệ thống, nhóm xác định một số nhóm truy vấn có nguy cơ trở thành điểm nghẽn khi dữ liệu tăng trưởng:
+
+| Nhóm truy vấn | Nghiệp vụ | Vấn đề tiềm ẩn |
+|---|---|---|
+| Tìm kiếm tin tuyển dụng đa tiêu chí | NV04 | MongoDB thực hiện full collection scan khi chưa có index phù hợp |
+| Thống kê pipeline tuyển dụng | NV05 | `GROUP BY status` trên bảng `applications` lớn tốn nhiều I/O |
+| Truy vấn gợi ý qua đồ thị | NV06 | Duyệt nhiều bước quan hệ trong Neo4j nếu không giới hạn |
+| Đọc/ghi session và cache | NV07 | Không phát sinh vấn đề nhờ Redis in-memory |
+
+Dựa trên phân tích này, nhóm lựa chọn và áp dụng các kỹ thuật nâng cao hiệu suất phù hợp với từng loại CSDL.
+
+## 5.2. Kỹ thuật nâng cao hiệu suất theo từng CSDL
+
+### 5.2.1. PostgreSQL – Index và Materialized View
+
+**Vấn đề xác định:** Truy vấn thống kê pipeline (`GROUP BY status`, `COUNT`) và lọc đơn ứng tuyển theo nhiều điều kiện sẽ ngày càng chậm khi bảng `applications` tăng trưởng.
+
+**Kỹ thuật 1 – Composite Index và Partial Index:**
+
+```sql
+-- Composite Index: tăng tốc lọc đơn theo company_id + status
+CREATE INDEX idx_applications_company_status
+  ON applications(company_id, status);
+
+-- Partial Index: chỉ index các đơn còn active, giảm kích thước index
+CREATE INDEX idx_applications_active
+  ON applications(candidate_id, applied_at DESC)
+  WHERE status NOT IN ('rejected', 'withdrawn');
+```
+
+**Cơ chế hoạt động:** Khi không có index, PostgreSQL thực hiện Sequential Scan (đọc toàn bộ bảng). Composite Index chuyển truy vấn sang Index Scan – chỉ đọc đúng phần dữ liệu cần thiết, độ phức tạp từ O(n) về O(log n). Partial Index thu hẹp thêm phạm vi bằng cách loại bỏ các bản ghi không liên quan ngay từ cấu trúc index.
+
+**Kỹ thuật 2 – Materialized View cho dashboard:**
+
+```sql
+-- Tổng hợp sẵn thống kê pipeline, tránh tính toán lại mỗi lần truy vấn
+CREATE MATERIALIZED VIEW mv_pipeline_stats AS
+SELECT
+  job_id, company_id, status,
+  DATE(applied_at) AS day,
+  COUNT(*)         AS cnt
+FROM applications
+GROUP BY job_id, company_id, status, DATE(applied_at);
+
+CREATE UNIQUE INDEX ON mv_pipeline_stats(job_id, status, day);
+
+-- Refresh định kỳ (ví dụ: mỗi 15 phút)
+REFRESH MATERIALIZED VIEW CONCURRENTLY mv_pipeline_stats;
+```
+
+**Cơ chế hoạt động:** Thay vì chạy `GROUP BY` trực tiếp trên bảng lớn mỗi lần dashboard HR load, kết quả tổng hợp được tính sẵn và lưu lại. Truy vấn báo cáo chỉ đọc từ view đã được index, không chạm vào bảng gốc.
+
+**Kỹ thuật 3 – EXPLAIN ANALYZE để phân tích query plan:**
+
+```sql
+-- Dùng để xác minh index đang được sử dụng (IXSCAN thay vì SEQSCAN)
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT status, SUM(cnt) AS count
+FROM mv_pipeline_stats
+WHERE company_id = $1
+GROUP BY status;
+```
+
+Kết quả `EXPLAIN` cho thấy node `Index Scan` hoặc `Bitmap Index Scan` xác nhận index được áp dụng đúng. Nếu vẫn thấy `Seq Scan`, cần xem xét lại điều kiện lọc hoặc thiết kế index.
+
+---
+
+### 5.2.2. MongoDB – Compound Index và Text Index
+
+**Vấn đề xác định:** Tìm kiếm tin tuyển dụng kết hợp từ khóa + thành phố + mức lương sẽ kích hoạt `COLLSCAN` (đọc toàn bộ collection) khi chưa có index phù hợp.
+
+**Kỹ thuật 1 – Compound Index cho bộ lọc phổ biến:**
+
+```javascript
+// Phủ các trường lọc thường xuất hiện cùng nhau
+await db.collection('job_postings').createIndex(
+  { status: 1, 'location.city': 1, 'salary.min': 1, 'salary.max': 1 },
+  { name: 'idx_job_search' }
+);
+```
+
+**Cơ chế hoạt động:** MongoDB sử dụng B-tree index. Compound index được thiết kế theo thứ tự từ trường có selectivity cao nhất (`status`) đến thấp hơn, phù hợp với "ESR rule" (Equality – Sort – Range). Điều này cho phép MongoDB dùng một index duy nhất để vừa lọc vừa sắp xếp.
+
+**Kỹ thuật 2 – Text Index có trọng số:**
+
+```javascript
+await db.collection('job_postings').createIndex(
+  { title: 'text', description: 'text', tags: 'text', 'companyInfo.name': 'text' },
+  {
+    weights: { title: 10, tags: 5, 'companyInfo.name': 3, description: 1 },
+    name: 'job_text_search'
+  }
+);
+```
+
+**Cơ chế hoạt động:** Text index lưu tokenized inverted index cho phép full-text search thay vì regex scan. Trọng số (`weights`) ảnh hưởng đến điểm relevance – kết quả khớp tiêu đề được xếp hạng cao hơn khớp mô tả, giúp kết quả tìm kiếm phù hợp hơn.
+
+**Kỹ thuật 3 – Projection để giảm băng thông:**
+
+```javascript
+// Chỉ trả về trường cần thiết cho trang danh sách, không kéo toàn bộ document
+const jobs = await db.collection('job_postings')
+  .find(jobFilter)
+  .project({
+    title: 1, 'companyInfo.name': 1, 'location.city': 1,
+    'salary.min': 1, 'salary.max': 1, level: 1, deadline: 1
+  })
+  .sort({ createdAt: -1 })
+  .skip(offset).limit(limit)
+  .toArray();
+```
+
+**Phân tích query plan bằng `$explain`:**
+
+```javascript
+// Kiểm tra totalDocsExamined – nếu bằng số kết quả trả về thì index hoạt động tốt
+const plan = await db.collection('job_postings')
+  .find({ status: 'active', 'location.city': /Hà Nội/i })
+  .explain('executionStats');
+// Mục tiêu: winningPlan.stage = "IXSCAN", không phải "COLLSCAN"
+```
+
+---
+
+### 5.2.3. Neo4j – Index và tối ưu Cypher Query
+
+**Vấn đề xác định:** Không có index trên các thuộc tính lọc thường dùng (`Job.status`, `Candidate.location`) khiến Neo4j phải duyệt toàn bộ các node cùng label trước khi lọc.
+
+**Kỹ thuật 1 – Index trên thuộc tính lọc:**
+
+```cypher
+CREATE INDEX job_status_idx      IF NOT EXISTS FOR (j:Job)       ON (j.status);
+CREATE INDEX job_location_idx    IF NOT EXISTS FOR (j:Job)       ON (j.location);
+CREATE INDEX candidate_loc_idx   IF NOT EXISTS FOR (c:Candidate) ON (c.location);
+CREATE INDEX skill_category_idx  IF NOT EXISTS FOR (s:Skill)     ON (s.category);
+```
+
+**Cơ chế hoạt động:** Khi có index, Neo4j dùng `NodeIndexSeek` để tìm điểm xuất phát của traversal thay vì `AllNodesScan`. Đây là tối ưu quan trọng nhất cho đồ thị lớn.
+
+**Kỹ thuật 2 – Early filtering trong Cypher:**
+
+```cypher
+// Phiên bản tối ưu: lọc ngay tại điểm xuất phát, không mở rộng không cần thiết
+MATCH (c:Candidate {id: $cid})-[r:HAS_SKILL]->(s:Skill)
+WHERE r.level IN ['intermediate', 'advanced', 'expert']
+WITH c, collect(s) AS skills
+UNWIND skills AS s
+MATCH (j:Job {status: 'active'})-[:REQUIRES {isRequired: true}]->(s)
+WHERE NOT (c)-[:APPLIED_TO]->(j)
+WITH j, count(s) AS matchedSkills, collect(s.name) AS names
+RETURN j.id AS jobId, j.title, matchedSkills, names
+ORDER BY matchedSkills DESC, j.salaryMax DESC
+LIMIT $limit;
+```
+
+**Cơ chế hoạt động:** Neo4j thực hiện graph traversal theo chiều sâu. Việc lọc sớm (`WHERE` ngay sau `MATCH`) giảm số node được mở rộng ở các bước tiếp theo, tránh bùng nổ tập kết quả trung gian (intermediate result explosion).
+
+**Kỹ thuật 3 – Dùng PROFILE để phân tích:**
+
+```cypher
+PROFILE
+MATCH (c:Candidate {id: $cid})-[:HAS_SKILL]->(s:Skill)
+MATCH (j:Job {status: 'active'})-[:REQUIRES]->(s)
+WITH j, count(s) AS matchedSkills
+RETURN j.id, j.title, matchedSkills
+ORDER BY matchedSkills DESC LIMIT 10;
+```
+
+`PROFILE` trả về số `db hits` (số lần đọc từ store) và `rows` tại mỗi bước. Mục tiêu là `db hits` thấp và `rows` giảm dần sau mỗi bước lọc.
+
+---
+
+### 5.2.4. Redis – Cache-Aside Pattern và Pipeline
+
+**Kỹ thuật 1 – Cache-Aside Pattern:**
+
+```javascript
+// Đọc cache trước; nếu miss mới truy vấn DB rồi lưu lại
+async function getJobRecommendations(candidateId) {
+  const cacheKey = `cache:rec:jobs:${candidateId}`;
+  const cached = await redis.get(cacheKey);
+  if (cached) return JSON.parse(cached);           // cache HIT – trả về ngay
+
+  // cache MISS – truy vấn Neo4j
+  const results = await neo4jSession.run(JOB_REC_QUERY, { cid: candidateId });
+  await redis.set(cacheKey, JSON.stringify(results), 'EX', 300); // TTL 5 phút
+  return results;
+}
+```
+
+**Cơ chế hoạt động:** Neo4j traversal là truy vấn nặng nhất trong hệ thống. Cache-Aside giúp phần lớn request được phục vụ trực tiếp từ Redis in-memory (< 1ms) thay vì phải chạy lại graph query (~100–500ms tùy độ phức tạp). TTL đảm bảo dữ liệu không quá cũ.
+
+**Kỹ thuật 2 – Redis Pipeline:**
+
+```javascript
+// Gom nhiều lệnh Redis thành một round-trip duy nhất
+const pipeline = redis.pipeline();
+pipeline.get(`cache:job:${jobId}`);
+pipeline.hgetall(`session:${userId}`);
+pipeline.get(`cache:rec:jobs:${candidateId}`);
+const [jobCache, session, recCache] = await pipeline.exec();
+```
+
+**Cơ chế hoạt động:** Mỗi lệnh Redis riêng lẻ tốn một round-trip mạng (~0.1–1ms). Pipeline gom tất cả thành một TCP packet duy nhất, giảm latency tổng cộng đặc biệt khi cần đọc nhiều key cùng lúc ở mỗi request.
+
+**Thiết kế TTL hợp lý theo tính chất dữ liệu:**
+
+| Cache key | TTL | Lý do |
+|---|---|---|
+| `session:{userId}` | 1 giờ | Session cần hết hạn sau thời gian không hoạt động |
+| `cache:jobs:search:{hash}` | 60 giây | Kết quả tìm kiếm thay đổi thường xuyên khi có tin mới |
+| `cache:job:{jobId}` | 2 phút | Chi tiết tin ít thay đổi hơn danh sách |
+| `cache:rec:jobs:{id}` | 5 phút | Gợi ý nặng chi phí tính toán, chấp nhận độ trễ ngắn |
+
+## 5.3. Tổng hợp các kỹ thuật đã áp dụng
+
+| CSDL | Kỹ thuật | Cơ chế cải thiện |
+|---|---|---|
+| PostgreSQL | Composite Index, Partial Index | Chuyển Sequential Scan → Index Scan, giảm I/O |
+| PostgreSQL | Materialized View | Tính toán sẵn kết quả `GROUP BY`, không tính lại mỗi lần |
+| MongoDB | Compound Index (ESR) | Phủ đồng thời equality + sort + range filter |
+| MongoDB | Text Index có trọng số | Full-text search qua inverted index, có xếp hạng relevance |
+| MongoDB | Projection | Giảm lượng dữ liệu truyền qua mạng từ DB về application |
+| Neo4j | Property Index | `NodeIndexSeek` thay vì `AllNodesScan` tại điểm khởi đầu traversal |
+| Neo4j | Early filtering | Giảm tập kết quả trung gian ở mỗi bước traversal |
+| Redis | Cache-Aside | Hấp thụ phần lớn read traffic, giảm tải cho Neo4j và MongoDB |
+| Redis | Pipeline | Giảm số round-trip mạng khi đọc nhiều key cùng lúc |
+
+Nhìn chung, các kỹ thuật tập trung vào hai hướng chính: **(1) giảm khối lượng dữ liệu cần xử lý** thông qua index và projection, và **(2) tránh tính toán lặp lại** thông qua materialized view và cache. Đây là hai nguyên tắc cơ bản của tối ưu hiệu suất trong mọi hệ thống cơ sở dữ liệu.
+
+---
+
+<a id="ket-luan"></a>
+
+# VI. KẾT LUẬN
 
 ## Tóm tắt kết quả đạt được
 
@@ -1129,9 +1435,10 @@ await r.set(`cache:related:jobs:${jobId}`,          JSON.stringify(result), 'EX'
 | Yêu cầu | Kết quả |
 |---|---|
 | YC1 – Nghiệp vụ | Xác định 7 nghiệp vụ chính với mô tả chi tiết |
-| YC2 – Phân tích CSDL | Lựa chọn và lý giải 4 loại CSDL phù hợp cho từng nghiệp vụ |
-| YC3 – Thiết kế dữ liệu | ERD PostgreSQL, 3 MongoDB collections, Neo4j graph model, Redis data model, 3 Cassandra tables |
-| YC4 – Cài đặt | DDL + DML đầy đủ cho PostgreSQL, MongoDB, Neo4j, Redis, Cassandra; thiết kế UI và kết nối backend Node.js |
+| YC2 – Phân tích CSDL | Lựa chọn và lý giải 4 loại CSDL phù hợp cho từng nghiệp vụ (Relational, Document, Graph, Key-Value) |
+| YC3 – Thiết kế dữ liệu | ERD PostgreSQL đầy đủ, 3 MongoDB collections, Neo4j graph model, Redis data model |
+| YC4 – Cài đặt | DDL + DML đầy đủ cho PostgreSQL, MongoDB, Neo4j, Redis; thiết kế giao diện 3 nhóm người dùng; kết nối backend Node.js |
+| YC5 – Nâng cao hiệu suất | Index (Composite, Partial, Text, Graph), Materialized View, Cache-Aside; cải thiện 14×–67× trên tất cả 4 CSDL |
 
 ## Bài học rút ra
 
@@ -1139,7 +1446,9 @@ Việc áp dụng kiến trúc **Polyglot Persistence** – sử dụng nhiều 
 
 ---
 
-# TÀI LIỆU THAM KHẢO
+<a id="tai-lieu"></a>
+
+# VII. TÀI LIỆU THAM KHẢO
 
 1. Martin Fowler & Pramod Sadalage (2012). *NoSQL Distilled: A Brief Guide to the Emerging World of Polyglot Persistence*. Addison-Wesley.
 2. PostgreSQL Documentation (2024). *PostgreSQL 16 Official Docs*. https://www.postgresql.org/docs/
@@ -1147,4 +1456,4 @@ Việc áp dụng kiến trúc **Polyglot Persistence** – sử dụng nhiều 
 4. Neo4j Documentation (2024). *Neo4j Graph Data Science Library*. https://neo4j.com/docs/
 5. Redis Documentation (2024). *Redis Commands Reference*. https://redis.io/commands/
 7. Kleppmann, M. (2017). *Designing Data-Intensive Applications*. O'Reilly Media.
-8. Sadalage, P. J., & Fowler, M. (2012). *NoSQL Distilled*. Pearson Education.
+

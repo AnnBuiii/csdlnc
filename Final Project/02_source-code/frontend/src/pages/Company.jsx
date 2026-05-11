@@ -1,0 +1,316 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { companyAPI, jobAPI, analyticsAPI } from '../services/api';
+import authStore from '../store/authStore';
+
+export default function Company() {
+  const navigate = useNavigate();
+  const { user } = authStore();
+  const [activeTab, setActiveTab] = useState('jobs');
+  const [company, setCompany] = useState(null);
+  const [jobs, setJobs] = useState([]);
+  const [stats, setStats] = useState({
+    totalJobs: 0,
+    totalApplications: 0,
+    totalInterviews: 0,
+    newApplications: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState(false);
+  const [toast, setToast] = useState(null);
+
+  const showToast = (type, msg) => {
+    setToast({ type, msg });
+    setTimeout(() => setToast(null), 4000);
+  };
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    website: '',
+    industry: '',
+    size: '',
+    location: '',
+  });
+
+  useEffect(() => {
+    fetchCompanyData();
+    fetchJobs();
+    fetchStats();
+  }, []);
+
+  const fetchCompanyData = async () => {
+    try {
+      const response = await companyAPI.getProfile();
+      setCompany(response.data);
+      setFormData(response.data || {});
+    } catch (err) {
+      console.error('Error fetching company:', err);
+    }
+  };
+
+  const fetchStats = async () => {
+    try {
+      const response = await analyticsAPI.getRecruiterDashboard();
+      const s = response.data;
+      setStats({
+        totalJobs: s?.recentJobs?.length ?? 0,
+        totalApplications: parseInt(s?.applicationStats?.total_applications) || 0,
+        totalInterviews: parseInt(s?.applicationStats?.interview) || 0,
+        newApplications: parseInt(s?.applicationStats?.submitted) || 0,
+      });
+    } catch (err) {
+      console.error('Error fetching stats:', err);
+    }
+  };
+
+  const fetchJobs = async () => {
+    try {
+      const response = await jobAPI.getCompanyJobs({ limit: 20 });
+      setJobs(response.data || []);
+    } catch (err) {
+      console.error('Error fetching jobs:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSaveCompany = async (e) => {
+    e.preventDefault();
+    try {
+      await companyAPI.updateProfile(formData);
+      setCompany(formData);
+      setEditing(false);
+      showToast('success', 'Company profile updated successfully!');
+    } catch (err) {
+      showToast('error', err.message || 'Failed to update');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      {toast && (
+        <div className={`toast fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-xl text-white text-sm font-medium ${toast.type === 'success' ? 'bg-secondary' : 'bg-danger'}`}>
+          <span>{toast.type === 'success' ? '✓' : '✕'}</span> {toast.msg}
+        </div>
+      )}
+      <h1 className="text-4xl font-bold mb-8">Company Dashboard</h1>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div className="card text-center">
+          <p className="text-3xl font-bold text-primary">{stats.totalJobs}</p>
+          <p className="text-muted">Active Jobs</p>
+        </div>
+        <div className="card text-center">
+          <p className="text-3xl font-bold text-secondary">{stats.totalApplications}</p>
+          <p className="text-muted">Applications</p>
+        </div>
+        <div className="card text-center">
+          <p className="text-3xl font-bold text-accent">{stats.totalInterviews}</p>
+          <p className="text-muted">Interviews</p>
+        </div>
+        <div className="card text-center">
+          <p className="text-3xl font-bold text-danger">{stats.newApplications}</p>
+          <p className="text-muted">New Applications</p>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="card mb-6">
+        <div className="flex gap-4 border-b">
+          {['jobs', 'profile', 'candidates'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-3 font-semibold transition ${
+                activeTab === tab
+                  ? 'border-b-2 border-primary text-primary'
+                  : 'text-muted hover:text-dark'
+              }`}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'jobs' && (
+        <div className="space-y-4">
+          <button
+            onClick={() => navigate('/create-job')}
+            className="btn-primary"
+          >
+            + Post New Job
+          </button>
+
+          {jobs.length === 0 ? (
+            <div className="card text-center py-12">
+              <p className="text-muted">No jobs posted yet</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {jobs.map((job) => (
+                <div key={job.jobId || job.id} className="card">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1 min-w-0">
+                      <h3
+                        className="text-xl font-bold hover:text-primary cursor-pointer transition"
+                        onClick={() => navigate(`/jobs/${job.jobId || job.id}`)}
+                      >
+                        {job.title}
+                      </h3>
+                      <p className="text-muted">
+                        {typeof job.location === 'string' ? job.location : job.location?.city}
+                      </p>
+                      <span className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full font-medium ${
+                        job.status === 'active' ? 'bg-green-100 text-green-700' :
+                        job.status === 'closed' ? 'bg-red-100 text-red-700' :
+                        'bg-gray-100 text-gray-600'
+                      }`}>
+                        {job.status}
+                      </span>
+                    </div>
+                    <div className="flex gap-6 text-right ml-4 shrink-0">
+                      <div>
+                        <p className="font-semibold">{job.application_count ?? 0}</p>
+                        <p className="text-sm text-muted">Applications</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex gap-2">
+                    <button className="btn-outline text-sm" onClick={() => navigate(`/jobs/${job.jobId || job.id}`)}>View Job</button>
+                    <button className="btn-outline text-sm" onClick={() => navigate(`/edit-job/${job.jobId || job.id}`)}>Edit</button>
+                    <button className="btn-primary text-sm" onClick={() => navigate(`/jobs/${job.jobId || job.id}/applications`)}>View Applications</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'profile' && (
+        <div className="card">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Company Profile</h2>
+            <button
+              onClick={() => setEditing(!editing)}
+              className={editing ? 'btn-secondary' : 'btn-primary'}
+            >
+              {editing ? 'Cancel' : 'Edit'}
+            </button>
+          </div>
+
+          {editing ? (
+            <form onSubmit={handleSaveCompany} className="space-y-4">
+              <div>
+                <label className="form-label">Company Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  className="form-input"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div>
+                <label className="form-label">Description</label>
+                <textarea
+                  name="description"
+                  className="form-input"
+                  rows="4"
+                  value={formData.description}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="form-label">Website</label>
+                  <input
+                    type="url"
+                    name="website"
+                    className="form-input"
+                    value={formData.website}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Industry</label>
+                  <input
+                    type="text"
+                    name="industry"
+                    className="form-input"
+                    value={formData.industry}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="form-label">Company Size</label>
+                  <input
+                    type="text"
+                    name="size"
+                    className="form-input"
+                    value={formData.size}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Location</label>
+                  <input
+                    type="text"
+                    name="location"
+                    className="form-input"
+                    value={formData.location}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <button type="submit" className="btn-primary">
+                Save Changes
+              </button>
+            </form>
+          ) : (
+            <div className="space-y-4">
+              {company && (
+                <>
+                  <p><strong>Name:</strong> {company.name}</p>
+                  <p><strong>Description:</strong> {company.description}</p>
+                  <p><strong>Website:</strong> {company.website || 'Not provided'}</p>
+                  <p><strong>Industry:</strong> {company.industry || 'Not provided'}</p>
+                  <p><strong>Size:</strong> {company.size || 'Not provided'}</p>
+                  <p><strong>Location:</strong> {company.location || 'Not provided'}</p>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'candidates' && (
+        <div className="text-center card py-12">
+          <p className="text-muted">Candidates management coming soon</p>
+        </div>
+      )}
+    </div>
+  );
+}
