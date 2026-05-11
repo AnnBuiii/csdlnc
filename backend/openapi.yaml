@@ -246,7 +246,7 @@ paths:
         get:
             tags: [Candidates]
             summary: Lấy hồ sơ của chính mình
-            description: Ứng viên lấy thông tin hồ sơ của mình (role: candidate)
+            description: "Ứng viên lấy thông tin hồ sơ của mình (role: candidate)"
             security:
                 - bearerAuth: []
             responses:
@@ -263,7 +263,7 @@ paths:
         put:
             tags: [Candidates]
             summary: Cập nhật hồ sơ
-            description: Ứng viên cập nhật toàn bộ thông tin hồ sơ (role: candidate)
+            description: "Ứng viên cập nhật toàn bộ thông tin hồ sơ (role: candidate)"
             security:
                 - bearerAuth: []
             requestBody:
@@ -307,7 +307,7 @@ paths:
         post:
             tags: [Candidates]
             summary: Thêm kinh nghiệm làm việc
-            description: Ứng viên thêm một mục kinh nghiệm vào hồ sơ (role: candidate)
+            description: "Ứng viên thêm một mục kinh nghiệm vào hồ sơ (role: candidate)"
             security:
                 - bearerAuth: []
             requestBody:
@@ -350,7 +350,7 @@ paths:
         post:
             tags: [Candidates]
             summary: Thêm kỹ năng
-            description: Ứng viên thêm một kỹ năng vào hồ sơ (role: candidate)
+            description: "Ứng viên thêm một kỹ năng vào hồ sơ (role: candidate)"
             security:
                 - bearerAuth: []
             requestBody:
@@ -379,7 +379,7 @@ paths:
         get:
             tags: [Candidates]
             summary: Tìm kiếm ứng viên
-            description: HR/Admin tìm kiếm ứng viên theo tiêu chí (role: recruiter, admin)
+            description: "HR/Admin tìm kiếm ứng viên theo tiêu chí (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             parameters:
@@ -432,7 +432,7 @@ paths:
         get:
             tags: [Companies]
             summary: Lấy thông tin công ty của mình
-            description: Recruiter/Admin lấy thông tin công ty của mình (role: recruiter, admin)
+            description: "Recruiter/Admin lấy thông tin công ty của mình (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             responses:
@@ -447,7 +447,7 @@ paths:
         put:
             tags: [Companies]
             summary: Cập nhật thông tin công ty
-            description: Recruiter/Admin cập nhật thông tin công ty (role: recruiter, admin)
+            description: "Recruiter/Admin cập nhật thông tin công ty (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             requestBody:
@@ -572,7 +572,7 @@ paths:
         post:
             tags: [Jobs]
             summary: Tạo tin tuyển dụng
-            description: Nhà tuyển dụng tạo tin tuyển dụng mới (role: recruiter, admin)
+            description: "Nhà tuyển dụng tạo tin tuyển dụng mới (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             requestBody:
@@ -673,7 +673,7 @@ paths:
         get:
             tags: [Jobs]
             summary: Tin tuyển dụng của công ty tôi
-            description: Recruiter/Admin xem danh sách tin tuyển dụng của công ty mình (role: recruiter, admin)
+            description: "Recruiter/Admin xem danh sách tin tuyển dụng của công ty mình (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             parameters:
@@ -756,7 +756,7 @@ paths:
         patch:
             tags: [Jobs]
             summary: Cập nhật trạng thái tin tuyển dụng
-            description: Recruiter/Admin thay đổi trạng thái tin tuyển dụng (role: recruiter, admin)
+            description: "Recruiter/Admin thay đổi trạng thái tin tuyển dụng (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             parameters:
@@ -788,7 +788,7 @@ paths:
         post:
             tags: [Applications]
             summary: Nộp đơn ứng tuyển
-            description: Ứng viên nộp đơn ứng tuyển công việc (role: candidate)
+            description: "Ứng viên nộp đơn ứng tuyển công việc (role: candidate)"
             security:
                 - bearerAuth: []
             requestBody:
@@ -820,7 +820,7 @@ paths:
         get:
             tags: [Applications]
             summary: Đơn ứng tuyển của tôi
-            description: Ứng viên xem danh sách đơn ứng tuyển của mình (role: candidate)
+            description: "Ứng viên xem danh sách đơn ứng tuyển của mình (role: candidate)"
             security:
                 - bearerAuth: []
             parameters:
@@ -865,7 +865,7 @@ paths:
         get:
             tags: [Applications]
             summary: Danh sách đơn theo tin tuyển dụng
-            description: HR/Admin xem danh sách đơn ứng tuyển của một tin (role: recruiter, admin)
+            description: "HR/Admin xem danh sách đơn ứng tuyển của một tin (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             parameters:
@@ -918,7 +918,7 @@ paths:
         get:
             tags: [Applications]
             summary: Thống kê pipeline tuyển dụng
-            description: HR/Admin xem thống kê số lượng đơn theo từng trạng thái (role: recruiter, admin)
+            description: "HR/Admin xem thống kê số lượng đơn theo từng trạng thái (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             parameters:
@@ -955,7 +955,7 @@ paths:
         patch:
             tags: [Applications]
             summary: Cập nhật trạng thái đơn ứng tuyển
-            description: HR/Admin cập nhật trạng thái xử lý đơn ứng tuyển (role: recruiter, admin)
+            description: "HR/Admin cập nhật trạng thái xử lý đơn ứng tuyển (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             parameters:
@@ -987,7 +987,7 @@ paths:
         post:
             tags: [Interviews]
             summary: Lên lịch phỏng vấn
-            description: Nhà tuyển dụng tạo lịch phỏng vấn cho ứng viên (role: recruiter, admin)
+            description: "Nhà tuyển dụng tạo lịch phỏng vấn cho ứng viên (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             requestBody:
@@ -1026,7 +1026,7 @@ paths:
         get:
             tags: [Interviews]
             summary: Lịch phỏng vấn của công ty
-            description: Recruiter/Admin xem toàn bộ lịch phỏng vấn của công ty (role: recruiter, admin)
+            description: "Recruiter/Admin xem toàn bộ lịch phỏng vấn của công ty (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             parameters:
@@ -1059,7 +1059,7 @@ paths:
         get:
             tags: [Interviews]
             summary: Lịch phỏng vấn của tôi
-            description: Ứng viên xem danh sách lịch phỏng vấn của mình (role: candidate)
+            description: "Ứng viên xem danh sách lịch phỏng vấn của mình (role: candidate)"
             security:
                 - bearerAuth: []
             responses:
@@ -1078,7 +1078,7 @@ paths:
         patch:
             tags: [Interviews]
             summary: Ghi kết quả phỏng vấn
-            description: Recruiter/Admin cập nhật trạng thái và kết quả phỏng vấn (role: recruiter, admin)
+            description: "Recruiter/Admin cập nhật trạng thái và kết quả phỏng vấn (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             parameters:
@@ -1113,7 +1113,7 @@ paths:
         patch:
             tags: [Interviews]
             summary: Đổi lịch phỏng vấn
-            description: Recruiter/Admin thay đổi thời gian phỏng vấn (role: recruiter, admin)
+            description: "Recruiter/Admin thay đổi thời gian phỏng vấn (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             parameters:
@@ -1145,7 +1145,7 @@ paths:
         get:
             tags: [Recommendations]
             summary: Đề xuất công việc cho ứng viên
-            description: Hệ thống gợi ý công việc phù hợp dựa trên hồ sơ (role: candidate)
+            description: "Hệ thống gợi ý công việc phù hợp dựa trên hồ sơ (role: candidate)"
             security:
                 - bearerAuth: []
             parameters:
@@ -1172,7 +1172,7 @@ paths:
         get:
             tags: [Recommendations]
             summary: Đề xuất ứng viên cho HR
-            description: Hệ thống gợi ý ứng viên phù hợp cho một tin tuyển dụng (role: recruiter, admin)
+            description: "Hệ thống gợi ý ứng viên phù hợp cho một tin tuyển dụng (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             parameters:
@@ -1207,7 +1207,7 @@ paths:
         get:
             tags: [Recommendations]
             summary: Ứng viên tương tự
-            description: Tìm ứng viên có hồ sơ tương tự với ứng viên hiện tại (role: candidate)
+            description: "Tìm ứng viên có hồ sơ tương tự với ứng viên hiện tại (role: candidate)"
             security:
                 - bearerAuth: []
             responses:
@@ -1227,7 +1227,7 @@ paths:
         post:
             tags: [Reviews]
             summary: Gửi đánh giá công ty
-            description: Ứng viên gửi đánh giá cho một công ty (role: candidate). Đánh giá cần admin duyệt trước khi hiển thị.
+            description: "Ứng viên gửi đánh giá cho một công ty (role: candidate). Đánh giá cần admin duyệt trước khi hiển thị."
             security:
                 - bearerAuth: []
             requestBody:
@@ -1325,7 +1325,7 @@ paths:
         patch:
             tags: [Reviews]
             summary: Duyệt hoặc từ chối đánh giá
-            description: Admin duyệt hoặc từ chối một đánh giá công ty (role: admin)
+            description: "Admin duyệt hoặc từ chối một đánh giá công ty (role: admin)"
             security:
                 - bearerAuth: []
             parameters:
@@ -1360,7 +1360,7 @@ paths:
         get:
             tags: [Analytics]
             summary: Dashboard nhà tuyển dụng
-            description: Thống kê tổng quan cho nhà tuyển dụng (role: recruiter, admin)
+            description: "Thống kê tổng quan cho nhà tuyển dụng (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             responses:
@@ -1377,7 +1377,7 @@ paths:
         get:
             tags: [Analytics]
             summary: Dashboard quản trị viên
-            description: Thống kê toàn hệ thống cho admin (role: admin)
+            description: "Thống kê toàn hệ thống cho admin (role: admin)"
             security:
                 - bearerAuth: []
             responses:
@@ -1396,7 +1396,7 @@ paths:
         get:
             tags: [Analytics]
             summary: Lịch sử hành vi người dùng
-            description: Lấy lịch sử hành vi của người dùng hiện tại theo ngày (yêu cầu đăng nhập)
+            description: "Lấy lịch sử hành vi của người dùng hiện tại theo ngày (yêu cầu đăng nhập)"
             security:
                 - bearerAuth: []
             parameters:
@@ -1417,7 +1417,7 @@ paths:
         get:
             tags: [Analytics]
             summary: Thống kê tin tuyển dụng
-            description: Xem thống kê lượt xem và ứng tuyển của một tin tuyển dụng (role: recruiter, admin)
+            description: "Xem thống kê lượt xem và ứng tuyển của một tin tuyển dụng (role: recruiter, admin)"
             security:
                 - bearerAuth: []
             parameters:
@@ -1441,7 +1441,7 @@ paths:
         get:
             tags: [Notifications]
             summary: Lấy danh sách thông báo
-            description: Lấy tất cả thông báo của người dùng hiện tại (yêu cầu đăng nhập)
+            description: "Lấy tất cả thông báo của người dùng hiện tại (yêu cầu đăng nhập)"
             security:
                 - bearerAuth: []
             responses:

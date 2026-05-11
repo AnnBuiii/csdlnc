@@ -60,6 +60,22 @@ router.post('/profile/skills',
   }
 );
 
+// DELETE /api/candidates/profile/experience/:expId – Xóa kinh nghiệm
+router.delete('/profile/experience/:expId', authenticate, authorize('candidate'), async (req, res, next) => {
+  try {
+    const profile = await candidateService.deleteExperience(req.user.candidateId, req.params.expId);
+    success(res, profile, 'Đã xóa kinh nghiệm.');
+  } catch (err) { next(err); }
+});
+
+// DELETE /api/candidates/profile/skills/:index – Xóa kỹ năng theo vị trí
+router.delete('/profile/skills/:index', authenticate, authorize('candidate'), async (req, res, next) => {
+  try {
+    const profile = await candidateService.deleteSkillByIndex(req.user.candidateId, parseInt(req.params.index));
+    success(res, profile, 'Đã xóa kỹ năng.');
+  } catch (err) { next(err); }
+});
+
 // GET /api/candidates/search – HR tìm kiếm ứng viên (NV04)
 router.get('/search', authenticate, authorize('recruiter', 'admin'), async (req, res, next) => {
   try {

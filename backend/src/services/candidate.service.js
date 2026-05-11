@@ -96,6 +96,34 @@ class CandidateService {
     return profile;
   }
 
+  // ── NV02: Xóa kinh nghiệm ───────────────────────────────────
+  async deleteExperience(candidateId, expId) {
+    const profile = await CandidateProfile.findOneAndUpdate(
+      { candidateId },
+      { $pull: { experience: { _id: expId } } },
+      { new: true, lean: true }
+    );
+    if (!profile) { const err = new Error('Hồ sơ không tồn tại.'); err.statusCode = 404; throw err; }
+    return profile;
+  }
+
+  // ── NV02: Xóa kỹ năng theo index ─────────────────────────
+  async deleteSkillByIndex(candidateId, index) {
+    const current = await CandidateProfile.findOne({ candidateId }).lean();
+    if (!current) { const err = new Error('Hồ sơ không tồn tại.'); err.statusCode = 404; throw err; }
+    const skills = [...(current.skills || [])];
+    if (index < 0 || index >= skills.length) {
+      const err = new Error('Index kỹ năng không hợp lệ.'); err.statusCode = 400; throw err;
+    }
+    skills.splice(index, 1);
+    const profile = await CandidateProfile.findOneAndUpdate(
+      { candidateId },
+      { $set: { skills } },
+      { new: true, lean: true }
+    );
+    return profile;
+  }
+
   // ── NV04: Tìm kiếm ứng viên (HR/Admin) ──────────────────────
   async searchCandidates(filters, paginationQuery) {
     const { page, limit, offset } = parsePagination(paginationQuery);

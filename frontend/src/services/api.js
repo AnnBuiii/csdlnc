@@ -25,7 +25,7 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !error.config?.url?.includes('/auth/login')) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';
@@ -61,7 +61,9 @@ export const candidateAPI = {
   getPublicProfile: (id) => apiClient.get(`/candidates/${id}/profile`),
   updateProfile: (data) => apiClient.put('/candidates/profile', data),
   addExperience: (data) => apiClient.post('/candidates/profile/experience', data),
+  deleteExperience: (expId) => apiClient.delete(`/candidates/profile/experience/${expId}`),
   addSkill: (data) => apiClient.post('/candidates/profile/skills', data),
+  deleteSkill: (index) => apiClient.delete(`/candidates/profile/skills/${index}`),
   searchCandidates: (params) => apiClient.get('/candidates/search', { params }),
 };
 

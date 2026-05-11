@@ -17,6 +17,12 @@ export default function Company() {
   });
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
+  const [toast, setToast] = useState(null);
+
+  const showToast = (type, msg) => {
+    setToast({ type, msg });
+    setTimeout(() => setToast(null), 4000);
+  };
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -79,9 +85,9 @@ export default function Company() {
       await companyAPI.updateProfile(formData);
       setCompany(formData);
       setEditing(false);
-      alert('Company profile updated!');
+      showToast('success', 'Company profile updated successfully!');
     } catch (err) {
-      alert(err.message || 'Failed to update');
+      showToast('error', err.message || 'Failed to update');
     }
   };
 
@@ -95,6 +101,11 @@ export default function Company() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      {toast && (
+        <div className={`toast fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-xl text-white text-sm font-medium ${toast.type === 'success' ? 'bg-secondary' : 'bg-danger'}`}>
+          <span>{toast.type === 'success' ? '✓' : '✕'}</span> {toast.msg}
+        </div>
+      )}
       <h1 className="text-4xl font-bold mb-8">Company Dashboard</h1>
 
       {/* Stats */}
